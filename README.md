@@ -21,3 +21,5 @@ To build it yourself, you'll need to clone a few dependencies into the `Vendor/`
 ## Notes
 
 This is just a learning tool not a serious project. Built for fun and experimentation with game memory, rendering, and plugin structure.
+
+Even though this is a fun project, please provide credit if you end up using it for anything......though I doubt anyone will use this lol.
