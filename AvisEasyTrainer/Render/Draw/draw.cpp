@@ -12,7 +12,8 @@ namespace render::draw
         ImU32 color,
         ImFont* font)
     {
-        auto* drawList = ImGui::GetBackgroundDrawList();
+     
+        auto* drawList = ImGui::GetWindowDrawList();
         if (font) ImGui::PushFont(font);
 
         if (left)
@@ -46,7 +47,7 @@ namespace render::draw
         float rounding,
         ImDrawFlags flags)
     {
-        ImGui::GetBackgroundDrawList()->AddRectFilled(
+        ImGui::GetWindowDrawList()->AddRectFilled(
             pos,
             { pos.x + size.x, pos.y + size.y },
             color, rounding, flags
@@ -55,12 +56,12 @@ namespace render::draw
 
     void DrawLine(ImVec2 from, ImVec2 to, ImU32 color, float thickness)
     {
-        ImGui::GetBackgroundDrawList()->AddLine(from, to, color, thickness);
+        ImGui::GetWindowDrawList()->AddLine(from, to, color, thickness);
     }
 
     void DrawOutlinedRect(ImVec2 pos, ImVec2 size, ImU32 fillColor, ImU32 outlineColor, float rounding, float thickness)
     {
-        auto* drawList = ImGui::GetBackgroundDrawList();
+        auto* drawList = ImGui::GetWindowDrawList();
         drawList->AddRectFilled(pos, ImVec2(pos.x + size.x, pos.y + size.y), fillColor, rounding);
         drawList->AddRect(pos, ImVec2(pos.x + size.x, pos.y + size.y), outlineColor, rounding, 0, thickness);
     }
@@ -68,14 +69,14 @@ namespace render::draw
     void DrawProgressBar(ImVec2 pos, ImVec2 size, float value01, ImU32 fillColor, ImU32 bgColor)
     {
         value01 = std::clamp(value01, 0.0f, 1.0f);
-        auto* drawList = ImGui::GetBackgroundDrawList();
+        auto* drawList = ImGui::GetWindowDrawList();
         drawList->AddRectFilled(pos, ImVec2(pos.x + size.x, pos.y + size.y), bgColor);
         drawList->AddRectFilled(pos, ImVec2(pos.x + size.x * value01, pos.y + size.y), fillColor);
     }
 
     void DrawTextLabel(ImVec2 pos, const std::string& text, ImU32 textColor, ImFont* font, ImU32 bgColor, float padding)
     {
-        auto* drawList = ImGui::GetBackgroundDrawList();
+        auto* drawList = ImGui::GetWindowDrawList();
         if (font) ImGui::PushFont(font);
         ImVec2 textSize = ImGui::CalcTextSize(text.c_str());
         if (bgColor)
@@ -92,7 +93,7 @@ namespace render::draw
 
     void DrawSpinner(ImVec2 center, float radius, ImU32 color, int segments, float speed)
     {
-        auto* drawList = ImGui::GetBackgroundDrawList();
+        auto* drawList = ImGui::GetWindowDrawList();
         float time = ImGui::GetTime();
         float startAngle = fmodf(time * speed * 2 * IM_PI, 2 * IM_PI);
         float step = 2 * IM_PI / segments;
@@ -110,7 +111,7 @@ namespace render::draw
 
     void DrawCrosshair(ImVec2 center, float size, ImU32 color, float thickness)
     {
-        auto* drawList = ImGui::GetBackgroundDrawList();
+        auto* drawList = ImGui::GetWindowDrawList();
         drawList->AddLine(ImVec2(center.x - size, center.y), ImVec2(center.x + size, center.y), color, thickness);
         drawList->AddLine(ImVec2(center.x, center.y - size), ImVec2(center.x, center.y + size), color, thickness);
     }

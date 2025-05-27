@@ -1,13 +1,47 @@
 #pragma once
 namespace controls {
+    // State
+    inline bool menuOpen = true;
+    inline int optionIndex = 0;
+    inline int currentOption = 1;
 
-	inline int g_MouseDeltaX = 0;
-	inline int g_MouseDeltaY = 0;
+    // State for one-frame buttons
+    inline bool leftPressed = false;
+    inline bool rightPressed = false;
+    inline bool selectPressed = false;
+    inline bool miscPressed = false;
 
-	namespace inputhook {
+    // Input checks
+    bool Up();
+    bool Down();
+    bool Left();
+    bool Right();
+    bool Select();
+    bool Misc();
+    bool ToggleMenu();
 
-		void Init(HWND hwnd);
-		void Remove(HWND hwnd);
-	}
+    // Tick handler
+    void HandleInputTick();
+
+
+    namespace inputhook
+    {
+        void Init(HWND hwnd);
+        void Remove(HWND hwnd);
+
+        void SetMouseTrap(bool enable);
+        bool IsMouseTrapped();
+
+        namespace draw
+        {
+            inline int g_MouseDeltaX = 0;
+            inline int g_MouseDeltaY = 0;
+
+            inline ImVec2 g_CustomCursorPos = { 500.f, 500.f };
+            inline POINT g_LastCursorPos = {};
+            inline bool g_CursorInitialized = false;
+            inline float g_CursorSensitivity = 1.0f;
+        }
+    }
 
 }

@@ -72,6 +72,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LibraryPath>.\Vendor\RED4ext.SDK\include;.\Vendor\minhook;$(LibraryPath)</LibraryPath>
+    <OutDir>D:\2077\Cyberpunk 2077\red4ext\plugins</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -146,10 +147,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Controls\controls.h" />
+    <ClInclude Include="Global\math.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Render\Draw\draw.h" />
+    <ClInclude Include="Render\Font\font.h" />
+    <ClInclude Include="Render\Font\Icons\fa_solid_900.h" />
+    <ClInclude Include="Render\Font\Icons\font_awesome_5.h" />
+    <ClInclude Include="Render\Font\Icons\IconLoader.h" />
+    <ClInclude Include="Render\Font\rubikFont.h" />
     <ClInclude Include="Render\Hooks\d3d12globals.h" />
     <ClInclude Include="Render\Hooks\hooks.h" />
+    <ClInclude Include="Render\UserInterface\Style.h" />
+    <ClInclude Include="Render\UserInterface\UserInterface.h" />
     <ClInclude Include="Vendor\ImGui\backends\imgui_impl_dx12.h" />
     <ClInclude Include="Vendor\ImGui\backends\imgui_impl_win32.h" />
     <ClInclude Include="Vendor\ImGui\imgui.h" />
@@ -168,6 +177,7 @@
     <ClInclude Include="Vendor\minhook\src\trampoline.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Controls\controls.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -179,6 +189,9 @@
     <ClCompile Include="Render\Hooks\d3d12hook.cpp" />
     <ClCompile Include="Controls\inputhook.cpp" />
     <ClCompile Include="Render\Hooks\hooks.cpp" />
+    <ClCompile Include="Render\Menu\Menu.cpp" />
+    <ClCompile Include="Render\UserInterface\Background.cpp" />
+    <ClCompile Include="Render\UserInterface\Opitons.cpp" />
     <ClCompile Include="Vendor\ImGui\backends\imgui_impl_dx12.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>

@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 
+//Placed into the only hook files that needs it
 //#include <dxgi.h>
 //#include <d3d12.h>
 //#pragma comment(lib, "d3d12.lib")
@@ -12,6 +13,7 @@
 //#include <d3d12.h>
 //#include <dxgi1_4.h>
 
+//Vendors
 #include "imgui.h"
 #include "imgui_impl_dx12.h"
 #include "imgui_impl_win32.h"
@@ -26,12 +28,17 @@
 #include "Vendor/kiero/kiero.h"
 
 
-namespace loghandler
+namespace loghandler 
 {
     inline RED4ext::PluginHandle handle = 0;
     inline const RED4ext::v0::Sdk* sdk = nullptr;
 }
+
+#include "Global/math.h"
+
 //Hooks
 #include "render/Hooks/hooks.h"
 //Draw
 #include "Render/Draw/draw.h"
+#include "Render/Font/font.h"
+#include "Render/UserInterface/UserInterface.h"

@@ -15,7 +15,7 @@ namespace render::draw
 
     void DrawRect(ImVec2 pos, ImVec2 size, ImU32 color,
         float rounding = 0.f,
-        ImDrawFlags flags = 0);
+        ImDrawFlags flags = ImDrawFlags_RoundCornersAll);
 
     void DrawLine(ImVec2 from, ImVec2 to, ImU32 color, float thickness);
 
