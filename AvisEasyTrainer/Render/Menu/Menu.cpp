@@ -2,202 +2,12 @@
 #include "Controls/controls.h"
 #include "Render/Hooks/d3d12globals.h"
 #include "Render/UserInterface/Style.h"
+#include <Features/Base/gamebase.h>
 
-#include <RED4ext/Scripting/Natives/ScriptGameInstance.hpp>
-#include <RED4ext/Scripting/Natives/Generated/ent/Entity.hpp>
-#include <RED4ext/Scripting/Natives/Generated/WorldTransform.hpp>
-#include <RED4ext/Scripting/Natives/Generated/ent/IPlacedComponent.hpp>
-#include <RED4ext/Scripting/Natives/Generated/game/data/StatType.hpp>
-#include <RED4ext/Scripting/Natives/Generated/game/StatsSystem.hpp>
 
-#include <RED4ext/Scripting/Natives/Generated/game/StatPoolsSystem.hpp>
-#include <RED4ext/Scripting/Natives/Generated/game/data/StatPoolType.hpp>
 
 namespace render::ui
 {
-
-    RED4ext::ent::Entity* GetPlayerEntity()
-    {
-        using namespace RED4ext;
-
-        ScriptGameInstance gameInstance;
-        Handle<IScriptable> handle;
-        if (!ExecuteGlobalFunction("GetPlayer;GameInstance", &handle, gameInstance) || !handle)
-            return nullptr;
-
-        return reinterpret_cast<ent::Entity*>(handle.instance);
-    }
-
-    bool GetPlayerHandleAndID(RED4ext::Handle<RED4ext::IScriptable>& outHandle, RED4ext::ent::EntityID& outID)
-    {
-        using namespace RED4ext;
-
-        ScriptGameInstance gameInstance;
-        if (!ExecuteGlobalFunction("GetGameInstance", &gameInstance))
-            return false;
-
-        if (!ExecuteGlobalFunction("GetPlayer;GameInstance", &outHandle, gameInstance) || !outHandle)
-            return false;
-
-        auto* rtti = CRTTISystem::Get();
-        auto* getEntityID = rtti->GetClass("entEntity")->GetFunction("GetEntityID");
-        StackArgs_t args;
-
-        return ExecuteFunction(outHandle, getEntityID, &outID, args) && outID.hash != 0;
-    }
-
-        // NOTE: StatPoolType values are treated as percentages (0–100%). 
-        // Any value >100 will be automatically clamped to 100%. 
-        // Keep your sliders within 0–100 (or use a 0.0–1.0 slider and multiply by 100) 
-        //  to avoid unexpected maxing out.
-
-
-    float GetStatValue(RED4ext::game::data::StatPoolType poolType)
-    {
-        using namespace RED4ext;
-
-        // 1) grab the player
-        Handle<IScriptable> playerHandle;
-        ent::EntityID playerID;
-        if (!GetPlayerHandleAndID(playerHandle, playerID))
-        {
-            loghandler::sdk->logger->Error(loghandler::handle,
-                "[GetStatValue(pool)] failed to get player handle/ID");
-            return -1.0f;
-        }
-
-        // 2) get the game instance
-        ScriptGameInstance gameInstance;
-        if (!ExecuteGlobalFunction("GetGameInstance", &gameInstance))
-        {
-            loghandler::sdk->logger->Error(loghandler::handle,
-                "[GetStatValue(pool)] GetGameInstance failed");
-            return -1.0f;
-        }
-
-        // 3) fetch the StatPoolsSystem
-        Handle<game::StatPoolsSystem> statPoolsSystem;
-        if (!ExecuteFunction("ScriptGameInstance", "GetStatPoolsSystem",
-            &statPoolsSystem, gameInstance)
-            || !statPoolsSystem)
-        {
-            loghandler::sdk->logger->Error(loghandler::handle,
-                "[GetStatValue(pool)] GetStatPoolsSystem returned null");
-            return -1.0f;
-        }
-
-        // 4) find the RTTI class and its getter
-        auto* rtti = CRTTISystem::Get();
-        if (!rtti)
-        {
-            loghandler::sdk->logger->Error(loghandler::handle,
-                "[GetStatValue(pool)] CRTTISystem not available");
-            return -1.0f;
-        }
-        auto* poolsCls = rtti->GetClass("gameStatPoolsSystem");
-        if (!poolsCls)
-        {
-            loghandler::sdk->logger->Error(loghandler::handle,
-                "[GetStatValue(pool)] RTTI class 'gameStatPoolsSystem' not found");
-            return -1.0f;
-        }
-        auto* getFunc = poolsCls->GetFunction("GetStatPoolValue");
-        if (!getFunc)
-        {
-            loghandler::sdk->logger->Error(loghandler::handle,
-                "[GetStatValue(pool)] function 'GetStatPoolValue' not found");
-            return -1.0f;
-        }
-
-        // 5) call into StatPoolsSystem
-        float outValue = 0.0f;
-        StackArgs_t args;
-        args.emplace_back(nullptr, &playerID);
-        args.emplace_back(nullptr, &poolType);
-        args.emplace_back(nullptr, &playerHandle);
-
-        if (!ExecuteFunction(statPoolsSystem, getFunc, &outValue, args))
-        {
-            loghandler::sdk->logger->Error(loghandler::handle,
-                "[GetStatValue(pool)] ExecuteFunction failed");
-            return -1.0f;
-        }
-
-        return outValue;
-    }
-
-    bool SetStatValue(RED4ext::game::data::StatPoolType poolType, float newValue)
-    {
-        using namespace RED4ext;
-
-        // 1) get the player
-        Handle<IScriptable> playerHandle;
-        ent::EntityID playerID;
-        if (!GetPlayerHandleAndID(playerHandle, playerID))
-        {
-            loghandler::sdk->logger->Error(loghandler::handle,
-                "[SetStatValue] failed to get player handle/ID");
-            return false;
-        }
-
-        // 2) get the game instance
-        ScriptGameInstance gameInstance;
-        if (!ExecuteGlobalFunction("GetGameInstance", &gameInstance))
-        {
-            loghandler::sdk->logger->Error(loghandler::handle,
-                "[SetStatValue] GetGameInstance failed");
-            return false;
-        }
-
-        // 3) grab the StatPoolsSystem
-        Handle<game::StatPoolsSystem> statPoolsSystem;
-        if (!ExecuteFunction("ScriptGameInstance", "GetStatPoolsSystem",
-            &statPoolsSystem, gameInstance)
-            || !statPoolsSystem)
-        {
-            loghandler::sdk->logger->Error(loghandler::handle,
-                "[SetStatValue] GetStatPoolsSystem returned null");
-            return false;
-        }
-
-        // 4) find the RTTI class for gameStatPoolsSystem
-        auto* rtti = CRTTISystem::Get();
-        if (!rtti)
-        {
-            loghandler::sdk->logger->Error(loghandler::handle,
-                "[SetStatValue] CRTTISystem not available");
-            return false;
-        }
-        auto* poolsCls = rtti->GetClass("gameStatPoolsSystem");
-        if (!poolsCls)
-        {
-            loghandler::sdk->logger->Error(loghandler::handle,
-                "[SetStatValue] RTTI class 'gameStatPoolsSystem' not found");
-            return false;
-        }
-
-        // 5) lookup the RequestSettingStatPoolValue function
-        auto* reqFunc = poolsCls->GetFunction("RequestSettingStatPoolValue");
-        if (!reqFunc)
-        {
-            loghandler::sdk->logger->Error(loghandler::handle,
-                "[SetStatValue] function 'RequestSettingStatPoolValue' not found");
-            return false;
-        }
-
-        // 6) build args: (EntityID, StatPoolType, newValue, playerHandle, propagate)
-        bool propagate = false;
-        StackArgs_t args;
-        args.emplace_back(nullptr, &playerID);
-        args.emplace_back(nullptr, &poolType);
-        args.emplace_back(nullptr, &newValue);
-        args.emplace_back(nullptr, &playerHandle);
-        args.emplace_back(nullptr, &propagate);
-
-        // 7) execute
-        ExecuteFunction(statPoolsSystem, reqFunc, nullptr, args);
-        return true;
-    }
 
     void InitializeUIStyle() {
         using namespace UI;
@@ -273,25 +83,26 @@ namespace render::ui
     void NativeTick()
     {
         using namespace RED4ext;
-
+		using namespace gamebase::statsutils;
         // grab the *current* pool values once on first tick
         if (!poolValuesInit)
         {
-            currentHealth = GetStatValue(game::data::StatPoolType::Health);
-            currentStamina = GetStatValue(game::data::StatPoolType::Stamina);
-            currentArmor = GetStatValue(game::data::StatPoolType::Armor);
+            currentHealth = GetPoolValue(game::data::StatPoolType::Health);
+            currentStamina = GetPoolValue(game::data::StatPoolType::Stamina);
+            currentArmor = GetPoolValue(game::data::StatPoolType::QuickHackUpload);
+
             poolValuesInit = true;
         }
 
         // set pools whenever their toggle is on
         if (healthEnabled)
-            SetStatValue(game::data::StatPoolType::Health, healthValue);
+            SetPoolValue(game::data::StatPoolType::Health, healthValue);
 
         if (staminaEnabled)
-            SetStatValue(game::data::StatPoolType::Stamina, staminaValue);
+            SetPoolValue(game::data::StatPoolType::Stamina, staminaValue);
 
         if (armorEnabled)
-            SetStatValue(game::data::StatPoolType::Armor, armorValue);
+            SetPoolValue(game::data::StatPoolType::QuickHackUpload, armorValue);
     }
 
 

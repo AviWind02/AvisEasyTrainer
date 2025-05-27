@@ -102,6 +102,9 @@
     <ClInclude Include="Global\math.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Features\Base\gamebase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -171,6 +174,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Render\Menu\Menu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Features\Base\gamebase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Features\Base\gamesystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Features\Base\statsutils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Features\PlayerFeats\playerfeature.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

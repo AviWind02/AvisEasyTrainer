@@ -147,6 +147,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Controls\controls.h" />
+    <ClInclude Include="Features\Base\gamebase.h" />
     <ClInclude Include="Global\math.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Render\Draw\draw.h" />
@@ -179,6 +180,10 @@
   <ItemGroup>
     <ClCompile Include="Controls\controls.cpp" />
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="Features\Base\gamebase.cpp" />
+    <ClCompile Include="Features\Base\gamesystem.cpp" />
+    <ClCompile Include="Features\Base\statsutils.cpp" />
+    <ClCompile Include="Features\PlayerFeats\playerfeature.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
