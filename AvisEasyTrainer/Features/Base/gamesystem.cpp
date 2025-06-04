@@ -13,4 +13,5 @@ namespace gamebase {
     Handle<StatPoolsSystem> GetStatPoolsSystem() {
         return GetGameSystem<StatPoolsSystem>("GetStatPoolsSystem");
     }
+
 }

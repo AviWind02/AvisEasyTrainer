@@ -1,8 +1,12 @@
 #include "pch.h"
+
 #include "Controls/controls.h"
 #include "Render/Hooks/d3d12globals.h"
 #include "Render/UserInterface/Style.h"
-#include <Features/Base/gamebase.h>
+
+
+
+#include "Features/PlayerFeats/playerfeature.h"
 
 
 
@@ -65,44 +69,9 @@ namespace render::ui
         ImGuiWindowFlags_NoBackground |
         ImGuiWindowFlags_NoDecoration;
 
-    static float currentHealth = -1.f;
-    static float currentStamina = -1.f;
-    static float currentArmor = -1.f;
-    static bool  poolValuesInit = false;
-
-    // toggles + target values
-    static bool  healthEnabled = false;
-    static float healthValue = 100.0f;
-
-    static bool  staminaEnabled = false;
-    static float staminaValue = 100.0f;
-
-    static bool  armorEnabled = false;
-    static float armorValue = 0.0f;
-
     void NativeTick()
     {
-        using namespace RED4ext;
-		using namespace gamebase::statsutils;
-        // grab the *current* pool values once on first tick
-        if (!poolValuesInit)
-        {
-            currentHealth = GetPoolValue(game::data::StatPoolType::Health);
-            currentStamina = GetPoolValue(game::data::StatPoolType::Stamina);
-            currentArmor = GetPoolValue(game::data::StatPoolType::QuickHackUpload);
-
-            poolValuesInit = true;
-        }
-
-        // set pools whenever their toggle is on
-        if (healthEnabled)
-            SetPoolValue(game::data::StatPoolType::Health, healthValue);
-
-        if (staminaEnabled)
-            SetPoolValue(game::data::StatPoolType::Stamina, staminaValue);
-
-        if (armorEnabled)
-            SetPoolValue(game::data::StatPoolType::QuickHackUpload, armorValue);
+        feature::playeroptions::Tick();
     }
 
 
@@ -127,22 +96,22 @@ namespace render::ui
         ImGui::Begin("##BackgroundWindow", nullptr, flags);
         background::DrawBackgroundWindow();
 
-        // pool sliders + toggles
-        DrawFloatOption("Health", healthValue, 0.0f, 10000.0f, 1.0f, true, healthEnabled);
-        DrawFloatOption("Stamina", staminaValue, 0.0f, 10000.0f, 1.0f, true, staminaEnabled);
-        DrawFloatOption("Armor", armorValue, 0.0f, 10000.0f, 1.0f, true, armorEnabled);
+        DrawToggleOption("Godmode", feature::playeroptions::tickGodmode, "Refills health to 100 constantly");
+        DrawToggleOption("Unlimited Stamina", feature::playeroptions::tickUnlimitedStamina, "Keeps stamina maxed");
+        DrawToggleOption("Unlimited Memory", feature::playeroptions::tickUnlimitedMemory,
+            "Memory resets to 100% when exiting and re-entering scanner mode.\n"
+            "Effectively gives infinite RAM outside of active Quickhacks.");
+        DrawToggleOption("Fast Throw Recovery", feature::playeroptions::tickFastThrowRecovery, "Instantly resets throwable recovery");
+        DrawToggleOption("Unlimited Oxygen", feature::playeroptions::tickUnlimitedOxygen, "Keeps oxygen at 100%");
+        DrawToggleOption("Unlimited Optical Camo", feature::playeroptions::tickUnlimitedOpticalCamo, "Refills camo charges endlessly");
+        DrawOptionTextRAW("Camo:", std::to_string(feature::playeroptions::TestCamo));
 
-        DrawToggleOption("Enable Health Pool", healthEnabled);
-        DrawToggleOption("Enable Stamina Pool", staminaEnabled);
-        DrawToggleOption("Enable Armor Pool", armorEnabled);
-
-        // current values display + reset
-        DrawOptionTextRAW("Current Health:  " + std::format("{:.1f}", currentHealth));
-        DrawOptionTextRAW("Current Stamina: " + std::format("{:.1f}", currentStamina));
-        DrawOptionTextRAW("Current Armor:   " + std::format("{:.1f}", currentArmor));
-        if (DrawOptionTextRAW("Reset Pools"))
-            poolValuesInit = false;
-
+        DrawToggleOption("Quickhack Cooldown Reduction", feature::playeroptions::tickQuickhackCooldownReduction, "Reduces all quickhack cooldowns.");
+        DrawToggleOption("Quickhack Upload Speed Boost", feature::playeroptions::tickQuickhackUploadSpeedBoost, "Increases how fast quickhacks upload.");
+        DrawToggleOption("Quickhack Queue Count Boost", feature::playeroptions::tickQuickhackQueueCountBoost, "Increases the number of quickhacks that can queue.");
+        DrawToggleOption("Quickhack Spread Number Boost", feature::playeroptions::tickQuickhackSpreadNumberBoost, "Increases the number of targets a quickhack can spread to.");
+        DrawToggleOption("Quickhack Spread Distance Boost", feature::playeroptions::tickQuickhackSpreadDistanceBoost, "Extends the distance that a quickhack can spread.");
+        DrawToggleOption("Blackwall Spread Number Boost", feature::playeroptions::tickQuickhackBlackWallSpreadNumberBoost, "Increases the spread count for Blackwall-related hacks.");
         ImGui::End();
         DebugUI::DrawStyleDebugMenu();
     }

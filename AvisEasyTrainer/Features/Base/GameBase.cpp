@@ -6,65 +6,89 @@ namespace gamebase {
     using namespace RED4ext;
     using namespace RED4ext::game;
 
-    bool TryGetGameInstance(ScriptGameInstance& outInstance) {
+    bool TryGetGameInstance(ScriptGameInstance& outInstance)
+    {
         return ExecuteGlobalFunction("GetGameInstance", &outInstance);
     }
 
-    ent::Entity* GetPlayerEntity() {
-        ScriptGameInstance gi;
-        if (!TryGetGameInstance(gi))
-            return nullptr;
+    bool TryGetPlayerHandle(Handle<IScriptable>& outHandle)
+    {
+        ScriptGameInstance gameInstance;
+        if (!TryGetGameInstance(gameInstance))
+            return false;
 
+        return ExecuteGlobalFunction("GetPlayer;GameInstance", &outHandle, gameInstance) && outHandle;
+    }
+
+    bool TryGetPlayerID(ent::EntityID& outID)
+    {
         Handle<IScriptable> handle;
-        if (!ExecuteFunction("ScriptGameInstance", "GetPlayer", &handle, gi) || !handle)
+        if (!TryGetPlayerHandle(handle))
+            return false;
+
+        auto* rtti = CRTTISystem::Get();
+        auto* getEntityID = rtti->GetClass("entEntity")->GetFunction("GetEntityID");
+        StackArgs_t args;
+
+        return ExecuteFunction(handle, getEntityID, &outID, args) && outID.hash != 0;
+    }
+
+    bool TryGetPlayerHandleAndID(Handle<IScriptable>& outHandle, ent::EntityID& outID)
+    {
+        if (!TryGetPlayerHandle(outHandle))
+            return false;
+
+        auto* rtti = CRTTISystem::Get();
+        auto* getEntityID = rtti->GetClass("entEntity")->GetFunction("GetEntityID");
+        StackArgs_t args;
+
+        return ExecuteFunction(outHandle, getEntityID, &outID, args) && outID.hash != 0;
+    }
+
+    ent::Entity* GetPlayerEntity()
+    {
+        Handle<IScriptable> handle;
+        if (!TryGetPlayerHandle(handle))
             return nullptr;
 
         return reinterpret_cast<ent::Entity*>(handle.instance);
     }
 
-    bool TryGetPlayerHandle(Handle<IScriptable>& outHandle) {
-        ScriptGameInstance gi;
-        if (!TryGetGameInstance(gi))
-            return false;
 
-        return ExecuteFunction("ScriptGameInstance", "GetPlayer", &outHandle, gi) && outHandle;
-    }
+    static bool hasRun = false;
 
-    bool TryGetPlayerID(ent::EntityID& outID) {
-        Handle<IScriptable> handle;
-        if (!TryGetPlayerHandle(handle))
-            return false;
+    void ListAllGlobalFunctionsOnce()
+    {
+        if (hasRun)
+            return;
+        hasRun = true;
 
-        auto* cls = CRTTISystem::Get()->GetClass("entEntity");
-        if (!cls)
-            return false;
+        RED4ext::CRTTISystem* rtti = RED4ext::CRTTISystem::Get();
+        if (!rtti)
+        {
+            loghandler::sdk->logger->Error(loghandler::handle, "[ListAllGlobalFunctionsOnce] Failed to get CRTTISystem.");
+            return;
+        }
 
-        auto* fn = cls->GetFunction("GetEntityID");
-        if (!fn)
-            return false;
+        loghandler::sdk->logger->Info(loghandler::handle, "==== GLOBAL FUNCTION LIST START ====");
 
-        StackArgs_t args;
-        return ExecuteFunction(handle, fn, &outID, args) && outID.hash != 0;
-    }
+        rtti->funcs.ForEach([](const RED4ext::CName& name, RED4ext::CGlobalFunction*& func)
+            {
+                if (func)
+                {
+                    auto shortName = func->shortName.ToString();
+                    auto fullName = func->fullName.ToString();
 
-    bool TryGetPlayerHandleAndID(Handle<IScriptable>& outHandle, ent::EntityID& outID) {
-        if (!TryGetPlayerHandle(outHandle))
-            return false;
-        return TryGetPlayerID(outID);
-    }
+                    loghandler::sdk->logger->InfoF(
+                        loghandler::handle,
+                        "ShortName: %s | FullName: %s",
+                        shortName,
+                        fullName
+                    );
+                }
+            });
 
-    // Template implementation
-    template<typename T>
-    Handle<T> GetGameSystem(const char* functionName) {
-        ScriptGameInstance gi;
-        if (!TryGetGameInstance(gi))
-            return {};
-
-        Handle<T> sys;
-        if (!ExecuteFunction("ScriptGameInstance", functionName, &sys, gi) || !sys)
-            return {};
-
-        return sys;
+        loghandler::sdk->logger->Info(loghandler::handle, "==== GLOBAL FUNCTION LIST END ====");
     }
 
 }

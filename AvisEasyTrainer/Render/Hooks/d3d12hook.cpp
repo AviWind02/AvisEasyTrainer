@@ -363,9 +363,9 @@ namespace render::hooks::d3d12
             ImGui_ImplWin32_NewFrame();
             ImGui_ImplDX12_NewFrame();
             ImGui::NewFrame();
-            ImGui::GetIO().MouseDrawCursor = controls::menuOpen;
+    /*        ImGui::GetIO().MouseDrawCursor = controls::menuOpen;
             ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_NoMouse;
-            controls::inputhook::SetMouseTrap(controls::menuOpen);
+            controls::inputhook::SetMouseTrap(controls::menuOpen);*/
             render::ui::DrawMainMenu();
 
             ImGui::Render();

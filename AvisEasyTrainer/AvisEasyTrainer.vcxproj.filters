@@ -105,6 +105,9 @@
     <ClInclude Include="Features\Base\gamebase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Features\PlayerFeats\playerfeature.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -186,6 +189,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Features\PlayerFeats\playerfeature.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Features\Base\modifiers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

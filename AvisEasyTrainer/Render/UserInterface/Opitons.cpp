@@ -66,10 +66,8 @@ namespace render::ui
             font
         );
 
-        if (clicked)
-            currentOption = optionIndex;
 
-        return (clicked && currentOption == optionIndex);
+        return (currentOption == optionIndex && (clicked || controls::selectPressed));
     }
     bool DrawIntOption(const std::string& label, int& value, int min, int max, int step, bool useToggle, bool& toggle, const std::string& tip)
     {

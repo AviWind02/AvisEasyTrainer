@@ -50,16 +50,34 @@ namespace controls::inputhook
             return TRUE;
 
         ImGuiIO& io = ImGui::GetIO();
-        if (io.WantCaptureMouse || io.WantCaptureKeyboard)
+        if (menuOpen)
         {
-            if ((uMsg >= WM_MOUSEFIRST && uMsg <= WM_MOUSELAST) ||
-                (uMsg >= WM_KEYFIRST && uMsg <= WM_KEYLAST) ||
-                (uMsg == WM_INPUT))
-                return TRUE;
+            const bool mouseEnabled = false; 
+            if (mouseEnabled)
+            {
+                if (uMsg >= WM_MOUSEFIRST && uMsg <= WM_MOUSELAST)
+                    return TRUE;
+            }
+
+            if (io.WantCaptureKeyboard && (uMsg == WM_KEYDOWN || uMsg == WM_SYSKEYDOWN))
+            {
+                switch (wParam)
+                {
+                case VK_BACK:
+                case VK_RETURN:
+                case VK_UP: case VK_DOWN: case VK_LEFT: case VK_RIGHT:
+                case VK_NUMPAD0: case VK_NUMPAD1: case VK_NUMPAD2: case VK_NUMPAD3:
+                case VK_NUMPAD4: case VK_NUMPAD5: case VK_NUMPAD6: case VK_NUMPAD7:
+                case VK_NUMPAD8: case VK_NUMPAD9:
+                case VK_F4:
+                    return TRUE;
+                }
+            }
         }
 
         return CallWindowProc(oWndProc, hWnd, uMsg, wParam, lParam);
     }
+
 
     // Setup WndProc and mouse trap system
     void Init(HWND hwnd)

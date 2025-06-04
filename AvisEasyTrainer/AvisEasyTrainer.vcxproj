@@ -148,6 +148,7 @@
   <ItemGroup>
     <ClInclude Include="Controls\controls.h" />
     <ClInclude Include="Features\Base\gamebase.h" />
+    <ClInclude Include="Features\PlayerFeats\playerfeature.h" />
     <ClInclude Include="Global\math.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Render\Draw\draw.h" />
@@ -182,6 +183,7 @@
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="Features\Base\gamebase.cpp" />
     <ClCompile Include="Features\Base\gamesystem.cpp" />
+    <ClCompile Include="Features\Base\modifiers.cpp" />
     <ClCompile Include="Features\Base\statsutils.cpp" />
     <ClCompile Include="Features\PlayerFeats\playerfeature.cpp" />
     <ClCompile Include="pch.cpp">
