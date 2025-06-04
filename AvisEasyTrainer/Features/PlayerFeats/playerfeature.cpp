@@ -38,69 +38,44 @@ namespace feature {
 		{
 			SetStatPoolValue(StatPoolType::Oxygen, 100.f);
 		}
-
 		void SetOpticalCamoFull()
 		{
-			if (!gamebase::modifier::IsModifierActive("OpticalCamoRecharge")) {
-				gamebase::modifier::CreateStatModifier(game::data::StatType::OpticalCamoRechargeDuration, 0.01f, game::StatModifierType::Multiplier, "OpticalCamoRecharge");
-				gamebase::modifier::AddStatModifier("OpticalCamoRecharge");
-			}
+			gamebase::modifier::AddStatModifier(game::data::StatType::OpticalCamoRechargeDuration, 0.01f, game::StatModifierType::Multiplier);
+			gamebase::modifier::AddStatModifier(game::data::StatType::OpticalCamoChargesRegenRate, 100.0f, game::StatModifierType::Additive);
 
-			if (!gamebase::modifier::IsModifierActive("OpticalCamoRegenRate")) {
-				gamebase::modifier::CreateStatModifier(game::data::StatType::OpticalCamoChargesRegenRate, 100.0f, game::StatModifierType::Additive, "OpticalCamoRegenRate");
-				gamebase::modifier::AddStatModifier("OpticalCamoRegenRate");
-			}
-
-			TestCamo = gamebase::statsutils::GetStatValue(game::data::StatType::OpticalCamoDuration);
+			TestCamo = gamebase::statsutils::GetStatValue(game::data::StatType::OpticalCamoRechargeDuration);
 		}
 
 		void SetQuickhackCooldownReduction()
 		{
-			if (!gamebase::modifier::IsModifierActive("QuickhackCooldownReduction")) {
-				gamebase::modifier::CreateStatModifier(game::data::StatType::QuickhacksCooldownReduction, 1.0f, game::StatModifierType::Additive, "QuickhackCooldownReduction");
-				gamebase::modifier::AddStatModifier("QuickhackCooldownReduction");
-			}
+			gamebase::modifier::AddStatModifier(game::data::StatType::QuickhacksCooldownReduction, 1.0f, game::StatModifierType::Additive);
 		}
 
 		void SetQuickhackUploadSpeedBoost()
 		{
-			if (!gamebase::modifier::IsModifierActive("QuickhackUploadTimeDecrease")) {
-				gamebase::modifier::CreateStatModifier(game::data::StatType::QuickHackUploadTimeDecrease, 2.0f, game::StatModifierType::Multiplier, "QuickhackUploadTimeDecrease");
-				gamebase::modifier::AddStatModifier("QuickhackUploadTimeDecrease");
-			}
+			gamebase::modifier::AddStatModifier(game::data::StatType::QuickHackUploadTimeDecrease, 2.0f, game::StatModifierType::Multiplier);
 		}
 
 		void SetQuickhackQueueCountBoost()
 		{
-			if (!gamebase::modifier::IsModifierActive("QuickhackQueueCount")) {
-				gamebase::modifier::CreateStatModifier(game::data::StatType::QuickHackQueueCount, 5.0f, game::StatModifierType::Additive, "QuickhackQueueCount");
-				gamebase::modifier::AddStatModifier("QuickhackQueueCount");
-			}
+			gamebase::modifier::AddStatModifier(game::data::StatType::QuickHackQueueCount, 5.0f, game::StatModifierType::Additive);
 		}
 
 		void SetQuickhackSpreadNumberBoost()
 		{
-			if (!gamebase::modifier::IsModifierActive("QuickhackSpreadNumber")) {
-				gamebase::modifier::CreateStatModifier(game::data::StatType::QuickHackSpreadNumber, 3.0f, game::StatModifierType::Additive, "QuickhackSpreadNumber");
-				gamebase::modifier::AddStatModifier("QuickhackSpreadNumber");
-			}
+			gamebase::modifier::AddStatModifier(game::data::StatType::QuickHackSpreadNumber, 3.0f, game::StatModifierType::Additive);
 		}
 
 		void SetQuickhackSpreadDistanceBoost()
 		{
-			if (!gamebase::modifier::IsModifierActive("QuickhackSpreadDistanceIncrease")) {
-				gamebase::modifier::CreateStatModifier(game::data::StatType::QuickHackSpreadDistanceIncrease, 50.0f, game::StatModifierType::Additive, "QuickhackSpreadDistanceIncrease");
-				gamebase::modifier::AddStatModifier("QuickhackSpreadDistanceIncrease");
-			}
+			gamebase::modifier::AddStatModifier(game::data::StatType::QuickHackSpreadDistanceIncrease, 50.0f, game::StatModifierType::Additive);
 		}
 
 		void SetQuickhackBlackWallSpreadNumberBoost()
 		{
-			if (!gamebase::modifier::IsModifierActive("QuickhackBlackWallSpreadNumber")) {
-				gamebase::modifier::CreateStatModifier(game::data::StatType::QuickHackBlackWallSpreadNumber, 5.0f, game::StatModifierType::Additive, "QuickhackBlackWallSpreadNumber");
-				gamebase::modifier::AddStatModifier("QuickhackBlackWallSpreadNumber");
-			}
+			gamebase::modifier::AddStatModifier(game::data::StatType::QuickHackBlackWallSpreadNumber, 5.0f, game::StatModifierType::Additive);
 		}
+
 
 		void Tick()
 		{

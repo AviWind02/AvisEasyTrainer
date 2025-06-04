@@ -41,38 +41,48 @@ namespace gamebase {
 
 
 
-    RED4ext::Handle<game::StatsSystem>     GetStatsSystem();
-    RED4ext::Handle<game::StatPoolsSystem> GetStatPoolsSystem();
+    Handle<game::StatsSystem>     GetStatsSystem();
+    Handle<game::StatPoolsSystem> GetStatPoolsSystem();
 
     namespace modifier {
 
         struct ModifierEntry
         {
-            RED4ext::CName customID;
-            RED4ext::game::data::StatType statType;
-            RED4ext::Handle<RED4ext::game::StatModifierData> modifierHandle;
+            CName customID;
+            game::data::StatType statType;
+            Handle<game::StatModifierData> modifierHandle;
             bool isAdded = false;
         };
 
-        RED4ext::Handle<RED4ext::game::StatModifierData> CreateStatModifier(
-            RED4ext::game::data::StatType statType,
+        Handle<game::StatModifierData> CreateStatModifier(
+            game::data::StatType statType,
             float value,
-            RED4ext::game::StatModifierType modifierType,
-            const std::string& customID);
+            game::StatModifierType modifierType,
+            uint32_t* outID = nullptr);
 
-        bool AddStatModifier(const RED4ext::CName& customID);
-        bool RemoveStatModifier(const RED4ext::CName& customID);
-        bool InjectStatModifier(const RED4ext::CName& customID);
-        bool IsModifierActive(const RED4ext::CName& customID);
+        bool InjectStatModifier(Handle<game::StatModifierData> handle);
+        bool AddStatModifier(Handle<game::StatModifierData> handle);
+        bool RemoveStatModifier(Handle<game::StatModifierData> handle);
 
+        bool InjectStatModifier(
+            game::data::StatType statType,
+            float value,
+            game::StatModifierType modifierType);
+
+        bool AddStatModifier(
+            game::data::StatType statType,
+            float value,
+            game::StatModifierType modifierType);
+
+        void RemoveAllCachedModifiers();
     }
 
     namespace statsutils
     {
-        float GetStatValue(RED4ext::game::data::StatType statType);
+        float GetStatValue(game::data::StatType statType);
         bool InjectStatModifier(game::data::StatType statType, float value, game::StatModifierType modifierType = game::StatModifierType::Additive);
-        float GetPoolValue(RED4ext::game::data::StatPoolType poolType);
-        bool SetPoolValue(RED4ext::game::data::StatPoolType poolType, float newValue, bool propagate = true);
+        float GetPoolValue(game::data::StatPoolType poolType);
+        bool SetPoolValue(game::data::StatPoolType poolType, float newValue, bool propagate = true);
     }
 
 }
