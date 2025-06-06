@@ -10,6 +10,7 @@
 #include <RED4ext/Scripting/Natives/Generated/game/StatData.hpp>
 #include <RED4ext/Scripting/Natives/Generated/game/StatModifierData.h>
 #include <RED4ext/Scripting/Natives/Generated/game/TeleportationFacility.hpp>
+#include <RED4ext/Scripting/Natives/Generated/game/StatusEffectSystem.hpp>
 
 
 #include <RED4ext/Scripting/Natives/Generated/game/StatsObjectID.hpp>
@@ -45,6 +46,7 @@ namespace gamebase {
 
     Handle<game::StatsSystem>     GetStatsSystem();
     Handle<game::StatPoolsSystem> GetStatPoolsSystem();
+    Handle<game::StatusEffectSystem> GetStatusEffectSystem();
 
     namespace modifier {
 

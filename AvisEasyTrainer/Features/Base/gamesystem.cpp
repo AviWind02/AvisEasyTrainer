@@ -14,4 +14,8 @@ namespace gamebase {
         return GetGameSystem<StatPoolsSystem>("GetStatPoolsSystem");
     }
 
+    Handle<game::StatusEffectSystem> GetStatusEffectSystem() {
+        return GetGameSystem<game::StatusEffectSystem>("GetStatusEffectSystem");
+    }
+
 }

@@ -17,6 +17,8 @@ namespace feature {
 		using namespace RED4ext;
 		using namespace game;
 		using namespace data;
+		using namespace gamebase;
+		using namespace modifier;
 
 		void SetStatPoolValue(StatPoolType stat, float value)
 		{
@@ -83,8 +85,6 @@ namespace feature {
 
 		void SetDamageResistances(bool remove = false)
 		{
-			using namespace gamebase::modifier;
-
 			static Handle<game::StatModifierData> explosion;
 			static Handle<game::StatModifierData> melee;
 			static Handle<game::StatModifierData> thermal;
@@ -112,7 +112,6 @@ namespace feature {
 
 		void SetCombatRegenMods(bool remove = false)
 		{
-			using namespace gamebase::modifier;
 			static Handle<game::StatModifierData> regenEnable;
 			if (remove)
 				RemoveStatModifier(regenEnable);
@@ -122,7 +121,6 @@ namespace feature {
 
 		void SetInfiniteOxygen(bool remove = false)
 		{
-			using namespace gamebase::modifier;
 			static Handle<game::StatModifierData> oxygen;
 			if (remove)
 				RemoveStatModifier(oxygen);
@@ -132,7 +130,6 @@ namespace feature {
 
 		void SetInfiniteStamina(bool remove = false)
 		{
-			using namespace gamebase::modifier;
 			static Handle<game::StatModifierData> stamina;
 			if (remove)
 				RemoveStatModifier(stamina);
@@ -142,7 +139,6 @@ namespace feature {
 
 		void SetHealItemCooldown(bool remove = false)
 		{
-			using namespace gamebase::modifier;
 			static Handle<game::StatModifierData> heal;
 			if (remove)
 				RemoveStatModifier(heal);
@@ -152,7 +148,6 @@ namespace feature {
 
 		void SetGrenadeCooldown(bool remove = false)
 		{
-			using namespace gamebase::modifier;
 			static Handle<game::StatModifierData> grenade;
 			if (remove)
 				RemoveStatModifier(grenade);
@@ -162,7 +157,6 @@ namespace feature {
 
 		void SetProjectileCooldown(bool remove = false)
 		{
-			using namespace gamebase::modifier;
 			static Handle<game::StatModifierData> projectile;
 			if (remove)
 				RemoveStatModifier(projectile);
@@ -172,7 +166,6 @@ namespace feature {
 
 		void SetCloakCooldown(bool remove = false)
 		{
-			using namespace gamebase::modifier;
 			static Handle<game::StatModifierData> cloak1;
 			static Handle<game::StatModifierData> cloak2;
 			if (remove)
@@ -189,7 +182,6 @@ namespace feature {
 
 		void SetSandevistanCooldown(bool remove = false)
 		{
-			using namespace gamebase::modifier;
 			static Handle<game::StatModifierData> sand;
 			if (remove)
 				RemoveStatModifier(sand);
@@ -199,7 +191,6 @@ namespace feature {
 
 		void SetBerserkCooldown(bool remove = false)
 		{
-			using namespace gamebase::modifier;
 			static Handle<game::StatModifierData> berserk;
 			if (remove)
 				RemoveStatModifier(berserk);
@@ -209,7 +200,6 @@ namespace feature {
 
 		void SetKerenzikovCooldown(bool remove = false)
 		{
-			using namespace gamebase::modifier;
 			static Handle<game::StatModifierData> keren;
 			if (remove)
 				RemoveStatModifier(keren);
@@ -219,7 +209,6 @@ namespace feature {
 
 		void SetOverclockCooldown(bool remove = false)
 		{
-			using namespace gamebase::modifier;
 			static Handle<game::StatModifierData> over1;
 			static Handle<game::StatModifierData> over2;
 			if (remove)
@@ -236,7 +225,6 @@ namespace feature {
 
 		void SetQuickhackCooldown(bool remove = false)
 		{
-			using namespace gamebase::modifier;
 			static Handle<game::StatModifierData> hackcool;
 			if (remove)
 				RemoveStatModifier(hackcool);
@@ -246,7 +234,6 @@ namespace feature {
 
 		void SetQuickhackCost(bool remove = false)
 		{
-			using namespace gamebase::modifier;
 			static Handle<game::StatModifierData> hackcost;
 			if (remove)
 				RemoveStatModifier(hackcost);
@@ -256,13 +243,125 @@ namespace feature {
 
 		void SetMemoryRegeneration(bool remove = false)
 		{
-			using namespace gamebase::modifier;
 			static Handle<game::StatModifierData> regen;
 			if (remove)
 				RemoveStatModifier(regen);
 			else
 				AddStatModifier(StatType::MemoryRegenRateMult, 100.0f, StatModifierType::Additive, regen);
 		}
+
+		void SetDetectionRatelow(bool remove = false)
+		{
+			static Handle<game::StatModifierData> detection1;
+			static Handle<game::StatModifierData> detection2;
+			static Handle<game::StatModifierData> detection3;
+
+			if (remove)
+			{
+				RemoveStatModifier(detection1);
+				RemoveStatModifier(detection2);
+				RemoveStatModifier(detection3);
+
+			}
+			else
+			{
+				// No idea if this is even right works sometimes tho soooooo yea!?
+				AddStatModifier(StatType::Visibility, 0.00001f, StatModifierType::Multiplier, detection1);
+				AddStatModifier(StatType::VisibilityReduction, 0.00001f, StatModifierType::Multiplier, detection2);
+				AddStatModifier(StatType::VisibilityReductionModifierHelper, 99999999.9f, StatModifierType::Additive, detection3);
+				
+			}
+		}
+
+
+		void SetSuperJump(bool remove = false)
+		{
+			using namespace gamebase::modifier;
+			static Handle<game::StatModifierData> detection1;
+
+			if (remove)
+			{
+				RemoveStatModifier(detection1);
+
+			}
+			else
+			{
+				AddStatModifier(StatType::JumpHeight, jumpHeight, StatModifierType::Multiplier, detection1);
+
+			}
+		}
+		void SetKiroshEyeZoom(bool remove = false)
+		{
+			using namespace gamebase::modifier;
+			static Handle<game::StatModifierData> detection1;
+
+			static bool loadValue = true;
+			if (loadValue)
+			{
+				kiroshEyeZoom = statsutils::GetStatValue(StatType::KiroshiMaxZoomLevel);
+				loadValue = false;
+			}
+
+			if (remove)
+			{
+				RemoveStatModifier(detection1);
+
+			}
+			else
+			{
+				AddStatModifier(StatType::KiroshiMaxZoomLevel, kiroshEyeZoom, StatModifierType::Multiplier, detection1);
+
+			}
+		}
+
+
+		
+
+	/*	void SetSuperJump(bool remove = false)
+		{
+			static Handle<game::StatModifierData> detection1;
+			static float currentJumpHeight = -1.0f; 
+
+			if (remove)
+			{
+				RemoveStatModifier(detection1);
+				currentJumpHeight = -1.0f; 
+			}
+			else
+			{
+				if (currentJumpHeight != jumpHeight)
+				{
+					RemoveStatModifier(detection1); 
+					if (tickSuperJump)
+						AddStatModifier(StatType::JumpHeight, jumpHeight, StatModifierType::Multiplier, detection1);
+					currentJumpHeight = jumpHeight;
+				}
+			}
+		}*/
+
+		void Settest(bool remove = false)
+		{
+			//static Handle<game::StatModifierData> detection1;
+			static Handle<game::StatModifierData> detection2;
+			static Handle<game::StatModifierData> detection3;
+
+			if (remove)
+			{
+				//RemoveStatModifier(detection1);
+				RemoveStatModifier(detection2);
+				RemoveStatModifier(detection3);
+
+			}
+			else
+			{
+				// No idea if this is even right works sometimes tho soooooo yea!?
+				//AddStatModifier(StatType::MagazineAutoRefill, 0.00001f, StatModifierType::Additive, detection1);
+				//AddStatModifier(StatType::JumpHeight, 10.f, StatModifierType::Multiplier, detection2); Super jump
+
+			}
+		}
+
+
 
 		using FeatureFn = void(*)(bool);
 
@@ -278,6 +377,32 @@ namespace feature {
 				applied = false;
 			}
 		}
+
+		//Adds a new mod each time the values is update
+		void HandleStatModifierToggle(bool toggle, float currentValue, float& lastAppliedValue, bool& applied, FeatureFn applyFunc)
+		{
+			if (toggle)
+			{
+				if (!applied)
+				{
+					applyFunc(false);
+					applied = true;
+					lastAppliedValue = currentValue;
+				}
+				else if (currentValue != lastAppliedValue)
+				{
+					applyFunc(true); 
+					applyFunc(false);
+					lastAppliedValue = currentValue;
+				}
+			}
+			else if (applied)
+			{
+				applyFunc(true); // remove
+				applied = false;
+			}
+		}
+
 
 		void Tick()
 		{
@@ -298,6 +423,20 @@ namespace feature {
 
 			//static bool appliedStamina = false;
 			//HandleStatModifierToggle(tickUnlimitedStamina, appliedStamina, SetInfiniteStamina);
+
+			//static bool kiroshEye = false;
+			//static float kiroshEyeZoomS = 0.f;
+			//HandleStatModifierToggle(tickKiroshEyeZoom, kiroshEyeZoom, kiroshEyeZoomS, kiroshEye, SetKiroshEyeZoom);
+
+			static bool superjump = false;
+			static float superjumpH = 0.f;
+			HandleStatModifierToggle(tickSuperJump, jumpHeight, superjumpH, superjump, SetSuperJump);
+
+			static bool test = false;
+			HandleStatModifierToggle(tickTest, test, Settest);
+
+			static bool detectionRate = false;
+			HandleStatModifierToggle(tickdetectionRate, detectionRate, SetDetectionRatelow);
 
 			static bool appliedHeal = false;
 			HandleStatModifierToggle(tickHealItemCooldown, appliedHeal, SetHealItemCooldown);

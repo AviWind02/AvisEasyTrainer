@@ -122,6 +122,8 @@ namespace gamebase {
             return true;
         }
 
+
+
         bool InjectStatModifier(game::data::StatType statType, float value, game::StatModifierType modifierType)
         {
             auto* rtti = RED4ext::CRTTISystem::Get();
@@ -187,5 +189,42 @@ namespace gamebase {
 
             return true;
         }
+
+       /* bool CheckRevealPlayerPosition(game::NPCPuppet* ownerPuppet, const ent::EntityID& playerID, bool isPrevention)
+        {
+            auto* rtti = RED4ext::CRTTISystem::Get();
+            if (!rtti)
+            {
+                loghandler::sdk->logger->Error(loghandler::handle, "[CheckReveal] RTTI system is null");
+                return false;
+            }
+
+            auto* revealFn = rtti->GetFunction("NPCPuppet::RevealPlayerPositionIfNeeded;ScriptedPuppetEntityIDBool");
+            if (!revealFn)
+            {
+                loghandler::sdk->logger->Error(loghandler::handle, "[CheckReveal] RevealPlayerPositionIfNeeded not found");
+                return false;
+            }
+
+            RED4ext::Handle<RED4ext::IScriptable> ownerHandle = reinterpret_cast<RED4ext::IScriptable*>(ownerPuppet);
+
+            StackArgs_t args{
+                { nullptr, &ownerHandle },
+                { nullptr, &playerID },
+                { nullptr, &isPrevention }
+            };
+
+            bool result = false;
+            if (!ExecuteFunction(nullptr, revealFn, &result, args))
+            {
+                loghandler::sdk->logger->Error(loghandler::handle, "[CheckReveal] Failed to execute RevealPlayerPositionIfNeeded");
+                return false;
+            }
+
+            loghandler::sdk->logger->InfoF(loghandler::handle, "[CheckReveal] RevealPlayerPositionIfNeeded returned: %s", result ? "true" : "false");
+
+            return result;
+        }*/
+
     } 
 } 

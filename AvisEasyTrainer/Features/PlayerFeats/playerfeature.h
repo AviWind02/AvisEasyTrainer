@@ -8,7 +8,15 @@ namespace feature {
 		inline bool tickUnlimitedMemory = false;
 		inline bool tickUnlimitedOxygen = false;
 
-		inline bool tickHealItemCooldown = false;
+		inline bool tickHealItemCooldown = false;		
+		inline bool tickdetectionRate = false;
+		inline bool tickTest = false;
+
+		inline bool tickSuperJump = false;
+		inline float jumpHeight = 5.f;
+		inline bool tickKiroshEyeZoom = false;
+		inline float kiroshEyeZoom = 5.f;
+		
 		inline bool tickGrenadeCooldown = false;
 		inline bool tickProjectileCooldown = false;
 		inline bool tickCloakCooldown = false;

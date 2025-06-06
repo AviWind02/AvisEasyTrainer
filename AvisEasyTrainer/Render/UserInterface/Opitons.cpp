@@ -252,7 +252,7 @@ namespace render::ui
 
             ImGui::SetCursorPosX(ImGui::GetCursorPosX() + OptionPaddingX);
             std::string sliderId = "##FloatSlider_" + label;
-            if (ImGui::SliderFloat(sliderId.c_str(), &value, min, max, "", step)) {
+            if (ImGui::SliderFloat(sliderId.c_str(), &value, min, max, "%.2f", step)) {
                 toggle = true;
                 changed = true;
             }

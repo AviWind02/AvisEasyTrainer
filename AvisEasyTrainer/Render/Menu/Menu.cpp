@@ -105,11 +105,18 @@ namespace render::ui
             DrawToggleOption("Fall Damage Reduction", feature::playeroptions::tickGodFallDamage, "Negates most fall damage.");
             DrawToggleOption("Damage Resistances", feature::playeroptions::tickGodResistances, "Maximizes all elemental and physical resistances.");
             DrawToggleOption("Combat Regen", feature::playeroptions::tickGodCombatRegen, "Enables health regeneration while in combat.");
-
+            DrawToggleOption("Visibility Rate Reduction", feature::playeroptions::tickdetectionRate,
+                "Lowers how easily NPCs detect you. You're still visible to them and can get detected up close or if in combat.");
+            DrawToggleOption("tickTest", feature::playeroptions::tickTest, "");
+			DrawFloatOption("Jump Height", feature::playeroptions::jumpHeight, 0.1f, 15.f, 0.5f, true, feature::playeroptions::tickSuperJump,  "Adjusts jump height.\n"
+				"Set to 0.0 to disable super jump.");
+            
+            
             DrawToggleOption("Unlimited Stamina", feature::playeroptions::tickUnlimitedStamina, "Keeps stamina maxed");
             DrawToggleOption("Unlimited Memory", feature::playeroptions::tickUnlimitedMemory,
                 "Memory resets to 100% when exiting and re-entering scanner mode.\n"
                 "Effectively gives infinite RAM outside of active Quickhacks.");
+            
             DrawToggleOption("Unlimited Oxygen", feature::playeroptions::tickUnlimitedOxygen, "Keeps oxygen at 100%");
 
             DrawToggleOption("Heal Item Cooldown Reduction", feature::playeroptions::tickHealItemCooldown, "Removes cooldown between healing item uses.");

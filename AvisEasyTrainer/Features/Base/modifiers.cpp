@@ -130,6 +130,9 @@ namespace gamebase {
 
         bool RemoveStatModifier(Handle<game::StatModifierData> handle)
         {
+            if (!handle)
+                return false;
+
             auto statsSystem = gamebase::GetStatsSystem();
             if (!statsSystem) {
                 loghandler::sdk->logger->Error(loghandler::handle, "[RemoveStatModifier] statsSystem is null");
