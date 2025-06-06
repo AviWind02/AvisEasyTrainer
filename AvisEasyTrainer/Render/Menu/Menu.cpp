@@ -79,6 +79,8 @@ namespace render::ui
         extern void DrawStyleDebugMenu();
     }
 
+
+
     void DrawMainMenu()
     {
         using namespace controls;
@@ -94,24 +96,34 @@ namespace render::ui
         ImGui::SetNextWindowSize(viewport->Size);
         ImGui::SetNextWindowBgAlpha(0.f);
         ImGui::Begin("##BackgroundWindow", nullptr, flags);
-        background::DrawBackgroundWindow();
+        {
+            background::DrawBackgroundWindow();
+            DrawToggleOption("Godmode", feature::playeroptions::tickGodmode, "Refills health to 100 constantly");
 
-        DrawToggleOption("Godmode", feature::playeroptions::tickGodmode, "Refills health to 100 constantly");
-        DrawToggleOption("Unlimited Stamina", feature::playeroptions::tickUnlimitedStamina, "Keeps stamina maxed");
-        DrawToggleOption("Unlimited Memory", feature::playeroptions::tickUnlimitedMemory,
-            "Memory resets to 100% when exiting and re-entering scanner mode.\n"
-            "Effectively gives infinite RAM outside of active Quickhacks.");
-        DrawToggleOption("Fast Throw Recovery", feature::playeroptions::tickFastThrowRecovery, "Instantly resets throwable recovery");
-        DrawToggleOption("Unlimited Oxygen", feature::playeroptions::tickUnlimitedOxygen, "Keeps oxygen at 100%");
-        DrawToggleOption("Unlimited Optical Camo", feature::playeroptions::tickUnlimitedOpticalCamo, "Refills camo charges endlessly");
-        DrawOptionTextRAW("Camo:", std::to_string(feature::playeroptions::TestCamo));
+            DrawToggleOption("Health Regen", feature::playeroptions::tickGodHealthRegen, "Applies extreme passive health regeneration and boosts base health.");
+            DrawToggleOption("Armor Boost", feature::playeroptions::tickGodArmor, "Increases armor to near-invincible levels.");
+            DrawToggleOption("Fall Damage Reduction", feature::playeroptions::tickGodFallDamage, "Negates most fall damage.");
+            DrawToggleOption("Damage Resistances", feature::playeroptions::tickGodResistances, "Maximizes all elemental and physical resistances.");
+            DrawToggleOption("Combat Regen", feature::playeroptions::tickGodCombatRegen, "Enables health regeneration while in combat.");
 
-        DrawToggleOption("Quickhack Cooldown Reduction", feature::playeroptions::tickQuickhackCooldownReduction, "Reduces all quickhack cooldowns.");
-        DrawToggleOption("Quickhack Upload Speed Boost", feature::playeroptions::tickQuickhackUploadSpeedBoost, "Increases how fast quickhacks upload.");
-        DrawToggleOption("Quickhack Queue Count Boost", feature::playeroptions::tickQuickhackQueueCountBoost, "Increases the number of quickhacks that can queue.");
-        DrawToggleOption("Quickhack Spread Number Boost", feature::playeroptions::tickQuickhackSpreadNumberBoost, "Increases the number of targets a quickhack can spread to.");
-        DrawToggleOption("Quickhack Spread Distance Boost", feature::playeroptions::tickQuickhackSpreadDistanceBoost, "Extends the distance that a quickhack can spread.");
-        DrawToggleOption("Blackwall Spread Number Boost", feature::playeroptions::tickQuickhackBlackWallSpreadNumberBoost, "Increases the spread count for Blackwall-related hacks.");
+            DrawToggleOption("Unlimited Stamina", feature::playeroptions::tickUnlimitedStamina, "Keeps stamina maxed");
+            DrawToggleOption("Unlimited Memory", feature::playeroptions::tickUnlimitedMemory,
+                "Memory resets to 100% when exiting and re-entering scanner mode.\n"
+                "Effectively gives infinite RAM outside of active Quickhacks.");
+            DrawToggleOption("Unlimited Oxygen", feature::playeroptions::tickUnlimitedOxygen, "Keeps oxygen at 100%");
+
+            DrawToggleOption("Heal Item Cooldown Reduction", feature::playeroptions::tickHealItemCooldown, "Removes cooldown between healing item uses.");
+            DrawToggleOption("Grenade Cooldown Reduction", feature::playeroptions::tickGrenadeCooldown, "Removes cooldown between grenade throws.");
+            DrawToggleOption("Projectile Launcher Cooldown", feature::playeroptions::tickProjectileCooldown, "Allows spamming projectile launcher.");
+            DrawToggleOption("Cloak Cooldown Reduction", feature::playeroptions::tickCloakCooldown, "Rapidly regenerates cloak charges and duration.");
+            DrawToggleOption("Sandevistan Cooldown Reduction", feature::playeroptions::tickSandevistanCooldown, "Reduces Sandevistan cooldown dramatically.");
+            DrawToggleOption("Berserk Cooldown Reduction", feature::playeroptions::tickBerserkCooldown, "Allows frequent Berserk activations.");
+            DrawToggleOption("Kerenzikov Cooldown Reduction", feature::playeroptions::tickKerenzikovCooldown, "Eliminates cooldown on Kerenzikov dodges.");
+            DrawToggleOption("Overclock Cooldown Reduction", feature::playeroptions::tickOverclockCooldown, "Greatly boosts overclock regen and disables cooldown.");
+            DrawToggleOption("Quickhack Cooldown Reduction", feature::playeroptions::tickQuickhackCooldown, "Minimizes cooldown between Quickhacks.");
+            DrawToggleOption("Quickhack Cost Reduction", feature::playeroptions::tickQuickhackCost, "Reduces RAM cost of Quickhacks to almost zero.");
+            DrawToggleOption("Memory Regeneration Boost", feature::playeroptions::tickMemoryRegeneration, "Massively increases RAM regen rate.");
+        }
         ImGui::End();
         DebugUI::DrawStyleDebugMenu();
     }
@@ -139,6 +151,8 @@ namespace render::ui
                 color = defaultColor;
             }
         }
+
+
 
         void DrawStyleDebugMenu() {
             if (!ImGui::Begin("UI Style Debug")) return;

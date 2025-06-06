@@ -9,6 +9,8 @@
 #include <RED4ext/Scripting/Natives/Generated/game/data/StatType.hpp>
 #include <RED4ext/Scripting/Natives/Generated/game/StatData.hpp>
 #include <RED4ext/Scripting/Natives/Generated/game/StatModifierData.h>
+#include <RED4ext/Scripting/Natives/Generated/game/TeleportationFacility.hpp>
+
 
 #include <RED4ext/Scripting/Natives/Generated/game/StatsObjectID.hpp>
 #include <RED4ext/Scripting/Natives/Generated/game/RPGManager.hpp>
@@ -64,23 +66,20 @@ namespace gamebase {
         bool AddStatModifier(Handle<game::StatModifierData> handle);
         bool RemoveStatModifier(Handle<game::StatModifierData> handle);
 
-        bool InjectStatModifier(
-            game::data::StatType statType,
-            float value,
-            game::StatModifierType modifierType);
+        bool InjectStatModifier(game::data::StatType statType, float value, game::StatModifierType modifierType, Handle<game::StatModifierData>& outHandle);
+        bool AddStatModifier(game::data::StatType statType, float value, game::StatModifierType modifierType, Handle<game::StatModifierData>& outHandle);
 
-        bool AddStatModifier(
-            game::data::StatType statType,
-            float value,
-            game::StatModifierType modifierType);
 
         void RemoveAllCachedModifiers();
+
+     
+
     }
 
     namespace statsutils
     {
         float GetStatValue(game::data::StatType statType);
-        bool InjectStatModifier(game::data::StatType statType, float value, game::StatModifierType modifierType = game::StatModifierType::Additive);
+        //bool InjectStatModifier(game::data::StatType statType, float value, game::StatModifierType modifierType = game::StatModifierType::Additive);
         float GetPoolValue(game::data::StatPoolType poolType);
         bool SetPoolValue(game::data::StatPoolType poolType, float newValue, bool propagate = true);
     }

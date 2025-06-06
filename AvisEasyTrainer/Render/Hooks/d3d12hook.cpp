@@ -1,4 +1,8 @@
 #pragma once
+// This D3D12 hook system was developed primarily through iterative vibe coding with ChatGPT.
+// A lot of it came together through trial and error, and debug-driven exploration.
+// Concepts were inspired by general DirectX12 hooking practices from like GTA 5, with influence from CET.
+
 
 #include "pch.h"
 #include "Controls/controls.h"

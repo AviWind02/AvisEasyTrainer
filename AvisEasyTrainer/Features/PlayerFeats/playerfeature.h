@@ -6,25 +6,26 @@ namespace feature {
 		inline bool tickGodmode = false;
 		inline bool tickUnlimitedStamina = false;
 		inline bool tickUnlimitedMemory = false;
-		inline bool tickFastThrowRecovery = false;
 		inline bool tickUnlimitedOxygen = false;
-		inline bool tickUnlimitedOpticalCamo = false;
 
-		inline bool tickQuickhackCooldownReduction = false;
-		inline bool tickQuickhackUploadSpeedBoost = false;
-		inline bool tickQuickhackQueueCountBoost = false;
-		inline bool tickQuickhackSpreadNumberBoost = false;
-		inline bool tickQuickhackSpreadDistanceBoost = false;
-		inline bool tickQuickhackBlackWallSpreadNumberBoost = false;
-
-		inline float TestCamo = -1.f;
-		void SetHealthFull();
-		void SetStaminaFull();
-		void SetMemoryFull();
-		void SetThrowRecoveryFull();
-		void SetOxygenFull();
-		void SetOpticalCamoFull();
-
+		inline bool tickHealItemCooldown = false;
+		inline bool tickGrenadeCooldown = false;
+		inline bool tickProjectileCooldown = false;
+		inline bool tickCloakCooldown = false;
+		inline bool tickSandevistanCooldown = false;
+		inline bool tickBerserkCooldown = false;
+		inline bool tickKerenzikovCooldown = false;
+		inline bool tickOverclockCooldown = false;
+		inline bool tickQuickhackCooldown = false;
+		inline bool tickQuickhackCost = false;
+		inline bool tickMemoryRegeneration = false;
+		inline bool tickFaceplateCooldown = false;
+		inline bool tickGodHealthRegen = false;
+		inline bool tickGodArmor = false;
+		inline bool tickGodFallDamage = false;
+		inline bool tickGodResistances = false;
+		inline bool tickGodCombatRegen = false;
+		inline bool tickNoClip = false;
 		void Tick();
 
 	}

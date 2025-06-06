@@ -48,7 +48,9 @@ namespace gamebase {
             loghandler::sdk->logger->InfoF(loghandler::handle, "[Modifier] Created stat modifier for type %u with value %.2f", static_cast<uint32_t>(modifierType), value);
             return modifierHandle;
         }
-
+        // InjectStatModifier is functionally the same as AddModifier. 
+        // Internally, it just calls AddModifier (per PsiberX's StatModifier info), so this function is 
+        // redundant but kept here in case it is still useful for compatibility or specific cases .
         bool InjectStatModifier(Handle<game::StatModifierData> handle)
         {
             auto* rtti = CRTTISystem::Get();
@@ -166,22 +168,22 @@ namespace gamebase {
         }
 
 
-        bool InjectStatModifier(game::data::StatType statType, float value, game::StatModifierType modifierType)
+        bool InjectStatModifier(game::data::StatType statType, float value, game::StatModifierType modifierType, Handle<game::StatModifierData>& outHandle)
         {
-            auto handle = CreateStatModifier(statType, value, modifierType);
-            if (!handle)
+            outHandle = CreateStatModifier(statType, value, modifierType);
+            if (!outHandle)
                 return false;
 
-            return InjectStatModifier(handle);
+            return InjectStatModifier(outHandle);
         }
 
-        bool AddStatModifier(game::data::StatType statType, float value, game::StatModifierType modifierType)
+        bool AddStatModifier(game::data::StatType statType, float value, game::StatModifierType modifierType, Handle<game::StatModifierData>& outHandle)
         {
-            auto handle = CreateStatModifier(statType, value, modifierType);
-            if (!handle)
+            outHandle = CreateStatModifier(statType, value, modifierType);
+            if (!outHandle)
                 return false;
 
-            return AddStatModifier(handle);
+            return AddStatModifier(outHandle);
         }
 
         void RemoveAllCachedModifiers()
