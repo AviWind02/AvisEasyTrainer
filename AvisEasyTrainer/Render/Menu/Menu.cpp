@@ -131,10 +131,8 @@ namespace render::ui
             DrawToggleOption("Quickhack Cooldown Reduction", feature::playeroptions::tickQuickhackCooldown, "Minimizes cooldown between Quickhacks.");
             DrawToggleOption("Quickhack Cost Reduction", feature::playeroptions::tickQuickhackCost, "Reduces RAM cost of Quickhacks to almost zero.");
             DrawToggleOption("Memory Regeneration Boost", feature::playeroptions::tickMemoryRegeneration, "Massively increases RAM regen rate.");
-			DrawIntOption("Memory Value", feature::playeroptions::memoryValue, 1, 256, 1, true, feature::playeroptions::tickMemoryEdit,
-				"Sets the maximum memory value for Quickhacks.\n"
-				"Set to 16 for default value.\n"
-				"Set to 64 for maximum value.");
+            DrawIntOption("Memory Value", feature::playeroptions::memoryValue, 1, 256, 1, true, feature::playeroptions::tickMemoryEdit, "Sets the maximum memory value for Quickhacks.\n");
+
         }
         ImGui::End();
         DebugUI::DrawStyleDebugMenu();
