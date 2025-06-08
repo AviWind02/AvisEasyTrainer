@@ -2,6 +2,7 @@
 #include "Features/Base/gamebase.h"
 #include "playerfeature.h"
 #include <RED4ext/Scripting/Natives/Generated/ent/IPlacedComponent.hpp>
+#include <RED4ext/Scripting/Natives/Generated/game/data/WeaponItem_Record.hpp>
 
 // Some of the functions below were inspired by or adapted from the CET SimpleMenu Lua scripts,
 // originally created by Dank Rafft and capncoolio2. 
@@ -277,19 +278,20 @@ namespace feature {
 		void SetSuperJump(bool remove = false)
 		{
 			using namespace gamebase::modifier;
-			static Handle<game::StatModifierData> detection1;
+			static Handle<game::StatModifierData> jump;
 
 			if (remove)
 			{
-				RemoveStatModifier(detection1);
+				RemoveStatModifier(jump);
 
 			}
 			else
 			{
-				AddStatModifier(StatType::JumpHeight, jumpHeight, StatModifierType::Multiplier, detection1);
+				AddStatModifier(StatType::JumpHeight, jumpHeight, StatModifierType::Multiplier, jump);
 
 			}
 		}
+
 		void SetKiroshEyeZoom(bool remove = false)
 		{
 			using namespace gamebase::modifier;
@@ -315,50 +317,64 @@ namespace feature {
 		}
 
 
-		
-
-	/*	void SetSuperJump(bool remove = false)
+		void setTraceRatelow(bool remove = false)
 		{
-			static Handle<game::StatModifierData> detection1;
-			static float currentJumpHeight = -1.0f; 
+			using namespace gamebase::modifier;
+			static Handle<game::StatModifierData> trace;
+			static Handle<game::StatModifierData> trace2;
 
 			if (remove)
 			{
-				RemoveStatModifier(detection1);
-				currentJumpHeight = -1.0f; 
+				RemoveStatModifier(trace);
+				RemoveStatModifier(trace2);
+
 			}
 			else
 			{
-				if (currentJumpHeight != jumpHeight)
-				{
-					RemoveStatModifier(detection1); 
-					if (tickSuperJump)
-						AddStatModifier(StatType::JumpHeight, jumpHeight, StatModifierType::Multiplier, detection1);
-					currentJumpHeight = jumpHeight;
-				}
+				AddStatModifier(StatType::RevealNetrunnerWhenHacked, -9999.0f, game::StatModifierType::Additive, trace);
+				AddStatModifier(StatType::HasICELevelBooster, 0.0f, game::StatModifierType::Additive, trace2);// I think this kills anyone hacking player?
+
 			}
-		}*/
+		}
+
+		void setMemory(bool remove = false)
+		{
+			using namespace gamebase::modifier;
+			static Handle<game::StatModifierData> memory;
+
+			static bool valueInitialized = false;
+
+			if (remove)
+			{
+				RemoveStatModifier(memory);
+			}
+			else
+			{
+				if (!valueInitialized)
+				{
+					memoryValue = statsutils::GetStatValue(StatType::Memory);
+					valueInitialized = true;
+				}
+
+				AddStatModifier(StatType::Memory, memoryValue, game::StatModifierType::Additive, memory);
+			}
+		}
+
 
 		void Settest(bool remove = false)
 		{
-			//static Handle<game::StatModifierData> detection1;
-			static Handle<game::StatModifierData> detection2;
-			static Handle<game::StatModifierData> detection3;
+			static Handle<game::StatModifierData> test;
 
 			if (remove)
 			{
-				//RemoveStatModifier(detection1);
-				RemoveStatModifier(detection2);
-				RemoveStatModifier(detection3);
+				RemoveStatModifier(test);
 
 			}
 			else
 			{
-				// No idea if this is even right works sometimes tho soooooo yea!?
-				//AddStatModifier(StatType::MagazineAutoRefill, 0.00001f, StatModifierType::Additive, detection1);
-				//AddStatModifier(StatType::JumpHeight, 10.f, StatModifierType::Multiplier, detection2); Super jump
-
+				AddStatModifier(StatType::Memory, 64, game::StatModifierType::Additive, test);
 			}
+
 		}
 
 
@@ -378,7 +394,7 @@ namespace feature {
 			}
 		}
 
-		//Adds a new mod each time the values is update
+		// Adds a new mod each time the values is update and removes the previous one
 		void HandleStatModifierToggle(bool toggle, float currentValue, float& lastAppliedValue, bool& applied, FeatureFn applyFunc)
 		{
 			if (toggle)
@@ -404,6 +420,7 @@ namespace feature {
 		}
 
 
+
 		void Tick()
 		{
 			if (tickGodmode)
@@ -427,6 +444,13 @@ namespace feature {
 			//static bool kiroshEye = false;
 			//static float kiroshEyeZoomS = 0.f;
 			//HandleStatModifierToggle(tickKiroshEyeZoom, kiroshEyeZoom, kiroshEyeZoomS, kiroshEye, SetKiroshEyeZoom);
+
+			static bool memoryEdit = false;
+			static float memoryValueS = 16;
+			HandleStatModifierToggle(tickMemoryEdit, (float)memoryValue, memoryValueS, memoryEdit, setMemory);
+
+			static bool tracing = false;
+			HandleStatModifierToggle(tickTraceRatelow, tracing, setTraceRatelow);
 
 			static bool superjump = false;
 			static float superjumpH = 0.f;

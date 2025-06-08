@@ -107,7 +107,7 @@ namespace render::ui
 
             ImGui::SetCursorPosX(ImGui::GetCursorPosX() + OptionPaddingX);
             std::string sliderId = "##Slider_" + label;
-            if (ImGui::SliderInt(sliderId.c_str(), &value, min, max, "")) {
+            if (ImGui::SliderInt(sliderId.c_str(), &value, min, max)) {
                 toggle = true;
                 changed = true;
             }

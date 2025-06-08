@@ -111,7 +111,8 @@ namespace render::ui
 			DrawFloatOption("Jump Height", feature::playeroptions::jumpHeight, 0.1f, 15.f, 0.5f, true, feature::playeroptions::tickSuperJump,  "Adjusts jump height.\n"
 				"Set to 0.0 to disable super jump.");
             
-            
+            DrawToggleOption("Trace Rate Reduction", feature::playeroptions::tickTraceRatelow, "Reduces disables NPC trace rate mechanics.");
+
             DrawToggleOption("Unlimited Stamina", feature::playeroptions::tickUnlimitedStamina, "Keeps stamina maxed");
             DrawToggleOption("Unlimited Memory", feature::playeroptions::tickUnlimitedMemory,
                 "Memory resets to 100% when exiting and re-entering scanner mode.\n"
@@ -130,6 +131,10 @@ namespace render::ui
             DrawToggleOption("Quickhack Cooldown Reduction", feature::playeroptions::tickQuickhackCooldown, "Minimizes cooldown between Quickhacks.");
             DrawToggleOption("Quickhack Cost Reduction", feature::playeroptions::tickQuickhackCost, "Reduces RAM cost of Quickhacks to almost zero.");
             DrawToggleOption("Memory Regeneration Boost", feature::playeroptions::tickMemoryRegeneration, "Massively increases RAM regen rate.");
+			DrawIntOption("Memory Value", feature::playeroptions::memoryValue, 1, 256, 1, true, feature::playeroptions::tickMemoryEdit,
+				"Sets the maximum memory value for Quickhacks.\n"
+				"Set to 16 for default value.\n"
+				"Set to 64 for maximum value.");
         }
         ImGui::End();
         DebugUI::DrawStyleDebugMenu();

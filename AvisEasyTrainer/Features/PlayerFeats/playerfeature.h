@@ -14,9 +14,14 @@ namespace feature {
 
 		inline bool tickSuperJump = false;
 		inline float jumpHeight = 5.f;
+		
 		inline bool tickKiroshEyeZoom = false;
 		inline float kiroshEyeZoom = 5.f;
-		
+
+		inline bool tickMemoryEdit = false;
+		inline int memoryValue = 16;
+
+		inline bool tickTraceRatelow = false;
 		inline bool tickGrenadeCooldown = false;
 		inline bool tickProjectileCooldown = false;
 		inline bool tickCloakCooldown = false;
@@ -35,6 +40,7 @@ namespace feature {
 		inline bool tickGodCombatRegen = false;
 		inline bool tickNoClip = false;
 		void Tick();
+		void showWeapons();
 
 	}
 }
