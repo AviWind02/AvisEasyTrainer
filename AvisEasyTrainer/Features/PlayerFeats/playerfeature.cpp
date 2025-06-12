@@ -360,6 +360,223 @@ namespace feature {
 			}
 		}
 
+		Vector3 GetPlayerWorldEulerAngles()
+		{
+			Vector3 result{ 0.f, 0.f, 0.f };
+
+			auto playerEntity = gamebase::GetPlayerEntity();
+			if (!playerEntity)
+			{
+				loghandler::sdk->logger->Error(loghandler::handle, "[GetPlayerWorldEulerAngles] Failed to get player entity");
+				return result;
+			}
+
+			auto* tf = reinterpret_cast<RED4ext::ent::IPlacedComponent*>(playerEntity->transformComponent);
+			if (!tf)
+			{
+				loghandler::sdk->logger->Error(loghandler::handle, "[GetPlayerWorldEulerAngles] transformComponent is null");
+				return result;
+			}
+
+			const auto& q = tf->worldTransform.Orientation;
+
+			float x = q.i;
+			float y = q.j;
+			float z = q.k;
+			float w = q.r;
+
+			float ysqr = y * y;
+
+			float t0 = +2.0f * (w * x + y * z);
+			float t1 = +1.0f - 2.0f * (x * x + ysqr);
+			float roll = std::atan2(t0, t1);
+
+			float t2 = +2.0f * (w * y - z * x);
+			t2 = t2 > 1.0f ? 1.0f : t2;
+			t2 = t2 < -1.0f ? -1.0f : t2;
+			float pitch = std::asin(t2);
+
+			float t3 = +2.0f * (w * z + x * y);
+			float t4 = +1.0f - 2.0f * (ysqr + z * z);
+			float yaw = std::atan2(t3, t4);
+
+			// Convert all to degrees
+			float pitchDegrees = pitch * (180.f / 3.14159265359f);
+			float rollDegrees = roll * (180.f / 3.14159265359f);
+			float yawDegrees = yaw * (180.f / 3.14159265359f);
+
+			if (yawDegrees < 0.f)
+				yawDegrees += 360.f;
+
+			result.X = pitchDegrees;
+			result.Y = rollDegrees;
+			result.Z = yawDegrees;
+
+			loghandler::sdk->logger->InfoF(loghandler::handle,
+				"[GetPlayerWorldEulerAngles] Pitch: %.2f, Roll: %.2f, Yaw: %.2f",
+				result.X, result.Y, result.Z);
+
+			return result;
+		}
+
+
+
+		Vector3 GetPlayerWorldPosition()
+		{
+			Vector3 result{ 0.f, 0.f, 0.f };
+
+			auto playerEntity = gamebase::GetPlayerEntity();
+			if (!playerEntity)
+			{
+				loghandler::sdk->logger->Error(loghandler::handle, "[GetPlayerWorldPosition] Failed to get player entity");
+				return result;
+			}
+
+			auto* tf = reinterpret_cast<RED4ext::ent::IPlacedComponent*>(playerEntity->transformComponent);
+			if (!tf)
+			{
+				loghandler::sdk->logger->Error(loghandler::handle, "[GetPlayerWorldPosition] transformComponent is null");
+				return result;
+			}
+
+			const auto& pos = tf->worldTransform.Position;
+
+			constexpr float kConversion = 1.f / (2 << 16);
+			result.X = pos.x.Bits * kConversion;
+			result.Y = pos.y.Bits * kConversion;
+			result.Z = pos.z.Bits * kConversion;
+
+			return result;
+		}
+
+		bool SetPlayerWorldPosition(float x, float y, float z)
+		{
+		/*	auto playerEntity = gamebase::GetPlayerEntity();
+			if (!playerEntity)
+			{
+				loghandler::sdk->logger->Error(loghandler::handle, "[SetPlayerWorldPosition] Failed to get player entity");
+				return false;
+			}*/
+			
+			RED4ext::Handle<RED4ext::IScriptable> playerHandle;
+			if (!gamebase::TryGetPlayerHandle(playerHandle))
+			{
+				loghandler::sdk->logger->Error(loghandler::handle, "[TeleportPlayer] Failed to get Player handle");
+				return false;
+			}
+
+			auto* rtti = RED4ext::CRTTISystem::Get();
+			if (!rtti)
+			{
+				loghandler::sdk->logger->Error(loghandler::handle, "[SetPlayerWorldPosition] RTTI system is null");
+				return false;
+			}
+
+
+			auto* getWorldTransformFn = rtti->GetClass("entEntity")->GetFunction("GetWorldTransform");
+			if (!getWorldTransformFn)
+			{
+				loghandler::sdk->logger->Error(loghandler::handle, "[SetPlayerWorldPosition] Function GetWorldTransform not found");
+				return false;
+			}
+
+			RED4ext::WorldTransform worldTransform{};
+			StackArgs_t getTransformArgs;
+			if (!ExecuteFunction(playerHandle, getWorldTransformFn, &worldTransform, getTransformArgs))
+			{
+				loghandler::sdk->logger->Error(loghandler::handle, "[SetPlayerWorldPosition] Failed to execute GetWorldTransform");
+				return false;
+			}
+
+			auto* setPositionFn = rtti->GetClass("WorldTransform")->GetFunction("SetPosition");
+			if (!setPositionFn)
+			{
+				loghandler::sdk->logger->Error(loghandler::handle, "[SetPlayerWorldPosition] Function SetPosition not found");
+				return false;
+			}
+
+			RED4ext::Vector4 posVec{ x, y, z, 1.0f };
+			StackArgs_t setPositionArgs{
+				{ nullptr, &worldTransform },
+				{ nullptr, &posVec }
+			};
+
+			if (!ExecuteFunction((ScriptInstance)nullptr, setPositionFn, nullptr, setPositionArgs))
+			{
+				loghandler::sdk->logger->Error(loghandler::handle, "[SetPlayerWorldPosition] Failed to execute SetPosition");
+				return false;
+			}
+
+			// Step 3c: SetWorldTransform
+			auto* setWorldTransformFn = rtti->GetClass("entEntity")->GetFunction("SetWorldTransform");
+			if (!setWorldTransformFn)
+			{
+				loghandler::sdk->logger->Error(loghandler::handle, "[SetPlayerWorldPosition] Function SetWorldTransform not found");
+				return false;
+			}
+
+			StackArgs_t setTransformArgs{ { nullptr, &worldTransform } };
+			if (!ExecuteFunction(playerHandle, setWorldTransformFn, nullptr, setTransformArgs))
+			{
+				loghandler::sdk->logger->Error(loghandler::handle, "[SetPlayerWorldPosition] Failed to execute SetWorldTransform");
+				return false;
+			}
+
+			loghandler::sdk->logger->InfoF(loghandler::handle, "[SetPlayerWorldPosition] Moved player to X %.2f, Y %.2f, Z %.2f", x, y, z);
+			return true;
+
+		}
+
+		bool TeleportPlayer(Vector3 targetPos, RED4ext::EulerAngles rotation)
+		{
+			auto teleportFacility = gamebase::GetGameSystem<game::TeleportationFacility>("GetTeleportationFacility");
+			if (!teleportFacility)
+			{
+				loghandler::sdk->logger->Error(loghandler::handle, "[TeleportPlayer] Failed to get TeleportationFacility");
+				return false;
+			}
+
+			RED4ext::Handle<RED4ext::IScriptable> playerHandle;
+			if (!gamebase::TryGetPlayerHandle(playerHandle))
+			{
+				loghandler::sdk->logger->Error(loghandler::handle, "[TeleportPlayer] Failed to get Player handle");
+				return false;
+			}
+
+			auto* rtti = RED4ext::CRTTISystem::Get();
+			if (!rtti)
+			{
+				loghandler::sdk->logger->Error(loghandler::handle, "[TeleportPlayer] RTTI system is null");
+				return false;
+			}
+
+			auto* teleportFn = rtti->GetClass("gameTeleportationFacility")->GetFunction("Teleport");
+			if (!teleportFn)
+			{
+				loghandler::sdk->logger->Error(loghandler::handle, "[TeleportPlayer] Function Teleport not found");
+				return false;
+			}
+
+			RED4ext::Vector4 posVec{ targetPos.X, targetPos.Y, targetPos.Z, 1.0f };
+			StackArgs_t args{
+				{ nullptr, &playerHandle },
+				{ nullptr, &posVec },
+				{ nullptr, &rotation }
+			};
+
+
+			if (!ExecuteFunction(teleportFacility, teleportFn, nullptr, args))
+			{
+				loghandler::sdk->logger->Error(loghandler::handle, "[TeleportPlayer] Failed to execute Teleport");
+				return false;
+			}
+
+
+			loghandler::sdk->logger->InfoF(loghandler::handle, "[TeleportPlayer] Teleported player to X %.2f, Y %.2f, Z %.2f", targetPos.X, targetPos.Y, targetPos.Z);
+			return true;
+		}
+
+
 
 		void Settest(bool remove = false)
 		{
@@ -420,11 +637,115 @@ namespace feature {
 		}
 
 
+		bool IsKeyPressed(int key)
+		{
+			return (GetAsyncKeyState(key) & 0x8000) != 0;
+		}
+
+		bool KeyW()
+		{
+			return IsKeyPressed('W');
+		}
+
+		bool KeyA()
+		{
+			return IsKeyPressed('A');
+		}
+
+		bool KeyS()
+		{
+			return IsKeyPressed('S');
+		}
+
+		bool KeyD()
+		{
+			return IsKeyPressed('D');
+		}
+
+		bool SpaceHeld()
+		{
+			return IsKeyPressed(VK_SPACE);
+		}
+
+		bool CtrlHeld()
+		{
+			return IsKeyPressed(VK_LCONTROL) || IsKeyPressed(VK_RCONTROL);
+		}
+
+		bool ShiftHeld()
+		{
+			return IsKeyPressed(VK_LSHIFT) || IsKeyPressed(VK_RSHIFT);
+		}
+		void HandleFreeflyMovement()
+		{
+			static bool once = false;
+			static Vector3 playerPos;
+
+			static float freeflyYaw = 0.f;
+
+			if (!once)
+			{
+				playerPos = GetPlayerWorldPosition();
+				loghandler::sdk->logger->InfoF(loghandler::handle, "Player Pos: X %.2f, Y %.2f, Z %.2f", playerPos.X, playerPos.Y, playerPos.Z);
+				once = true;
+			}
+
+			float moveStep = 0.5f;
+			float rotationStep = 2.0f; 
+
+			if (KeyA())
+				freeflyYaw += rotationStep;
+			if (KeyD())
+				freeflyYaw -= rotationStep;
+
+			if (freeflyYaw < 0.f)
+				freeflyYaw += 360.f;
+			if (freeflyYaw >= 360.f)
+				freeflyYaw -= 360.f;
+
+			float yawRad = freeflyYaw * (3.14159265f / 180.f);
+
+			float cosYaw = cosf(yawRad);
+			float sinYaw = sinf(yawRad);
+
+			Vector3 forward = { cosYaw, sinYaw, 0.f };   
+			Vector3 right = { -sinYaw, cosYaw, 0.f }; 
+
+			if (ShiftHeld())
+				moveStep += 3.f;
+
+			if (KeyW())
+			{
+				playerPos.X += forward.X * moveStep;
+				playerPos.Y += forward.Y * moveStep;
+			}
+			if (KeyS())
+			{
+				playerPos.X -= forward.X * moveStep;
+				playerPos.Y -= forward.Y * moveStep;
+			}
+
+			float moveZStep = 0.5f;
+			if (ShiftHeld())
+				moveZStep += 3.f;
+
+			if (SpaceHeld()) playerPos.Z += moveZStep;
+			if (CtrlHeld()) playerPos.Z -= moveZStep;
+
+			RED4ext::EulerAngles rotation{ 0.f, 0.f, freeflyYaw };
+			TeleportPlayer(playerPos, rotation);
+		}
+
 
 		void Tick()
 		{
 			if (tickGodmode)
+			{
 				SetHealthFull();
+
+				HandleFreeflyMovement();
+			}
+
 
 			if (tickUnlimitedStamina)
 				SetStaminaFull();
@@ -510,10 +831,11 @@ namespace feature {
 			static bool appliedCombatRegen = false;
 			HandleStatModifierToggle(tickGodCombatRegen, appliedCombatRegen, SetCombatRegenMods);
 		}
-
-
 	}
 }
+
+
+
 
 
 

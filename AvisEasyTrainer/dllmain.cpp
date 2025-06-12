@@ -1,6 +1,7 @@
 
 #include "pch.h"
 
+
 //Called every frame when the game is running
 bool Running_OnUpdate(RED4ext::CGameApplication* aApp)
 {
