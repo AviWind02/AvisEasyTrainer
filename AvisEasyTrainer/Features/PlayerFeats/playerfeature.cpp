@@ -708,8 +708,8 @@ namespace feature {
 			float cosYaw = cosf(yawRad);
 			float sinYaw = sinf(yawRad);
 
-			Vector3 forward = { cosYaw, sinYaw, 0.f };   
-			Vector3 right = { -sinYaw, cosYaw, 0.f }; 
+			Vector3 forward = { sinYaw, cosYaw, 0.f };  
+			Vector3 right = { cosYaw, -sinYaw, 0.f }; 
 
 			if (ShiftHeld())
 				moveStep += 3.f;
