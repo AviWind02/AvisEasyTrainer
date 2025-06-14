@@ -102,10 +102,19 @@
     <ClInclude Include="Global\math.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Features\Base\gamebase.h">
+    <ClInclude Include="Base\gamebase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Features\PlayerFeats\playerfeature.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\Natives\statmodifiers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\Natives\statpoolmodifiers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\Natives\transform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -179,19 +188,16 @@
     <ClCompile Include="Render\Menu\Menu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Features\Base\gamebase.cpp">
+    <ClCompile Include="Base\gamebase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Features\Base\gamesystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Features\Base\statsutils.cpp">
+    <ClCompile Include="Base\gamesystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Features\PlayerFeats\playerfeature.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Features\Base\modifiers.cpp">
+    <ClCompile Include="Base\Natives\natives.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

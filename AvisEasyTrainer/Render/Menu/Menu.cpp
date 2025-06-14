@@ -99,7 +99,6 @@ namespace render::ui
         {
             background::DrawBackgroundWindow();
             DrawToggleOption("Godmode", feature::playeroptions::tickGodmode, "Refills health to 100 constantly");
-
             DrawToggleOption("Health Regen", feature::playeroptions::tickGodHealthRegen, "Applies extreme passive health regeneration and boosts base health.");
             DrawToggleOption("Armor Boost", feature::playeroptions::tickGodArmor, "Increases armor to near-invincible levels.");
             DrawToggleOption("Fall Damage Reduction", feature::playeroptions::tickGodFallDamage, "Negates most fall damage.");

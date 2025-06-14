@@ -146,8 +146,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Base\Natives\statpoolmodifiers.h" />
+    <ClInclude Include="Base\Natives\statmodifiers.h" />
+    <ClInclude Include="Base\Natives\transform.h" />
     <ClInclude Include="Controls\controls.h" />
-    <ClInclude Include="Features\Base\gamebase.h" />
+    <ClInclude Include="Base\gamebase.h" />
     <ClInclude Include="Features\PlayerFeats\playerfeature.h" />
     <ClInclude Include="Global\math.h" />
     <ClInclude Include="pch.h" />
@@ -179,12 +182,11 @@
     <ClInclude Include="Vendor\minhook\src\trampoline.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Base\Natives\natives.cpp" />
     <ClCompile Include="Controls\controls.cpp" />
     <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="Features\Base\gamebase.cpp" />
-    <ClCompile Include="Features\Base\gamesystem.cpp" />
-    <ClCompile Include="Features\Base\modifiers.cpp" />
-    <ClCompile Include="Features\Base\statsutils.cpp" />
+    <ClCompile Include="Base\gamebase.cpp" />
+    <ClCompile Include="Base\gamesystem.cpp" />
     <ClCompile Include="Features\PlayerFeats\playerfeature.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

@@ -21,6 +21,7 @@ namespace feature {
 		inline bool tickMemoryEdit = false;
 		inline int memoryValue = 16;
 
+		inline bool tickFreeflyMovement = false;
 		inline bool tickTraceRatelow = false;
 		inline bool tickGrenadeCooldown = false;
 		inline bool tickProjectileCooldown = false;

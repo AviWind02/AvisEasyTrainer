@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "GameBase.h"
+#include "gamebase.h"
 
 namespace gamebase {
 
@@ -13,9 +13,4 @@ namespace gamebase {
     Handle<StatPoolsSystem> GetStatPoolsSystem() {
         return GetGameSystem<StatPoolsSystem>("GetStatPoolsSystem");
     }
-
-    Handle<game::StatusEffectSystem> GetStatusEffectSystem() {
-        return GetGameSystem<game::StatusEffectSystem>("GetStatusEffectSystem");
-    }
-
 }
