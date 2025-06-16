@@ -13,6 +13,12 @@ namespace render::ui
         using namespace UI;
         using namespace render::draw;
 
+        bool isBreak = (left.find("#BREAK") != std::string::npos);
+        if (isBreak && currentOption == optionIndex + 1) {
+            if (controls::Down()) currentOption++;
+            else if (controls::Up()) currentOption--;
+        }
+
         optionIndex++;
 
         const float spacing = Layout::OptionHeight;
@@ -47,22 +53,22 @@ namespace render::ui
 
         // Highlight bar (active + hovered)
         if (currentOption == optionIndex)
-            DrawRect({ optionPos.x, smoothY }, optionSize, Colors::ActiveHighlight, Layout::FrameRounding);
+            DrawRect({ optionPos.x, smoothY }, optionSize, isBreak ? Colors::Transparent : Colors::ActiveHighlight, Layout::FrameRounding);
 
         if (hovered)
-            DrawRect(optionPos, optionSize, Colors::HoverBg, Layout::FrameRounding);
+            DrawRect(optionPos, optionSize, isBreak ? Colors::Transparent : Colors::HoverBg, Layout::FrameRounding);
 
         // Horizontal text offset
-        float labelOffsetX = Layout::LabelOffsetX;  // New style variable
+        float labelOffsetX = Layout::LabelOffsetX; 
 
-        // Dynamically calculate text baseline
+        // Dynamically! calculate text baseline
         AddText(
             left.empty() ? std::nullopt : std::optional<std::string>{ left },
             center.empty() ? std::nullopt : std::optional<std::string>{ center },
             right.empty() ? std::nullopt : std::optional<std::string>{ right },
             { optionPos.x + labelOffsetX, verticalCenterY },
             optionSize,
-            Colors::Text,
+            isBreak ? Colors::MutedText : Colors::Text,
             font
         );
 

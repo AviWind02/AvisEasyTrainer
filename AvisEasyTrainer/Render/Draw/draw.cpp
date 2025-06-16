@@ -22,13 +22,13 @@ namespace render::draw
         if (center)
         {
             float textW = ImGui::CalcTextSize(center->c_str()).x;
-            drawList->AddText({ pos.x + (size.x - textW) * 0.5f, pos.y }, color, center->c_str());
+            drawList->AddText({ pos.x + (size.x - textW) * 0.f, pos.y }, color, center->c_str());
         }
 
         if (right)
         {
             float textW = ImGui::CalcTextSize(right->c_str()).x;
-            drawList->AddText({ pos.x + size.x - textW, pos.y }, color, right->c_str());
+            drawList->AddText({ pos.x + (size.x - textW) - 14.f, pos.y }, color, right->c_str());
         }
 
         if (font) ImGui::PopFont();

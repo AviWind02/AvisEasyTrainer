@@ -1,6 +1,66 @@
 
 #include "pch.h"
+#include "Features/VehicleFeat/vehiclefeature.h"
+#include "Vendor/minhook/include/MinHook.h"
+#include <Base/Natives/vehicleclass.h>
 
+
+
+//Temp loc - mirrored CET for LoadOptimized and thanks to WSSDude for the tip
+void (*originalTweakDBLoad)(RED4ext::TweakDB*) = nullptr;
+constexpr uint32_t LoadOptimizedHash = 3602585178UL;
+
+std::once_flag injectVehiclesOnce;
+
+void __stdcall HookTweakDBLoad(RED4ext::TweakDB* tdb)
+{
+    loghandler::sdk->logger->Info(loghandler::handle, "[HookTweakDBLoad] Hook called");
+
+    if (originalTweakDBLoad)
+        originalTweakDBLoad(tdb);
+
+    std::call_once(injectVehiclesOnce, []()
+        {
+            std::thread([]()
+                {
+                    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+
+                    for (const auto& vehicle : feature::vehicleoptions::allVehicles)
+                    {
+                        if (!vehicle.isPlayerVehicle)
+                        {
+                            gamebase::natives::vehicle::InjectSingleVehicleIntoTweakDB(vehicle.recordID);
+                        }
+                    }
+
+                    loghandler::sdk->logger->Info(loghandler::handle, "[HookTweakDBLoad] Vehicle injection complete.");
+                }).detach();
+        });
+}
+
+void InstallTweakDBLoadHook()
+{
+    MH_Initialize();
+
+    const RED4ext::UniversalRelocPtr<uint8_t> funcPtr(LoadOptimizedHash);
+    uint8_t* address = funcPtr.GetAddr();
+
+    if (!address)
+    {
+        loghandler::sdk->logger->Error(loghandler::handle, "[InstallTweakDBLoadHook] Failed to resolve LoadOptimized address");
+        return;
+    }
+
+    if (MH_CreateHook(address, &HookTweakDBLoad, reinterpret_cast<void**>(&originalTweakDBLoad)) != MH_OK ||
+        MH_EnableHook(address) != MH_OK)
+    {
+        loghandler::sdk->logger->Error(loghandler::handle, "[InstallTweakDBLoadHook] Failed to install hook");
+    }
+    else
+    {
+        loghandler::sdk->logger->Info(loghandler::handle, "[InstallTweakDBLoadHook] Hook successfully installed");
+    }
+}
 
 //Called every frame when the game is running
 bool Running_OnUpdate(RED4ext::CGameApplication* aApp)
@@ -11,8 +71,12 @@ bool Running_OnUpdate(RED4ext::CGameApplication* aApp)
 
 bool Running_OnEnter(RED4ext::CGameApplication* aApp)
 {
-    std::thread([=]() { render::hooks::WaitForDX12AndInit(loghandler::handle, loghandler::sdk); }).detach();
+    
 
+    std::thread([=]() { render::hooks::WaitForDX12AndInit(loghandler::handle, loghandler::sdk);
+
+        }).detach();
+    
     return true;
 }
 
@@ -24,12 +88,12 @@ bool Running_OnExit(RED4ext::CGameApplication* aApp)
 
 RED4EXT_C_EXPORT void RED4EXT_CALL RegisterTypes()
 {
-    // You can leave this empty or register CET-callable functions here if needed later
+
 }
 
 RED4EXT_C_EXPORT void RED4EXT_CALL PostRegisterTypes()
 {
-    // Not used in this version
+
 }
 
 RED4EXT_C_EXPORT bool RED4EXT_CALL Main(RED4ext::PluginHandle aHandle, RED4ext::EMainReason aReason, const RED4ext::Sdk* aSdk)
@@ -45,6 +109,9 @@ RED4EXT_C_EXPORT bool RED4EXT_CALL Main(RED4ext::PluginHandle aHandle, RED4ext::
         loghandler::sdk = aSdk;
 
         loghandler::sdk->logger->Info(loghandler::handle, "On Load");
+
+        InstallTweakDBLoadHook();
+
         auto* rtti = RED4ext::CRTTISystem::Get();
         rtti->AddRegisterCallback(RegisterTypes);
 

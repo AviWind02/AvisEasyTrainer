@@ -19,7 +19,10 @@ namespace feature {
 		inline float kiroshEyeZoom = 5.f;
 
 		inline bool tickMemoryEdit = false;
-		inline int memoryValue = 16;
+		inline int memoryValue = 0;
+
+		inline bool tickCarryCapacity = false;
+		inline int carryCapacityValue = 0;
 
 		inline bool tickFreeflyMovement = false;
 		inline bool tickTraceRatelow = false;

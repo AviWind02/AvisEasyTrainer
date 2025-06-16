@@ -149,9 +149,13 @@
     <ClInclude Include="Base\Natives\statpoolmodifiers.h" />
     <ClInclude Include="Base\Natives\statmodifiers.h" />
     <ClInclude Include="Base\Natives\transform.h" />
+    <ClInclude Include="Base\Natives\vehicleclass.h" />
     <ClInclude Include="Controls\controls.h" />
     <ClInclude Include="Base\gamebase.h" />
     <ClInclude Include="Features\PlayerFeats\playerfeature.h" />
+    <ClInclude Include="Features\TeleportFeats\teleportfeature.h" />
+    <ClInclude Include="Features\VehicleFeat\vehiclefeature.h" />
+    <ClInclude Include="Files\jsonhelper.h" />
     <ClInclude Include="Global\math.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Render\Draw\draw.h" />
@@ -162,7 +166,9 @@
     <ClInclude Include="Render\Font\rubikFont.h" />
     <ClInclude Include="Render\Hooks\d3d12globals.h" />
     <ClInclude Include="Render\Hooks\hooks.h" />
+    <ClInclude Include="Render\UserInterface\buttons.h" />
     <ClInclude Include="Render\UserInterface\Style.h" />
+    <ClInclude Include="Render\UserInterface\submenu.h" />
     <ClInclude Include="Render\UserInterface\UserInterface.h" />
     <ClInclude Include="Vendor\ImGui\backends\imgui_impl_dx12.h" />
     <ClInclude Include="Vendor\ImGui\backends\imgui_impl_win32.h" />
@@ -188,6 +194,8 @@
     <ClCompile Include="Base\gamebase.cpp" />
     <ClCompile Include="Base\gamesystem.cpp" />
     <ClCompile Include="Features\PlayerFeats\playerfeature.cpp" />
+    <ClCompile Include="Features\TeleportFeats\teleportfeature.cpp" />
+    <ClCompile Include="Features\VehicleFeat\vehiclefeature.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

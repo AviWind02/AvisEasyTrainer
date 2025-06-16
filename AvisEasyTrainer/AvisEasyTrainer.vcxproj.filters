@@ -117,6 +117,24 @@
     <ClInclude Include="Base\Natives\transform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Render\UserInterface\submenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\UserInterface\buttons.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\TeleportFeats\teleportfeature.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Files\jsonhelper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\VehicleFeat\vehiclefeature.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\Natives\vehicleclass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -198,6 +216,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Base\Natives\natives.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Features\TeleportFeats\teleportfeature.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Features\VehicleFeat\vehiclefeature.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -33,7 +33,7 @@ namespace loghandler
     inline RED4ext::PluginHandle handle = 0;
     inline const RED4ext::v0::Sdk* sdk = nullptr;
 }
-
+#include "Files/jsonhelper.h"
 #include "Global/math.h"
 
 //Hooks
@@ -41,4 +41,7 @@ namespace loghandler
 //Draw
 #include "Render/Draw/draw.h"
 #include "Render/Font/font.h"
+#include "Controls/controls.h"
 #include "Render/UserInterface/UserInterface.h"
+#include "Render/UserInterface/submenu.h"
+#include "Render/UserInterface/buttons.h"

@@ -5,3 +5,5 @@
 #include "statpoolmodifiers.h"
 
 #include "transform.h"
+
+#include "vehicleclass.h"

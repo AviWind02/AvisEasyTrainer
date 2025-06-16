@@ -301,6 +301,31 @@ namespace feature {
 		}
 
 
+		void setCarryCapacityHigh(bool remove = false)
+		{
+			static Handle<game::StatModifierData> carrycapacity;
+
+			static bool valueInitialized = false;
+			static int tempValue = 0;
+			if (remove)
+			{
+				natives::statmodifier::RemoveStatModifier(carrycapacity);
+			}
+			else
+			{
+
+				if (!valueInitialized)
+				{
+					tempValue = natives::statmodifier::GetStatValue(StatType::CarryCapacity);
+					valueInitialized = true;
+					carryCapacityValue = tempValue;
+				}
+
+				natives::statmodifier::AddStatModifier(StatType::CarryCapacity, (tempValue - carryCapacityValue), game::StatModifierType::Additive, carrycapacity);
+				//natives::statmodifier::AddStatModifier(StatType::CarryCapacityModifierHelper, (memoryValue - tempValue), game::StatModifierType::Additive, memory);
+			}
+		}
+
 		void setTraceRatelow(bool remove = false)
 		{
 			static Handle<game::StatModifierData> trace;
@@ -331,7 +356,7 @@ namespace feature {
 			else
 			{
 				// Capture the base stat once, then apply a zero modifier so the stat stays unchanged.
-				// But shoew the value in the UI.
+				// But show the value in the UI.
 				if (!valueInitialized)
 				{
 					tempValue = natives::statmodifier::GetStatValue(StatType::Memory);
@@ -354,7 +379,7 @@ namespace feature {
 			}
 			else
 			{
-				natives::statmodifier::AddStatModifier(StatType::Memory, 64, game::StatModifierType::Additive, test);
+				natives::statmodifier::AddStatModifier(StatType::MaxSpeed, 64, game::StatModifierType::Additive, test);// SpeedBoost
 			}
 
 		}
@@ -422,6 +447,13 @@ namespace feature {
 			//static bool kiroshEye = false;
 			//static float kiroshEyeZoomS = 0.f;
 			//HandleStatModifierToggle(tickKiroshEyeZoom, kiroshEyeZoom, kiroshEyeZoomS, kiroshEye, SetKiroshEyeZoom);
+
+
+
+			static bool carryCapacityEdit = false;
+			static float carryCapacityValueS = 300;
+			HandleStatModifierToggle(tickCarryCapacity, (float)carryCapacityValue, carryCapacityValueS, carryCapacityEdit, setCarryCapacityHigh);
+
 
 			static bool memoryEdit = false;
 			static float memoryValueS = 16;

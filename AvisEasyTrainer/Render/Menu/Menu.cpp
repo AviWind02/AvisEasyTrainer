@@ -1,14 +1,14 @@
 #include "pch.h"
 
-#include "Controls/controls.h"
 #include "Render/Hooks/d3d12globals.h"
 #include "Render/UserInterface/Style.h"
 
-
-
 #include "Features/PlayerFeats/playerfeature.h"
+#include "Features/TeleportFeats/teleportfeature.h"
+#include "Features/VehicleFeat/vehiclefeature.h"
 
-
+#include "Base/Natives/statmodifiers.h"
+#include "Base/Natives/vehicleclass.h"
 
 namespace render::ui
 {
@@ -68,10 +68,18 @@ namespace render::ui
         ImGuiWindowFlags_NoNav |
         ImGuiWindowFlags_NoBackground |
         ImGuiWindowFlags_NoDecoration;
-
+    bool tickTest = false;
     void NativeTick()
     {
         feature::playeroptions::Tick();
+        feature::teleoptions::Tick();
+        feature::vehicleoptions::Tick();
+
+		if (tickTest) {
+            gamebase::natives::vehicle::InjectSingleVehicleIntoTweakDB("Vehicle.v_standard2_thorton_colby");
+
+			tickTest = false;
+		}
     }
 
 
@@ -79,14 +87,132 @@ namespace render::ui
         extern void DrawStyleDebugMenu();
     }
 
+    void SelfView()
+    {
 
+        buttons::Toggle("Unlimited health", feature::playeroptions::tickGodmode, "Refills health to 100 constantly");
+        buttons::Toggle("Unlimited Stamina", feature::playeroptions::tickUnlimitedStamina, "Keeps stamina maxed.");
+        buttons::Toggle("Unlimited Oxygen", feature::playeroptions::tickUnlimitedOxygen, "Keeps oxygen at 100%");
+        buttons::Toggle("Health Regen", feature::playeroptions::tickGodHealthRegen, "Extreme passive health regeneration.");
+        buttons::Toggle("Armor Boost", feature::playeroptions::tickGodArmor, "Near invincible armor.");
+        buttons::Toggle("Damage Resistances", feature::playeroptions::tickGodResistances, "Maximizes all resistances.");
+		buttons::IntToggle("Carry Capacity", feature::playeroptions::carryCapacityValue, 1, 1000, 1, feature::playeroptions::tickCarryCapacity, "Set carry capacity.");
+        buttons::FloatToggle("Jump Height", feature::playeroptions::jumpHeight, 0.1f, 150.f, 0.5f, feature::playeroptions::tickSuperJump, "Set jump height.");
+        buttons::Toggle("Combat Regen", feature::playeroptions::tickGodCombatRegen, "Regen during combat.");
+        buttons::Toggle("Unlimited Memory", feature::playeroptions::tickUnlimitedMemory, "Full RAM when exiting scanner.");
+        buttons::IntToggle("Memory Value", feature::playeroptions::memoryValue, 1, 256, 1, feature::playeroptions::tickMemoryEdit, "Set RAM max.");
+        buttons::Toggle("Memory Regeneration Boost", feature::playeroptions::tickMemoryRegeneration, "Massive RAM regen.");
+
+    }
+    SubMenu selfMenu{ "Self Menu", &SelfView };
+    void ReductionView()
+    {
+
+        DrawToggleOption("Visibility Rate Reduction", feature::playeroptions::tickdetectionRate,
+            "Lowers how easily NPCs detect you. You're still visible to them and can get detected up close or if in combat.");
+        buttons::Toggle("Fall Damage Reduction", feature::playeroptions::tickGodFallDamage, "Negates most fall damage.");
+        buttons::Toggle("Trace Rate Reduction", feature::playeroptions::tickTraceRatelow, "Reduce trace mechanics.");
+        buttons::Toggle("Heal Item Cooldown Reduction", feature::playeroptions::tickHealItemCooldown, "No cooldown on healing.");
+        buttons::Toggle("Grenade Cooldown Reduction", feature::playeroptions::tickGrenadeCooldown, "No cooldown on grenades.");
+        buttons::Toggle("Projectile Launcher Cooldown", feature::playeroptions::tickProjectileCooldown, "Spam launcher freely.");
+        buttons::Toggle("Cloak Cooldown Reduction", feature::playeroptions::tickCloakCooldown, "Fast cloak recharge.");
+        buttons::Toggle("Sandevistan Cooldown Reduction", feature::playeroptions::tickSandevistanCooldown, "Short cooldown.");
+        buttons::Toggle("Berserk Cooldown Reduction", feature::playeroptions::tickBerserkCooldown, "Frequent activations.");
+        buttons::Toggle("Kerenzikov Cooldown Reduction", feature::playeroptions::tickKerenzikovCooldown, "No cooldown.");
+        buttons::Toggle("Overclock Cooldown Reduction", feature::playeroptions::tickOverclockCooldown, "No overclock delay.");
+        buttons::Toggle("Quickhack Cooldown Reduction", feature::playeroptions::tickQuickhackCooldown, "Rapid quickhacks.");
+        buttons::Toggle("Quickhack Cost Reduction", feature::playeroptions::tickQuickhackCost, "Reduces RAM cost.");
+
+
+    }
+    SubMenu cooldownMenu{ "Cooldown & Reduction Menu", &ReductionView };
+
+    void TeleportView()
+    {
+        static int forwardDistance = 2;
+        static int upwardDistance = 0;
+
+        buttons::Int("Forward Distance", forwardDistance, 1, 25, 1);
+        buttons::Int("Upward Distance", upwardDistance, 0, 20, 1);
+
+        if (buttons::Option("Teleport Forward", "Move forward based on rotation"))
+        {
+            feature::teleoptions::TeleportForward(static_cast<float>(forwardDistance));
+            feature::teleoptions::TeleportUp(static_cast<float>(upwardDistance));
+
+        }
+
+        std::string currentCategory;
+        for (const auto& loc : feature::teleoptions::teleportLocations)
+        {
+
+            if (buttons::OptionExtended(loc.name, "", ICON_FA_MAP_MARKED))
+            {
+                feature::teleoptions::RequestTeleport(loc.position);
+            }
+        }
+    }
+    SubMenu teleportMenu{ "Teleport Menu", &TeleportView };
+
+    void VehicleUnlockView()
+    {
+        using namespace feature::vehicleoptions;
+     
+
+        if (allVehicles.empty() || vehicleToggleStates.empty())
+        {
+            buttons::Option("Refresh Vehicle List", "", []() {
+                hasInitialized = false;
+                });
+            buttons::Break("No vehicles available to toggle.");
+            return;
+        }
+
+        for (const auto& vehicle : allVehicles)
+        {
+            if (vehicleToggleStates.empty())
+                return;
+
+            const std::string& id = vehicle.recordID;
+
+            //if (id.find("player") == std::string::npos)
+            //    continue;
+
+
+            bool& state = vehicleToggleStates[id];
+
+            if (buttons::Toggle(vehicle.modelName, state))
+            {
+                RequestVehicleToggle(id);
+            }
+        }
+    }
+
+    SubMenu vehicleUnlockMenu{ "Vehicle Menu", &VehicleUnlockView };
+
+    void MainMenuView()
+    {
+        buttons::Submenu("Self Menu", selfMenu);
+        buttons::Submenu("Vehicle Menu", vehicleUnlockMenu);
+        buttons::Submenu("Cooldown Reduction Menu", cooldownMenu);
+        buttons::Submenu("Teleport Menu", teleportMenu);
+
+		buttons::Toggle("Test Feature", tickTest, "Test feature toggle for debugging purposes");
+
+    }
+    SubMenu mainMenu{ "Main Menu",  &MainMenuView };
+    
 
     void DrawMainMenu()
     {
         using namespace controls;
-        using namespace render::ui;
-
+        static bool initialized = false;
+        if (!initialized) {
+            OpenSubMenu(mainMenu);
+            initialized = true;
+        }
         HandleInputTick();
+
         if (!controls::menuOpen)
             return;
 
@@ -98,39 +224,9 @@ namespace render::ui
         ImGui::Begin("##BackgroundWindow", nullptr, flags);
         {
             background::DrawBackgroundWindow();
-            DrawToggleOption("Godmode", feature::playeroptions::tickGodmode, "Refills health to 100 constantly");
-            DrawToggleOption("Health Regen", feature::playeroptions::tickGodHealthRegen, "Applies extreme passive health regeneration and boosts base health.");
-            DrawToggleOption("Armor Boost", feature::playeroptions::tickGodArmor, "Increases armor to near-invincible levels.");
-            DrawToggleOption("Fall Damage Reduction", feature::playeroptions::tickGodFallDamage, "Negates most fall damage.");
-            DrawToggleOption("Damage Resistances", feature::playeroptions::tickGodResistances, "Maximizes all elemental and physical resistances.");
-            DrawToggleOption("Combat Regen", feature::playeroptions::tickGodCombatRegen, "Enables health regeneration while in combat.");
-            DrawToggleOption("Visibility Rate Reduction", feature::playeroptions::tickdetectionRate,
-                "Lowers how easily NPCs detect you. You're still visible to them and can get detected up close or if in combat.");
-            DrawToggleOption("tickTest", feature::playeroptions::tickTest, "");
-			DrawFloatOption("Jump Height", feature::playeroptions::jumpHeight, 0.1f, 15.f, 0.5f, true, feature::playeroptions::tickSuperJump,  "Adjusts jump height.\n"
-				"Set to 0.0 to disable super jump.");
-            
-            DrawToggleOption("Trace Rate Reduction", feature::playeroptions::tickTraceRatelow, "Reduces disables NPC trace rate mechanics.");
-
-            DrawToggleOption("Unlimited Stamina", feature::playeroptions::tickUnlimitedStamina, "Keeps stamina maxed");
-            DrawToggleOption("Unlimited Memory", feature::playeroptions::tickUnlimitedMemory,
-                "Memory resets to 100% when exiting and re-entering scanner mode.\n"
-                "Effectively gives infinite RAM outside of active Quickhacks.");
-            
-            DrawToggleOption("Unlimited Oxygen", feature::playeroptions::tickUnlimitedOxygen, "Keeps oxygen at 100%");
-
-            DrawToggleOption("Heal Item Cooldown Reduction", feature::playeroptions::tickHealItemCooldown, "Removes cooldown between healing item uses.");
-            DrawToggleOption("Grenade Cooldown Reduction", feature::playeroptions::tickGrenadeCooldown, "Removes cooldown between grenade throws.");
-            DrawToggleOption("Projectile Launcher Cooldown", feature::playeroptions::tickProjectileCooldown, "Allows spamming projectile launcher.");
-            DrawToggleOption("Cloak Cooldown Reduction", feature::playeroptions::tickCloakCooldown, "Rapidly regenerates cloak charges and duration.");
-            DrawToggleOption("Sandevistan Cooldown Reduction", feature::playeroptions::tickSandevistanCooldown, "Reduces Sandevistan cooldown dramatically.");
-            DrawToggleOption("Berserk Cooldown Reduction", feature::playeroptions::tickBerserkCooldown, "Allows frequent Berserk activations.");
-            DrawToggleOption("Kerenzikov Cooldown Reduction", feature::playeroptions::tickKerenzikovCooldown, "Eliminates cooldown on Kerenzikov dodges.");
-            DrawToggleOption("Overclock Cooldown Reduction", feature::playeroptions::tickOverclockCooldown, "Greatly boosts overclock regen and disables cooldown.");
-            DrawToggleOption("Quickhack Cooldown Reduction", feature::playeroptions::tickQuickhackCooldown, "Minimizes cooldown between Quickhacks.");
-            DrawToggleOption("Quickhack Cost Reduction", feature::playeroptions::tickQuickhackCost, "Reduces RAM cost of Quickhacks to almost zero.");
-            DrawToggleOption("Memory Regeneration Boost", feature::playeroptions::tickMemoryRegeneration, "Massively increases RAM regen rate.");
-            DrawIntOption("Memory Value", feature::playeroptions::memoryValue, 1, 256, 1, true, feature::playeroptions::tickMemoryEdit, "Sets the maximum memory value for Quickhacks.\n");
+            if (!menuStack.empty()) {
+                menuStack.back().view();
+            }
 
         }
         ImGui::End();

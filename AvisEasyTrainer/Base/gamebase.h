@@ -5,6 +5,7 @@
 #include <RED4ext/Scripting/Natives/Generated/ent/Entity.hpp>
 #include <RED4ext/Scripting/Natives/Generated/game/StatsSystem.hpp>
 #include <RED4ext/Scripting/Natives/Generated/game/StatPoolsSystem.hpp>
+#include <RED4ext/Scripting/Natives/Generated/game/Puppet.hpp>
 
 using namespace RED4ext;
 
@@ -14,6 +15,7 @@ namespace gamebase {
     bool TryGetPlayerHandle(Handle<IScriptable>& outHandle);
     bool TryGetPlayerID(ent::EntityID& outID);
     bool TryGetPlayerHandleAndID(Handle<IScriptable>& outHandle, ent::EntityID& outID);
+    RED4ext::Handle<RED4ext::IScriptable> TryGetPlayerVehicleComponent();
     ent::Entity* GetPlayerEntity();
 
     template<typename T>

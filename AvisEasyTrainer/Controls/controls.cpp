@@ -20,6 +20,11 @@ namespace controls
         return IsKeyPressed(VK_UP) || IsKeyPressed(VK_NUMPAD8) || ImGui::IsKeyPressed(ImGuiKey_GamepadDpadUp);
     }
 
+    bool Back()
+    {
+        return IsKeyPressed(VK_BACK) || IsKeyPressed(VK_NUMPAD0) || ImGui::IsKeyPressed(ImGuiKey_GamepadFaceRight);
+    }
+
     bool Down()
     {
         return IsKeyPressed(VK_DOWN) || IsKeyPressed(VK_NUMPAD2) || ImGui::IsKeyPressed(ImGuiKey_GamepadDpadDown);
@@ -101,6 +106,11 @@ namespace controls
         {
             selectPressed = true;
             lastKeyTick = now;
+        }
+
+        if (Back())
+        {
+			render::ui::CloseSubMenu();
         }
 
         if (Misc() && now - lastKeyTick > scrollDelay)
