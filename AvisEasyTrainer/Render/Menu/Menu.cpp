@@ -178,7 +178,6 @@ namespace render::ui
             //if (id.find("player") == std::string::npos)
             //    continue;
 
-
             bool& state = vehicleToggleStates[id];
 
             if (buttons::Toggle(vehicle.modelName, state))
@@ -198,6 +197,7 @@ namespace render::ui
         buttons::Submenu("Teleport Menu", teleportMenu);
 
 		buttons::Toggle("Test Feature", tickTest, "Test feature toggle for debugging purposes");
+        buttons::Toggle("Test Player Feature", feature::playeroptions::tickTest);
 
     }
     SubMenu mainMenu{ "Main Menu",  &MainMenuView };
