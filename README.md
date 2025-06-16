@@ -5,7 +5,7 @@ AvisEasyTrainer is a basic trainer for Cyberpunk 2077 written in C++. It uses Di
 ## Features
 
 - Runs through RED4ext
-- Compatible with CET
+- Compatible with others like CET
 - Uses DirectX 12 background draw list
 - ImGui-based overlay
 
