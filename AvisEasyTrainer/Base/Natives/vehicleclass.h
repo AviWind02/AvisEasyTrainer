@@ -195,7 +195,7 @@ namespace gamebase {
                     return;
                 }
 
-          /*      TweakDBID parentRecordID("Vehicle.vehicle_list");
+            /*  TweakDBID parentRecordID("Vehicle.vehicle_list");
                 if (!tdb->UpdateRecord(parentRecordID))
                 {
                     loghandler::sdk->logger->Error(loghandler::handle, "[InjectVehicle] UpdateRecord on parent failed");
@@ -205,51 +205,9 @@ namespace gamebase {
                 loghandler::sdk->logger->InfoF(loghandler::handle, "[InjectVehicle] Added %s to vehicle list", recordName.c_str());
             }
 
+           
 
-
-            inline bool RepairPlayerVehicle()
-            {
-                using namespace RED4ext;
-
-                Handle<IScriptable> vehicleComponent;
-                if (!(vehicleComponent = gamebase::TryGetPlayerVehicleComponent()))
-                {
-                    loghandler::sdk->logger->Error(loghandler::handle, "[RepairPlayerVehicle] Failed to get vehicle component");
-                    return false;
-                }
-
-                auto* rtti = CRTTISystem::Get();
-                if (!rtti)
-                {
-                    loghandler::sdk->logger->Error(loghandler::handle, "[RepairPlayerVehicle] RTTI system is null");
-                    return false;
-                }
-
-                auto* cls = rtti->GetClass(vehicleComponent->GetType()->GetName());
-                if (!cls)
-                {
-                    loghandler::sdk->logger->Error(loghandler::handle, "[RepairPlayerVehicle] Failed to get class from type");
-                    return false;
-                }
-
-                auto* fn = cls->GetFunction("RepairVehicle");
-                if (!fn)
-                {
-                    loghandler::sdk->logger->Error(loghandler::handle, "[RepairPlayerVehicle] RepairVehicle function not found");
-                    return false;
-                }
-
-                if (!ExecuteFunction(vehicleComponent, fn, nullptr))
-                {
-                    loghandler::sdk->logger->Error(loghandler::handle, "[RepairPlayerVehicle] Failed to call RepairVehicle");
-                    return false;
-                }
-
-                loghandler::sdk->logger->Info(loghandler::handle, "[RepairPlayerVehicle] Vehicle successfully repaired");
-                return true;
-            }
-
-            
+  
 
             inline std::string GetLocalizedTextByKey(const RED4ext::CName& key)
             {

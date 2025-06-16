@@ -314,14 +314,14 @@ namespace feature {
 			else
 			{
 
-				if (!valueInitialized)
+		/*		if (!valueInitialized)
 				{
 					tempValue = natives::statmodifier::GetStatValue(StatType::CarryCapacity);
 					valueInitialized = true;
 					carryCapacityValue = tempValue;
-				}
+				}*/
 
-				natives::statmodifier::AddStatModifier(StatType::CarryCapacity, (tempValue - carryCapacityValue), game::StatModifierType::Additive, carrycapacity);
+				natives::statmodifier::AddStatModifier(StatType::CarryCapacity, carryCapacityValue, game::StatModifierType::Additive, carrycapacity);
 				//natives::statmodifier::AddStatModifier(StatType::CarryCapacityModifierHelper, (memoryValue - tempValue), game::StatModifierType::Additive, memory);
 			}
 		}
@@ -342,7 +342,6 @@ namespace feature {
 				natives::statmodifier::AddStatModifier(StatType::HasICELevelBooster, 0.0f, game::StatModifierType::Additive, trace2);// I think this kills anyone hacking player?
 			}
 		}
-
 		void setMemory(bool remove = false)
 		{
 			static Handle<game::StatModifierData> memory;
@@ -356,16 +355,27 @@ namespace feature {
 			else
 			{
 				// Capture the base stat once, then apply a zero modifier so the stat stays unchanged.
-				// But show the value in the UI.
-				if (!valueInitialized)
+				// But show the value in the UI.  My math is broke
+				/*if (!valueInitialized)
 				{
 					tempValue = natives::statmodifier::GetStatValue(StatType::Memory);
 					valueInitialized = true;
 					memoryValue = tempValue;
-				}
+				}*/
 
-				natives::statmodifier::AddStatModifier(StatType::Memory, (memoryValue - tempValue), game::StatModifierType::Additive, memory);
+				natives::statmodifier::AddStatModifier(StatType::Memory, memoryValue, game::StatModifierType::Additive, memory);
 			}
+		}
+
+
+		void setMaxSpeed(bool remove = false)
+		{
+			static Handle<game::StatModifierData> maxSpeedModifier;
+
+			if (remove)
+				natives::statmodifier::RemoveStatModifier(maxSpeedModifier);
+			else
+				natives::statmodifier::AddStatModifier(StatType::MaxSpeed, maxSpeedValue, StatModifierType::Multiplier, maxSpeedModifier);// I think this has a max no idea what it is tbh
 		}
 
 		void Settest(bool remove = false)
@@ -448,7 +458,9 @@ namespace feature {
 			//static float kiroshEyeZoomS = 0.f;
 			//HandleStatModifierToggle(tickKiroshEyeZoom, kiroshEyeZoom, kiroshEyeZoomS, kiroshEye, SetKiroshEyeZoom);
 
-
+			static bool maxSpeedEdit = false;
+			static float maxSpeedValueSlider = 7.0f;
+			HandleStatModifierToggle(tickPlayerMaxSpeed, maxSpeedValue, maxSpeedValueSlider, maxSpeedEdit, setMaxSpeed);
 
 			static bool carryCapacityEdit = false;
 			static float carryCapacityValueS = 300;

@@ -24,6 +24,9 @@ namespace feature {
 		inline bool tickCarryCapacity = false;
 		inline int carryCapacityValue = 0;
 
+		inline bool tickPlayerMaxSpeed = false;
+		inline float maxSpeedValue = 0;
+
 		inline bool tickFreeflyMovement = false;
 		inline bool tickTraceRatelow = false;
 		inline bool tickGrenadeCooldown = false;

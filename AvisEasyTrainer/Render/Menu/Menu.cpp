@@ -68,6 +68,8 @@ namespace render::ui
         ImGuiWindowFlags_NoNav |
         ImGuiWindowFlags_NoBackground |
         ImGuiWindowFlags_NoDecoration;
+
+
     bool tickTest = false;
     void NativeTick()
     {
@@ -76,7 +78,6 @@ namespace render::ui
         feature::vehicleoptions::Tick();
 
 		if (tickTest) {
-            gamebase::natives::vehicle::InjectSingleVehicleIntoTweakDB("Vehicle.v_standard2_thorton_colby");
 
 			tickTest = false;
 		}
@@ -93,6 +94,7 @@ namespace render::ui
         buttons::Toggle("Unlimited health", feature::playeroptions::tickGodmode, "Refills health to 100 constantly");
         buttons::Toggle("Unlimited Stamina", feature::playeroptions::tickUnlimitedStamina, "Keeps stamina maxed.");
         buttons::Toggle("Unlimited Oxygen", feature::playeroptions::tickUnlimitedOxygen, "Keeps oxygen at 100%");
+        buttons::FloatToggle("Player Max Speed", feature::playeroptions::maxSpeedValue, 1.0f, 15.f, 0.5f, feature::playeroptions::tickPlayerMaxSpeed, "Set maximum player speed.");
         buttons::Toggle("Health Regen", feature::playeroptions::tickGodHealthRegen, "Extreme passive health regeneration.");
         buttons::Toggle("Armor Boost", feature::playeroptions::tickGodArmor, "Near invincible armor.");
         buttons::Toggle("Damage Resistances", feature::playeroptions::tickGodResistances, "Maximizes all resistances.");

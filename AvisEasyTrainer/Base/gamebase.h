@@ -15,7 +15,8 @@ namespace gamebase {
     bool TryGetPlayerHandle(Handle<IScriptable>& outHandle);
     bool TryGetPlayerID(ent::EntityID& outID);
     bool TryGetPlayerHandleAndID(Handle<IScriptable>& outHandle, ent::EntityID& outID);
-    RED4ext::Handle<RED4ext::IScriptable> TryGetPlayerVehicleComponent();
+    bool TryGetVehicleHandle(RED4ext::Handle<RED4ext::IScriptable>& outHandle);
+    bool TryGetVehicleHandleAndID(RED4ext::Handle<RED4ext::IScriptable>& outHandle, RED4ext::ent::EntityID& outID);
     ent::Entity* GetPlayerEntity();
 
     template<typename T>
