@@ -12,11 +12,10 @@ namespace view::vehicle {
     namespace vehicleunlocks {
 
 
-        enum class FilterMode { None, Category, Model, Affiliation };
+        enum class FilterMode { None, All, Category, Brand, Affiliation };
 
         FilterMode currentMode = FilterMode::None;
         std::string selectedValue;
-
 
         void FilteredVehicleView()
         {
@@ -24,32 +23,49 @@ namespace view::vehicle {
 
             for (const auto& v : allVehicles)
             {
-                std::string model = v.modelName.empty() ? v.recordID : v.modelName;
-                bool match = false;
+                const std::string& brand = v.modelName.empty() ? v.recordID : v.modelName;
 
+                bool match = false;
                 switch (currentMode)
                 {
+                case FilterMode::All: match = true; break;
                 case FilterMode::Category: match = (v.category == selectedValue); break;
-                case FilterMode::Model: match = (model == selectedValue); break;
+                case FilterMode::Brand: match = (brand == selectedValue); break;
                 case FilterMode::Affiliation: match = (v.affiliation == selectedValue); break;
                 default: break;
                 }
 
-                if (!match) continue;
+                if (!match)
+                    continue;
 
                 bool& toggle = vehicleToggleStates[v.recordID];
-                if (buttons::Toggle(model, toggle))
+                if (buttons::Toggle(brand, toggle))
                 {
                     RequestVehicleToggle(v.recordID);
                 }
             }
-        }     SubMenu vehicleUnlockFilteredMenu{ "Filtered Vehicles", &FilteredVehicleView };
+        }    SubMenu vehicleUnlockFilteredMenu{ "Filtered Vehicles", &FilteredVehicleView };
 
 
         void VehicleUnlockMainView()
         {
             using namespace feature::vehicleoptions;
-            std::set<std::string> shownCategories, shownModels, shownAffiliations;
+            std::set<std::string> shownCategories, shownBrands, shownAffiliations;
+
+
+            if (buttons::Submenu("All Vehicles", vehicleUnlockFilteredMenu))
+            {
+                currentMode = FilterMode::All;
+                selectedValue.clear();
+            }
+
+            if (buttons::Submenu("Player Vehicles", vehicleUnlockFilteredMenu))
+            {
+                currentMode = FilterMode::Affiliation;
+                selectedValue = "Player";
+            }
+
+            buttons::Break("", "Filter by Category");
 
             for (const auto& v : allVehicles)
             {
@@ -64,22 +80,29 @@ namespace view::vehicle {
             }
 
             buttons::Break("", "Filter by Brand Name");
+
             for (const auto& v : allVehicles)
             {
-                const std::string& name = v.brandName.empty() ? v.recordID : v.brandName;
-                if (shownModels.insert(name).second)
+                if (v.brandName.empty())
+                    continue;
+
+                if (shownBrands.insert(v.brandName).second)
                 {
-                    if (buttons::Submenu(name.c_str(), vehicleUnlockFilteredMenu))
+                    if (buttons::Submenu(v.brandName.c_str(), vehicleUnlockFilteredMenu))
                     {
-                        currentMode = FilterMode::Model;
-                        selectedValue = name;
+                        currentMode = FilterMode::Brand;
+                        selectedValue = v.brandName;
                     }
                 }
             }
 
             buttons::Break("", "Filter by Affiliation");
+
             for (const auto& v : allVehicles)
             {
+                if (v.affiliation.empty() || v.affiliation == "Player" || v.affiliation == "Unknown")
+                    continue;
+
                 if (shownAffiliations.insert(v.affiliation).second)
                 {
                     if (buttons::Submenu(v.affiliation.c_str(), vehicleUnlockFilteredMenu))
