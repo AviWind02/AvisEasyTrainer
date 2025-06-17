@@ -22,7 +22,7 @@ namespace render::draw
         if (center)
         {
             float textW = ImGui::CalcTextSize(center->c_str()).x;
-            drawList->AddText({ pos.x + (size.x - textW) * 0.f, pos.y }, color, center->c_str());
+            drawList->AddText({ pos.x + (size.x - textW) * 0.5f, pos.y }, color, center->c_str());
         }
 
         if (right)

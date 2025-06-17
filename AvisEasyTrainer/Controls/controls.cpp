@@ -108,9 +108,11 @@ namespace controls
             lastKeyTick = now;
         }
 
-        if (Back())
+        if (Back() && now - lastKeyTick > scrollDelay)
         {
 			render::ui::CloseSubMenu();
+            lastKeyTick = now;
+
         }
 
         if (Misc() && now - lastKeyTick > scrollDelay)

@@ -389,7 +389,7 @@ namespace feature {
 			}
 			else
 			{
-				natives::statmodifier::AddStatModifier(StatType::MaxSpeed, 64, game::StatModifierType::Additive, test);// SpeedBoost
+				natives::statmodifier::InjectStatModifier(StatType::MaxSpeed, 100, game::StatModifierType::Multiplier, test);// SpeedBoost
 			}
 
 		}

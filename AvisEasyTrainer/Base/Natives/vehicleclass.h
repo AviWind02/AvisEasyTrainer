@@ -205,10 +205,6 @@ namespace gamebase {
                 loghandler::sdk->logger->InfoF(loghandler::handle, "[InjectVehicle] Added %s to vehicle list", recordName.c_str());
             }
 
-           
-
-  
-
             inline std::string GetLocalizedTextByKey(const RED4ext::CName& key)
             {
                 using namespace RED4ext;
@@ -257,6 +253,109 @@ namespace gamebase {
                 return GetLocalizedTextByKey(CName(locKey.primaryKey));
             }
 
+            inline std::string DumpVehicleRecordInfo(const std::string& vehicleTweakID)
+            {
+                auto* tdb = RED4ext::TweakDB::Get();
+                if (!tdb)
+                    return "<TweakDB unavailable>";
+
+                TweakDBID recordID(vehicleTweakID.c_str());
+                RED4ext::Handle<RED4ext::gamedataTweakDBRecord> record;
+                if (!tdb->TryGetRecord(recordID, record) || !record)
+                    return "<Record not found>";
+
+                auto* rtti = RED4ext::CRTTISystem::Get();
+                if (!rtti)
+                    return "<RTTI unavailable>";
+
+                auto* cls = rtti->GetClass("gameVehicleOffer_Record");
+                if (!cls)
+                    return "<VehicleOffer_Record class missing>";
+
+                CName brandCName;
+                if (auto* brandFn = cls->GetFunction("BrandName"))
+                {
+                    StackArgs_t args;
+                    ExecuteFunction(record, brandFn, &brandCName, args);
+                }
+
+                CString description;
+                if (auto* descFn = cls->GetFunction("Description"))
+                {
+                    StackArgs_t args;
+                    ExecuteFunction(record, descFn, &description, args);
+                }
+
+                std::string brand = gamebase::natives::vehicle::GetLocalizedTextByKey(brandCName);
+                std::string desc = description.c_str();
+
+                std::string result = "[Brand] " + brand + " | [Desc] " + desc;
+
+                loghandler::sdk->logger->InfoF(loghandler::handle,
+                    "[VehicleInfoDump] %s > Brand: %s | Desc: %s",
+                    vehicleTweakID.c_str(), brand.c_str(), desc.c_str());
+
+                return result;
+            }
+
+
         }
     }
 }
+
+
+
+/*
+
+
+            inline bool UnlockPlayerVehicle(CString vehicleName)
+            {
+                auto vehicleSystem = gamebase::GetGameSystem<game::VehicleSystem>("GetVehicleSystem");
+                if (!vehicleSystem)
+                {
+                    loghandler::sdk->logger->Error(loghandler::handle, "[UnlockPlayerVehicle] Failed to get VehicleSystem");
+                    return false;
+                }
+
+                auto* rtti = RED4ext::CRTTISystem::Get();
+                if (!rtti)
+                {
+                    loghandler::sdk->logger->Error(loghandler::handle, "[UnlockPlayerVehicle] RTTI system is null");
+                    return false;
+                }
+
+
+                auto* fn = rtti->GetClass("gameVehicleSystem")->GetFunction("EnablePlayerVehicle");
+                if (!fn)
+                {
+                    loghandler::sdk->logger->Error(loghandler::handle, "[UnlockPlayerVehicle] Function not found");
+                    return false;
+                }
+
+                bool enable = true;
+                bool despawnIfDisabling = false;
+
+                StackArgs_t args{
+                    { nullptr, &vehicleName },
+                    { nullptr, &enable },
+                    { nullptr, &despawnIfDisabling }
+                };
+
+                bool res = false;
+                if (!ExecuteFunction(vehicleSystem, fn, &res, args))
+                {
+                    loghandler::sdk->logger->ErrorF(loghandler::handle, "[UnlockPlayerVehicle] Failed to unlock vehicle: %s", vehicleName.c_str());
+                    return false;
+                }
+
+
+                loghandler::sdk->logger->InfoF(loghandler::handle, "[UnlockPlayerVehicle] VisualTags for %s: %s", vehicleName.c_str(), DumpVehicleRecordInfo(vehicleName.c_str()));
+
+
+
+
+                loghandler::sdk->logger->InfoF(loghandler::handle, "[VehicleSystem] Unlocked vehicle: %s", vehicleName.c_str());
+                return res;
+            }
+
+*/

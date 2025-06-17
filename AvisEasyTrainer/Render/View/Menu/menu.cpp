@@ -10,6 +10,9 @@
 #include "Base/Natives/statmodifiers.h"
 #include "Base/Natives/vehicleclass.h"
 
+#include "Render/View/VehicleMenu/vehicleView.h"
+#include "Render/View/TeleportMenu/teleportview.h"
+
 namespace render::ui
 {
 
@@ -70,15 +73,30 @@ namespace render::ui
         ImGuiWindowFlags_NoDecoration;
 
 
+    void UpdateStatesOnVehicleMenuView()
+    {
+        static bool hasCheckedUnlockStates = false;
+
+        if (!menuStack.empty() &&
+            menuStack.back().title == view::vehicle::vehicleunlocks::vehicleUnlockMenu.title &&
+            !hasCheckedUnlockStates)
+        {
+            feature::vehicleoptions::UpdateVehicleUnlockStates();
+            hasCheckedUnlockStates = true;
+        }
+
+    }
+
     bool tickTest = false;
     void NativeTick()
     {
         feature::playeroptions::Tick();
         feature::teleoptions::Tick();
         feature::vehicleoptions::Tick();
+        UpdateStatesOnVehicleMenuView();
+
 
 		if (tickTest) {
-
 			tickTest = false;
 		}
     }
@@ -105,8 +123,7 @@ namespace render::ui
         buttons::IntToggle("Memory Value", feature::playeroptions::memoryValue, 1, 256, 1, feature::playeroptions::tickMemoryEdit, "Set RAM max.");
         buttons::Toggle("Memory Regeneration Boost", feature::playeroptions::tickMemoryRegeneration, "Massive RAM regen.");
 
-    }
-    SubMenu selfMenu{ "Self Menu", &SelfView };
+    } SubMenu selfMenu{ "Self Menu", &SelfView };
     void ReductionView()
     {
 
@@ -126,83 +143,20 @@ namespace render::ui
         buttons::Toggle("Quickhack Cost Reduction", feature::playeroptions::tickQuickhackCost, "Reduces RAM cost.");
 
 
-    }
-    SubMenu cooldownMenu{ "Cooldown & Reduction Menu", &ReductionView };
+    }SubMenu cooldownMenu{ "Cooldown & Reduction Menu", &ReductionView };
 
-    void TeleportView()
-    {
-        static int forwardDistance = 2;
-        static int upwardDistance = 0;
-
-        buttons::Int("Forward Distance", forwardDistance, 1, 25, 1);
-        buttons::Int("Upward Distance", upwardDistance, 0, 20, 1);
-
-        if (buttons::Option("Teleport Forward", "Move forward based on rotation"))
-        {
-            feature::teleoptions::TeleportForward(static_cast<float>(forwardDistance));
-            feature::teleoptions::TeleportUp(static_cast<float>(upwardDistance));
-
-        }
-
-        std::string currentCategory;
-        for (const auto& loc : feature::teleoptions::teleportLocations)
-        {
-
-            if (buttons::OptionExtended(loc.name, "", ICON_FA_MAP_MARKED))
-            {
-                feature::teleoptions::RequestTeleport(loc.position);
-            }
-        }
-    }
-    SubMenu teleportMenu{ "Teleport Menu", &TeleportView };
-
-    void VehicleUnlockView()
-    {
-        using namespace feature::vehicleoptions;
-     
-
-        if (allVehicles.empty() || vehicleToggleStates.empty())
-        {
-            buttons::Option("Refresh Vehicle List", "", []() {
-                hasInitialized = false;
-                });
-            buttons::Break("No vehicles available to toggle.");
-            return;
-        }
-
-        for (const auto& vehicle : allVehicles)
-        {
-            if (vehicleToggleStates.empty())
-                return;
-
-            const std::string& id = vehicle.recordID;
-
-            //if (id.find("player") == std::string::npos)
-            //    continue;
-
-            bool& state = vehicleToggleStates[id];
-
-            if (buttons::Toggle(vehicle.modelName, state))
-            {
-                RequestVehicleToggle(id);
-            }
-        }
-    }
-
-    SubMenu vehicleUnlockMenu{ "Vehicle Menu", &VehicleUnlockView };
 
     void MainMenuView()
     {
         buttons::Submenu("Self Menu", selfMenu);
-        buttons::Submenu("Vehicle Menu", vehicleUnlockMenu);
+        buttons::Submenu("Vehicle Menu", view::vehicle::vehicleunlocks::vehicleUnlockMenu);
         buttons::Submenu("Cooldown Reduction Menu", cooldownMenu);
-        buttons::Submenu("Teleport Menu", teleportMenu);
+        buttons::Submenu("Teleport Menu", view::teleport::teleportMenu);
 
-		buttons::Toggle("Test Feature", tickTest, "Test feature toggle for debugging purposes");
-        buttons::Toggle("Test Player Feature", feature::playeroptions::tickTest);
+		//buttons::Toggle("Test Feature", tickTest, "Test feature toggle for debugging purposes");
+        //buttons::Toggle("Test Player Feature", feature::playeroptions::tickTest);
 
-    }
-    SubMenu mainMenu{ "Main Menu",  &MainMenuView };
+    } SubMenu mainMenu{ "Main Menu",  &MainMenuView };
     
 
     void DrawMainMenu()

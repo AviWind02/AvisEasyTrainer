@@ -20,22 +20,22 @@ void __stdcall HookTweakDBLoad(RED4ext::TweakDB* tdb)
         originalTweakDBLoad(tdb);
 
     std::call_once(injectVehiclesOnce, []()
+    {
+        std::thread([]()
         {
-            std::thread([]()
+            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+
+            for (const auto& vehicle : feature::vehicleoptions::allVehicles)
+            {
+                if (vehicle.affiliation.find("player") == std::string::npos)
                 {
-                    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-
-                    for (const auto& vehicle : feature::vehicleoptions::allVehicles)
-                    {
-                        if (!vehicle.isPlayerVehicle)
-                        {
-                            gamebase::natives::vehicle::InjectSingleVehicleIntoTweakDB(vehicle.recordID);
-                        }
-                    }
-
-                    loghandler::sdk->logger->Info(loghandler::handle, "[HookTweakDBLoad] Vehicle injection complete.");
-                }).detach();
-        });
+                    gamebase::natives::vehicle::InjectSingleVehicleIntoTweakDB(vehicle.recordID);
+                }
+            }
+            feature::vehicleoptions::UpdateVehicleNames();// all the game labels into the vector
+            loghandler::sdk->logger->Info(loghandler::handle, "[HookTweakDBLoad] Vehicle injection complete.");
+        }).detach();
+    });
 }
 
 void InstallTweakDBLoadHook()

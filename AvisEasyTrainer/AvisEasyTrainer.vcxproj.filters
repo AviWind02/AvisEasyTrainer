@@ -135,6 +135,12 @@
     <ClInclude Include="Base\Natives\vehicleclass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Render\View\VehicleMenu\vehicleview.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\View\TeleportMenu\teleportview.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -203,7 +209,7 @@
     <ClCompile Include="Controls\controls.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Render\Menu\Menu.cpp">
+    <ClCompile Include="Render\View\Menu\menu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Base\gamebase.cpp">
@@ -222,6 +228,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Features\VehicleFeat\vehiclefeature.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\View\VehicleMenu\vehicleunlockview.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\View\TeleportMenu\teleportview.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

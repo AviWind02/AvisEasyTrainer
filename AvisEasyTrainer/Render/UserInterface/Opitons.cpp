@@ -14,6 +14,11 @@ namespace render::ui
         using namespace render::draw;
 
         bool isBreak = (left.find("#BREAK") != std::string::npos);
+
+        std::string cleanedLeft = left;
+        if (isBreak)
+            cleanedLeft.erase(cleanedLeft.find("#BREAK"), 6);
+
         if (isBreak && currentOption == optionIndex + 1) {
             if (controls::Down()) currentOption++;
             else if (controls::Up()) currentOption--;
@@ -63,7 +68,7 @@ namespace render::ui
 
         // Dynamically! calculate text baseline
         AddText(
-            left.empty() ? std::nullopt : std::optional<std::string>{ left },
+            cleanedLeft.empty() ? std::nullopt : std::optional<std::string>{ left },
             center.empty() ? std::nullopt : std::optional<std::string>{ center },
             right.empty() ? std::nullopt : std::optional<std::string>{ right },
             { optionPos.x + labelOffsetX, verticalCenterY },

@@ -170,6 +170,8 @@
     <ClInclude Include="Render\UserInterface\Style.h" />
     <ClInclude Include="Render\UserInterface\submenu.h" />
     <ClInclude Include="Render\UserInterface\UserInterface.h" />
+    <ClInclude Include="Render\View\TeleportMenu\teleportview.h" />
+    <ClInclude Include="Render\View\VehicleMenu\vehicleview.h" />
     <ClInclude Include="Vendor\ImGui\backends\imgui_impl_dx12.h" />
     <ClInclude Include="Vendor\ImGui\backends\imgui_impl_win32.h" />
     <ClInclude Include="Vendor\ImGui\imgui.h" />
@@ -206,9 +208,11 @@
     <ClCompile Include="Render\Hooks\d3d12hook.cpp" />
     <ClCompile Include="Controls\inputhook.cpp" />
     <ClCompile Include="Render\Hooks\hooks.cpp" />
-    <ClCompile Include="Render\Menu\Menu.cpp" />
+    <ClCompile Include="Render\View\Menu\menu.cpp" />
     <ClCompile Include="Render\UserInterface\Background.cpp" />
     <ClCompile Include="Render\UserInterface\Opitons.cpp" />
+    <ClCompile Include="Render\View\TeleportMenu\teleportview.cpp" />
+    <ClCompile Include="Render\View\VehicleMenu\vehicleunlockview.cpp" />
     <ClCompile Include="Vendor\ImGui\backends\imgui_impl_dx12.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>

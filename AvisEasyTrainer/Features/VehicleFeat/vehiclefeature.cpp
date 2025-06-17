@@ -19,29 +19,45 @@ namespace feature {
             selectedVehicleID = vehicleID;
             tickVehicleToggleNow = true;
         }
+
+        void UpdateVehicleNames()
+        {
+            for (auto& vehicle : allVehicles)
+            {
+                const char* id = vehicle.recordID.empty() ? "<empty_id>" : vehicle.recordID.c_str();
+                std::string localizedName = gamebase::natives::vehicle::LocalizeVehicleDisplayName(vehicle.recordID);
+                vehicle.modelName = localizedName.empty() ? "<unnamed>" : localizedName;
+
+                loghandler::sdk->logger->InfoF(loghandler::handle,
+                    "[UpdateVehicleNames] %s resolved as '%s'",
+                    id, vehicle.modelName.c_str());
+            }
+        }
+
+        void UpdateVehicleUnlockStates()
+        {
+            for (const auto& vehicle : allVehicles)
+            {
+                const char* id = vehicle.recordID.empty() ? "<empty_id>" : vehicle.recordID.c_str();
+                RED4ext::TweakDBID tweakID(id);
+
+                bool isUnlocked = gamebase::natives::vehicle::IsVehicleUnlocked(tweakID);
+                vehicleToggleStates[vehicle.recordID] = isUnlocked;
+
+                loghandler::sdk->logger->InfoF(loghandler::handle,
+                    "[UpdateVehicleUnlockStates] %s (%s) is %s",
+                    vehicle.modelName.empty() ? "<unnamed>" : vehicle.modelName.c_str(),
+                    id,
+                    isUnlocked ? "UNLOCKED" : "LOCKED");
+            }
+        }
+
         bool hasInitialized = true;
         void Tick()
         {
             if (!hasInitialized)
             {
-                for (auto& vehicle : allVehicles)
-                {
-                    const char* id = vehicle.recordID.empty() ? "<empty_id>" : vehicle.recordID.c_str();
-                    RED4ext::TweakDBID tweakID(id);
-
-                    std::string localizedName = gamebase::natives::vehicle::LocalizeVehicleDisplayName(vehicle.recordID);
-                    vehicle.modelName = (localizedName.empty() ? "<unnamed>" : localizedName);
-
-                    bool isUnlocked = gamebase::natives::vehicle::IsVehicleUnlocked(tweakID);
-                    vehicleToggleStates[vehicle.recordID] = isUnlocked;
-
-                    loghandler::sdk->logger->InfoF(loghandler::handle,
-                        "[InitVehicleToggleStates] %s (%s) is %s",
-                        vehicle.modelName,
-                        id,
-                        isUnlocked ? "UNLOCKED" : "LOCKED");
-                }
-
+                UpdateVehicleUnlockStates();
                 hasInitialized = true;
             }
 
@@ -49,7 +65,7 @@ namespace feature {
                 return;
 
             auto it = std::find_if(allVehicles.begin(), allVehicles.end(),
-                [](const Vehicle& v) { return v.recordID == selectedVehicleID; });
+                [](const VehicleMetadata& v) { return v.recordID == selectedVehicleID; });
 
             if (it != allVehicles.end())
             {
