@@ -488,6 +488,10 @@ namespace feature {
 
 		void Tick()
 		{
+
+
+			playerwanted::Tick();
+
 			if (tickGodmode)
 				SetHealthFull();
 

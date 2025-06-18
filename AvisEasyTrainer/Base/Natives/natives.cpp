@@ -7,3 +7,5 @@
 #include "transform.h"
 
 #include "vehicleclass.h"
+
+#include "preventionsystem.h"

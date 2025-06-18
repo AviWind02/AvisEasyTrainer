@@ -147,6 +147,9 @@
     <ClInclude Include="Render\UserInterface\Backend\InfoBox.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Base\Natives\preventionsystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -243,6 +246,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Render\UserInterface\UserInterface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Features\PlayerFeats\PlayerWanted.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

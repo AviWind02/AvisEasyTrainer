@@ -146,6 +146,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Base\Natives\preventionsystem.h" />
     <ClInclude Include="Base\Natives\statpoolmodifiers.h" />
     <ClInclude Include="Base\Natives\statmodifiers.h" />
     <ClInclude Include="Base\Natives\transform.h" />
@@ -198,6 +199,7 @@
     <ClCompile Include="Base\gamebase.cpp" />
     <ClCompile Include="Base\gamesystem.cpp" />
     <ClCompile Include="Features\PlayerFeats\playerfeature.cpp" />
+    <ClCompile Include="Features\PlayerFeats\PlayerWanted.cpp" />
     <ClCompile Include="Features\TeleportFeats\teleportfeature.cpp" />
     <ClCompile Include="Features\VehicleFeat\vehiclefeature.cpp" />
     <ClCompile Include="pch.cpp">

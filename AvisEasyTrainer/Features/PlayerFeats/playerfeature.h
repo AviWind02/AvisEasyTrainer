@@ -1,7 +1,19 @@
 #pragma once
 namespace feature {
 	namespace playeroptions {
+		namespace playerwanted {
+		
+			inline bool tickNeverWanted = false;
+			inline bool tickAlwaysWanted = false;
+			inline bool tickHoldWanted = false;
 
+			inline int heldWantedLevel = 0;
+
+			void SetWantedLevel(int level);
+			void ClearWantedLevel();
+			void Tick();
+
+		}
 
 		inline bool tickGodmode = false;
 		inline bool tickUnlimitedStamina = false;
