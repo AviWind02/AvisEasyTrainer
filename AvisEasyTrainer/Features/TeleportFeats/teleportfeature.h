@@ -22,7 +22,6 @@ namespace feature {
 		};
 
 
-        // All teleport locations used in this file were originally sourced from a public CET lue script Simplemenu.
 	    inline std::vector<TeleportLocation> teleportLocations = {
             { "Akulov Penthouse", "Location", "Dank Rafft and capncoolio2", { -1218.135986f, 1409.635010f, 113.524445f } },
             { "Arasaka Orbital Station", "Location", "Dank Rafft and capncoolio2", { 4743.650879f, -1091.755127f, 1310.439575f } },
