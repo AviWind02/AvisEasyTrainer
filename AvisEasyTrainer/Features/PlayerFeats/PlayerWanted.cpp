@@ -4,14 +4,6 @@
 
 #include "Base/Natives/preventionsystem.h"
 
-// Some of the functions below were inspired by or adapted from the CET SimpleMenu Lua scripts,
-// originally created by Dank Rafft and capncoolio2. 
-
-// I'm using their script examples as a reference for which stat values to apply and how features like
-// InfiniteOxygen, InfiniteStamina, HealItemCooldown, GrenadeCooldown, ProjectileCooldown, CloakCooldown,
-// SandevistanCooldown, BerserkCooldown, KerenzikovCooldown, OverclockCooldown, QuickhackCooldown,
-// QuickhackCost, MemoryRegeneration, and the original GodMode are handled.
-
 namespace feature {
 	namespace playeroptions {
 		namespace playerwanted {
@@ -25,31 +17,80 @@ namespace feature {
 			using namespace natives::prevention;
 			void SetWantedLevel(int level)
 			{
-				level = std::clamp(level, 0, 5);
+				level = std::clamp(level, 1, 5);
 				SetPlayerWantedLevel(level);
 				heldWantedLevel = level;
 			}
 
 			void ClearWantedLevel()
 			{
-				TurnOffWantedLevel();
+				DisablePoliceSystem(true);
 				heldWantedLevel = 0;
+				DisablePoliceSystem(false);
 			}
 
-			void Tick()
+			void SetNeverWantedLevel(bool enabled)
 			{
-
-				if (tickAlwaysWanted && heldWantedLevel != 5)
-					SetWantedLevel(5);
-
-				if (tickNeverWanted)
+				if (enabled && tickHoldWanted)
 				{
-					heldWantedLevel = 0;
-					ClearWantedLevel();
+					tickHoldWanted = false;
+					render::ui::NotificationSystem::NotifyInfo("Disabled: Hold Wanted Level");
 				}
-				if (tickHoldWanted && heldWantedLevel > 0)
-					SetWantedLevel(heldWantedLevel);
+
+				tickNeverWanted = enabled;
 			}
+
+			void SetHoldWantedLevel(bool enabled)
+			{
+				if (enabled && tickNeverWanted)
+				{
+					tickNeverWanted = false;
+					render::ui::NotificationSystem::NotifyInfo("Disabled: Never Wanted");
+				}
+
+				tickHoldWanted = enabled;
+			}
+
+
+            void Tick()
+            {
+				static bool wasSystemDisabled = false;
+
+                if (tickClearWanted)
+                {
+                    ClearWantedLevel();
+					tickHoldWanted = false;
+					tickClearWanted = false;
+
+
+                }
+
+                if (tickNeverWanted)
+                {
+                    DisablePoliceSystem(true); 
+                    heldWantedLevel = 0;
+					wasSystemDisabled = true;
+
+                }
+				else
+				{
+					if (wasSystemDisabled)
+					{
+
+						DisablePoliceSystem(false);
+						wasSystemDisabled = false;
+					}
+				}
+
+
+				if (heldWantedLevel >= 1)
+				{
+					if (tickHoldWanted)
+						SetWantedLevel(heldWantedLevel); // Hold
+					DisablePoliceSystem(false);
+				}
+	
+            }
 		}
 	}
 }

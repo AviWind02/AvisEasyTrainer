@@ -4,10 +4,15 @@ namespace feature {
 		namespace playerwanted {
 		
 			inline bool tickNeverWanted = false;
+			inline bool tickClearWanted = false;
 			inline bool tickAlwaysWanted = false;
 			inline bool tickHoldWanted = false;
 
 			inline int heldWantedLevel = 0;
+
+			// disables conflicting modes if active
+			void SetNeverWantedLevel(bool enabled);
+			void SetHoldWantedLevel(bool enabled);
 
 			void SetWantedLevel(int level);
 			void ClearWantedLevel();

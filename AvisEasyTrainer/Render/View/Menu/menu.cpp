@@ -114,8 +114,12 @@ namespace render::ui
         buttons::Toggle("Unlimited Stamina", feature::playeroptions::tickUnlimitedStamina, "Keeps stamina maxed.");
         buttons::Toggle("Unlimited Oxygen", feature::playeroptions::tickUnlimitedOxygen, "Keeps oxygen at 100%");
         buttons::Toggle("NoClip Mode", feature::playeroptions::tickNoClip, "Move freely in any direction without collisions.");
-        buttons::Toggle("Never Wanted", feature::playeroptions::playerwanted::tickNeverWanted, "Prevents police from pursuing you.");
-        buttons::IntToggle("Wanted Level", feature::playeroptions::playerwanted::heldWantedLevel, 0, 5, 1, feature::playeroptions::playerwanted::tickHoldWanted, "Set desired wanted level.");
+        buttons::Toggle("Never Wanted", feature::playeroptions::playerwanted::tickNeverWanted, "Prevents police from pursuing you.",
+            [] { feature::playeroptions::playerwanted::SetNeverWantedLevel(feature::playeroptions::playerwanted::tickNeverWanted); });
+        buttons::IntToggle("Wanted Level", feature::playeroptions::playerwanted::heldWantedLevel, 1, 5, 1, feature::playeroptions::playerwanted::tickHoldWanted,
+            "Sets your wanted level. If toggled on, it will be held.",
+            [] { feature::playeroptions::playerwanted::SetHoldWantedLevel(feature::playeroptions::playerwanted::tickHoldWanted); });
+        buttons::Option("Clear Wanted level", "Temporarily disables the police system to reset wanted level.", [] {feature::playeroptions::playerwanted::tickClearWanted = true; });
         buttons::FloatToggle("Player Max Speed", feature::playeroptions::maxSpeedValue, 1.0f, 15.f, 0.5f, feature::playeroptions::tickPlayerMaxSpeed, "Set maximum player speed.");
         buttons::Toggle("Health Regen", feature::playeroptions::tickGodHealthRegen, "Extreme passive health regeneration.");
         buttons::Toggle("Armor Boost", feature::playeroptions::tickGodArmor, "Near invincible armor.");
@@ -126,15 +130,16 @@ namespace render::ui
         buttons::Toggle("Unlimited Memory", feature::playeroptions::tickUnlimitedMemory, "Full RAM when exiting scanner.");
         buttons::IntToggle("Memory Value", feature::playeroptions::memoryValue, 1, 256, 1, feature::playeroptions::tickMemoryEdit, "Set RAM max.");
         buttons::Toggle("Memory Regeneration Boost", feature::playeroptions::tickMemoryRegeneration, "Massive RAM regen.");
-        buttons::Toggle("Always Wanted", feature::playeroptions::playerwanted::tickAlwaysWanted, "Keeps you at max wanted level.");
-        buttons::Toggle("Hold Wanted Level", feature::playeroptions::playerwanted::tickHoldWanted, "Maintains the selected wanted level.");
+
+
+
+
 
     } SubMenu selfMenu{ "Self Menu", &SelfView };
     void ReductionView()
     {
 
-        DrawToggleOption("Visibility Rate Reduction", feature::playeroptions::tickdetectionRate,
-            "Lowers how easily NPCs detect you. You're still visible to them and can get detected up close or if in combat.");
+        buttons::Toggle("Visibility Rate Reduction", feature::playeroptions::tickdetectionRate, "Lowers how easily NPCs detect you. You're still visible to them and can get detected up close or if in combat.");
         buttons::Toggle("Fall Damage Reduction", feature::playeroptions::tickGodFallDamage, "Negates most fall damage.");
         buttons::Toggle("Trace Rate Reduction", feature::playeroptions::tickTraceRatelow, "Reduce trace mechanics.");
         buttons::Toggle("Heal Item Cooldown Reduction", feature::playeroptions::tickHealItemCooldown, "No cooldown on healing.");
