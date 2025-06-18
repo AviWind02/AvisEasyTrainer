@@ -23,14 +23,14 @@ namespace view::vehicle {
 
             for (const auto& v : allVehicles)
             {
-                const std::string& brand = v.modelName.empty() ? v.recordID : v.modelName;
+                const std::string& modelName = v.modelName.empty() ? v.recordID : v.modelName;
 
                 bool match = false;
                 switch (currentMode)
                 {
                 case FilterMode::All: match = true; break;
                 case FilterMode::Category: match = (v.category == selectedValue); break;
-                case FilterMode::Brand: match = (brand == selectedValue); break;
+                case FilterMode::Brand: match = (v.brandName == selectedValue); break;
                 case FilterMode::Affiliation: match = (v.affiliation == selectedValue); break;
                 default: break;
                 }
@@ -39,7 +39,8 @@ namespace view::vehicle {
                     continue;
 
                 bool& toggle = vehicleToggleStates[v.recordID];
-                if (buttons::Toggle(brand, toggle))
+                std::string tooltip = "Unlock " + modelName + " and add it to your player vehicle list. Disable to remove it. Make sure you're not inside the vehicle before disabling.";
+                if (buttons::Toggle(modelName, toggle, tooltip))
                 {
                     RequestVehicleToggle(v.recordID);
                 }

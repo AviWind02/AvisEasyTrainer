@@ -27,7 +27,7 @@ namespace FontManager {
 
     inline void InitializeFonts() {
         ImGuiIO& io = ImGui::GetIO();
-        float smallf = 20.f, medium = 28.f, large = 36.f;
+        float smallf = 16, medium = 20.f, large = 28;
 
         auto fontFolder = GetWindowsFontPath();
         loghandler::sdk->logger->Info(loghandler::handle, "Initializing fonts...");

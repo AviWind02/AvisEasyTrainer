@@ -52,9 +52,12 @@ namespace controls
 
     bool ToggleMenu()
     {
-        return IsKeyPressed(VK_F4) || ImGui::IsKeyPressed(ImGuiKey_GamepadStart);
+        return IsKeyPressed(VK_F4) || (ImGui::IsKeyPressed(ImGuiKey_GamepadFaceDown) && ImGui::IsKeyPressed(ImGuiKey_GamepadR1));
     }
-
+    bool ToggleMouse()
+    {
+        return IsKeyPressed('X');
+    }
 
  
 
@@ -112,7 +115,12 @@ namespace controls
         {
 			render::ui::CloseSubMenu();
             lastKeyTick = now;
+        }
 
+        if (ToggleMouse() && now - lastKeyTick > scrollDelay)
+        {
+            mouseToggle = !mouseToggle;
+            lastKeyTick = now;
         }
 
         if (Misc() && now - lastKeyTick > scrollDelay)

@@ -22,18 +22,22 @@ namespace feature {
             tickTeleportNow = true;
         }
 
+
+
         void TeleportForward(float distance)
         {
             Vector3 pos = gamebase::natives::transform::GetPlayerWorldPosition();
-            Vector3 rot = gamebase::natives::transform::GetPlayerWorldEulerAngles();
+            Vector3 rot = gamebase::natives::transform::GetPlayerWorldEulerAngles(); 
 
-            float radians = rot.Z * (3.14159265f / 180.0f);
-            pos.X += std::cos(radians) * distance;
-            pos.Y += std::sin(radians) * distance;
+            float yawRad = gamebase::natives::transform::DegreeToRadian(rot.Z);
+            float xOffset = distance * std::sin(yawRad) * -1.f;
+            float yOffset = distance * std::cos(yawRad);
+
+            pos.X += xOffset;
+            pos.Y += yOffset;
 
             RequestTeleport(pos);
         }
-
         void TeleportUp(float amount)
         {
             Vector3 pos = gamebase::natives::transform::GetPlayerWorldPosition();

@@ -34,6 +34,13 @@ namespace render::draw
         if (font) ImGui::PopFont();
     }
 
+    void AddWrappedText(const std::string& text, ImVec2 pos, float width,
+        ImU32 color, ImFont* font) {
+        if (!font) font = ImGui::GetFont();
+        ImGui::GetWindowDrawList()
+            ->AddText(font, ImGui::GetFontSize(), pos, color, text.c_str(), nullptr, width);
+    }
+
     void DrawTextLine(ImVec2 base, ImVec2 size, int line,
         const std::string& left, const std::string& center,
         const std::string& right, ImU32 color,

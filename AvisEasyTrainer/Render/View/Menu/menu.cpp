@@ -112,6 +112,7 @@ namespace render::ui
         buttons::Toggle("Unlimited health", feature::playeroptions::tickGodmode, "Refills health to 100 constantly");
         buttons::Toggle("Unlimited Stamina", feature::playeroptions::tickUnlimitedStamina, "Keeps stamina maxed.");
         buttons::Toggle("Unlimited Oxygen", feature::playeroptions::tickUnlimitedOxygen, "Keeps oxygen at 100%");
+        buttons::Toggle("NoClip Mode", feature::playeroptions::tickNoClip, "Move freely in any direction without collisions.");
         buttons::FloatToggle("Player Max Speed", feature::playeroptions::maxSpeedValue, 1.0f, 15.f, 0.5f, feature::playeroptions::tickPlayerMaxSpeed, "Set maximum player speed.");
         buttons::Toggle("Health Regen", feature::playeroptions::tickGodHealthRegen, "Extreme passive health regeneration.");
         buttons::Toggle("Armor Boost", feature::playeroptions::tickGodArmor, "Near invincible armor.");
@@ -165,6 +166,7 @@ namespace render::ui
         static bool initialized = false;
         if (!initialized) {
             OpenSubMenu(mainMenu);
+            NotificationSystem::NotifyInfo("EasyTrainer initialized");
             initialized = true;
         }
         HandleInputTick();
@@ -179,11 +181,14 @@ namespace render::ui
         ImGui::SetNextWindowBgAlpha(0.f);
         ImGui::Begin("##BackgroundWindow", nullptr, flags);
         {
+            background::DrawTitleBar();
             background::DrawBackgroundWindow();
             if (!menuStack.empty()) {
                 menuStack.back().view();
             }
-
+            background::DrawFooter();
+            NotificationSystem::Render();
+            InfoBox::Render();
         }
         ImGui::End();
         DebugUI::DrawStyleDebugMenu();

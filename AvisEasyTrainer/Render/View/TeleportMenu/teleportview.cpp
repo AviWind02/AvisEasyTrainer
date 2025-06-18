@@ -21,7 +21,7 @@ namespace view::teleport {
             if (loc.category != selectedCategory)
                 continue;
 
-            if (buttons::OptionExtended(loc.name, "", ICON_FA_MAP_MARKED))
+            if (buttons::OptionExtended(loc.name, "", ICON_FA_MAP_MARKED, "Teleport created by: " + loc.creator))
             {
                 RequestTeleport(loc.position);
             }
@@ -46,18 +46,20 @@ namespace view::teleport {
             //TeleportUp(static_cast<float>(upwardDistance));
         }
 
-        std::set<std::string> shownCategories;
-
         buttons::Break("", "Teleport Categories");
 
+        std::set<std::string> uniqueCategories;
         for (const auto& loc : teleportLocations)
+            uniqueCategories.insert(loc.category);
+
+        std::vector<std::string> sortedCategories(uniqueCategories.begin(), uniqueCategories.end());
+        std::sort(sortedCategories.begin(), sortedCategories.end());
+
+        for (const auto& category : sortedCategories)
         {
-            if (shownCategories.insert(loc.category).second)
+            if (buttons::Submenu(category.c_str(), teleportFilteredMenu))
             {
-                if (buttons::Submenu(loc.category.c_str(), teleportFilteredMenu))
-                {
-                    selectedCategory = loc.category;
-                }
+                selectedCategory = category;
             }
         }
     }

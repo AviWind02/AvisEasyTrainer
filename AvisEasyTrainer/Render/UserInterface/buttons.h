@@ -5,7 +5,7 @@ namespace render::ui {
 
         inline bool Option(const std::string& label, const std::string& tip = "", std::function<void()> action = [] {})
         {
-            if (DrawOptionTextRAW(label)) {
+            if (DrawOptionTextRAW(label, "", "", tip)) {
                 action();
                 return true;
             }
@@ -14,7 +14,7 @@ namespace render::ui {
 
         inline bool OptionExtended(const std::string& label, const std::string& centerText, const std::string& rightText, const std::string& tip = "", std::function<void()> action = [] {})
         {
-            if (DrawOptionTextRAW(label, centerText, rightText)) {
+            if (DrawOptionTextRAW(label, centerText, rightText, tip)) {
                 action();
                 return true;
             }
@@ -28,7 +28,7 @@ namespace render::ui {
 
         inline bool Submenu(const std::string& label, const SubMenu& submenu, const std::string& tip = "", std::function<void()> action = [] {})
         {
-            if (DrawOptionTextRAW(label, "", ICON_FA_ARROW_RIGHT)) {
+            if (DrawOptionTextRAW(label, "", ICON_FA_ARROW_RIGHT, tip)) {
                 OpenSubMenu(submenu);
                 action();
                 return true;

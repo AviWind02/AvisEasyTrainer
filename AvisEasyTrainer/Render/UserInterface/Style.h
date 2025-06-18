@@ -3,20 +3,20 @@ namespace UI
 {
     namespace Colors {
         // Text
-        inline ImU32 Text = IM_COL32(220, 230, 255, 255);   
-        inline ImU32 MutedText = IM_COL32(130, 140, 160, 255);  
+        inline ImU32 Text = IM_COL32(255, 255, 255, 255);             // Pure white for high contrast
+        inline ImU32 MutedText = IM_COL32(120, 140, 160, 255);        // Desaturated blue-gray
 
         // Surfaces
-        inline ImU32 Background = IM_COL32(10, 12, 18, 255);     
-        inline ImU32 FrameBg = IM_COL32(20, 22, 30, 255);     
+        inline ImU32 Background = IM_COL32(8, 10, 18, 255);           // Deep blue-black
+        inline ImU32 FrameBg = IM_COL32(18, 22, 34, 255);             // Slightly brighter blue-gray
 
         // Borders & UI elements
-        inline ImU32 Border = IM_COL32(70, 75, 90, 255);     
-        inline ImU32 Highlight = IM_COL32(100, 200, 255, 255);   
-        inline ImU32 ActiveHighlight = IM_COL32(100, 200, 255, 90);    
-        inline ImU32 HoverBg = IM_COL32(45, 60, 85, 160);     
-        inline ImU32 Active = IM_COL32(55, 120, 180, 255);   
-        inline ImU32 Grab = IM_COL32(160, 220, 255, 255);   
+        inline ImU32 Border = IM_COL32(80, 90, 110, 255);             // Muted slate
+        inline ImU32 Highlight = IM_COL32(0, 255, 180, 255);          // Bright neon aqua
+        inline ImU32 ActiveHighlight = IM_COL32(0, 255, 180, 90);     // Same hue, translucent
+        inline ImU32 HoverBg = IM_COL32(30, 60, 90, 160);             // Soft cyan highlight
+        inline ImU32 Active = IM_COL32(255, 20, 147, 255);            // Cyberpunk pink
+        inline ImU32 Grab = IM_COL32(0, 255, 255, 255);               // Neon teal
 
         // Utility
         inline ImU32 Transparent = IM_COL32(0, 0, 0, 0);

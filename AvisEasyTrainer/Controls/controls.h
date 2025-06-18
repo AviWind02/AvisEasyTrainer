@@ -2,6 +2,8 @@
 namespace controls {
     // State
     inline bool menuOpen = true;
+    inline bool mouseToggle = false;
+
     inline int optionIndex = 0;
     inline int currentOption = 1;
 

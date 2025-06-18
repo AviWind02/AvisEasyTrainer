@@ -141,6 +141,12 @@
     <ClInclude Include="Render\View\TeleportMenu\teleportview.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Render\UserInterface\Backend\NotificationSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\UserInterface\Backend\InfoBox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -234,6 +240,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Render\View\TeleportMenu\teleportview.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\UserInterface\UserInterface.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -17,21 +17,26 @@ namespace render::ui
     void DrawMainMenu();
     void NativeTick();
 
+    ImVec2 GetParentWindowSize();
+    bool ContainsIcon(const std::string& text);
 
     namespace background {
         void DrawBackgroundWindow();
+        void DrawFooter();
+        void DrawTitleBar();
     }
 
 
     // Draws a centered label row with optional left/right text
         // Returns true if clicked (used for selection logic)
-    bool DrawOptionTextRAW(const std::string& left, const std::string& center = "", const std::string& right = "");
+        // - tip: Optional tooltip or description string
+    bool DrawOptionTextRAW(const std::string& left, const std::string& center = "", const std::string& right = "", const std::string& tip = "");
 
     // Draws a boolean toggle option using a checkbox on the right
     // Parameters:
     // - label: The visible name of the option
     // - toggle: Reference to the boolean to toggle
-    // - tip: (unused currently) Optional tooltip or description string
+    // - tip: Optional tooltip or description string
     bool DrawToggleOption(const std::string& label, bool& toggle, const std::string& tip = "");
 
     // Draws a float slider option

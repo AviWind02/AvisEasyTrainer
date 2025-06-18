@@ -35,4 +35,7 @@ namespace render::draw
 
     void DrawCrosshair(ImVec2 center, float size, ImU32 color,
         float thickness = 1.0f);
+
+    void AddWrappedText(const std::string& text, ImVec2 pos, float wrapWidth, ImU32 color, ImFont* font = nullptr);
+
 }

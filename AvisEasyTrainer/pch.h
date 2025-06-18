@@ -3,6 +3,8 @@
 #include <cstdint>
 #include <vector>
 #include <string>
+#include <map>
+#include <queue>
 
 //Placed into the only hook files that needs it
 //#include <dxgi.h>
@@ -39,9 +41,13 @@ namespace loghandler
 //Hooks
 #include "render/Hooks/hooks.h"
 //Draw
+#include "Render/UserInterface/Style.h"
 #include "Render/Draw/draw.h"
 #include "Render/Font/font.h"
 #include "Controls/controls.h"
 #include "Render/UserInterface/UserInterface.h"
 #include "Render/UserInterface/submenu.h"
 #include "Render/UserInterface/buttons.h"
+
+#include "Render/UserInterface/Backend/NotificationSystem.h"
+#include "Render/UserInterface/Backend/InfoBox.h"

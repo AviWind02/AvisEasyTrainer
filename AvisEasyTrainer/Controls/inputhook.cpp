@@ -52,9 +52,9 @@ namespace controls::inputhook
         ImGuiIO& io = ImGui::GetIO();
         if (menuOpen)
         {
-            const bool mouseEnabled = false; 
-            if (mouseEnabled)
+            if (controls::mouseToggle)
             {
+
                 if (uMsg >= WM_MOUSEFIRST && uMsg <= WM_MOUSELAST)
                     return TRUE;
             }

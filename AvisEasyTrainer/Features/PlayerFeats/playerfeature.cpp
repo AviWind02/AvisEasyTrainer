@@ -4,6 +4,7 @@
 
 #include "Base/Natives/statmodifiers.h"
 #include "Base/Natives/statpoolmodifiers.h"
+#include <Base/Natives/transform.h>
 
 // Some of the functions below were inspired by or adapted from the CET SimpleMenu Lua scripts,
 // originally created by Dank Rafft and capncoolio2. 
@@ -433,6 +434,57 @@ namespace feature {
 			}
 		}
 
+		void TickNoclip()
+		{
+			static float yaw = 0.f;
+			static float moveSpeed = 2.5f;
+			static float rotSpeed = 1.0f;
+
+			bool forward = ImGui::IsKeyDown(ImGuiKey_W);
+			bool backward = ImGui::IsKeyDown(ImGuiKey_S);
+			bool turnLeft = ImGui::IsKeyDown(ImGuiKey_A);
+			bool turnRight = ImGui::IsKeyDown(ImGuiKey_D);
+			bool goUp = ImGui::IsKeyDown(ImGuiKey_Space);
+			bool goDown = ImGui::IsKeyDown(ImGuiKey_LeftCtrl);
+			bool speedBoost = ImGui::IsKeyDown(ImGuiKey_LeftShift);
+
+			float frameSpeed = moveSpeed * (speedBoost ? 2.5f : .7f);
+			float frameRotation = rotSpeed;
+
+			Vector3 position = gamebase::natives::transform::GetPlayerWorldPosition();
+			Vector3 rotation = gamebase::natives::transform::GetPlayerWorldEulerAngles();
+
+			yaw = rotation.Z;
+
+			float yawRad = gamebase::natives::transform::DegreeToRadian(yaw);
+
+			if (forward)
+			{
+				position.X += std::sin(yawRad) * -frameSpeed;
+				position.Y += std::cos(yawRad) * frameSpeed;
+			}
+			if (backward)
+			{
+				position.X -= std::sin(yawRad) * -frameSpeed;
+				position.Y -= std::cos(yawRad) * frameSpeed;
+			}
+			if (goUp)
+				position.Z += frameSpeed;
+			if (goDown)
+				position.Z -= frameSpeed;
+
+			if (turnLeft)
+				yaw += frameRotation;
+			if (turnRight)
+				yaw -= frameRotation;
+
+			if (yaw < 0.f) yaw += 360.f;
+			if (yaw > 360.f) yaw -= 360.f;
+
+			RED4ext::EulerAngles newRot{ rotation.X, rotation.Y, yaw };
+			gamebase::natives::transform::SetPlayerWorldTransform(position, newRot);
+		}
+
 
 		void Tick()
 		{
@@ -447,6 +499,9 @@ namespace feature {
 
 			if (tickUnlimitedOxygen)
 				SetOxygenFull();
+
+			if (tickNoClip)
+				TickNoclip();
 
 			//static bool appliedOxygen = false;
 			//HandleStatModifierToggle(tickUnlimitedOxygen, appliedOxygen, SetInfiniteOxygen);

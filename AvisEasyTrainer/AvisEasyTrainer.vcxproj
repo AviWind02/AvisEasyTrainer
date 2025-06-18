@@ -166,6 +166,8 @@
     <ClInclude Include="Render\Font\rubikFont.h" />
     <ClInclude Include="Render\Hooks\d3d12globals.h" />
     <ClInclude Include="Render\Hooks\hooks.h" />
+    <ClInclude Include="Render\UserInterface\Backend\InfoBox.h" />
+    <ClInclude Include="Render\UserInterface\Backend\NotificationSystem.h" />
     <ClInclude Include="Render\UserInterface\buttons.h" />
     <ClInclude Include="Render\UserInterface\Style.h" />
     <ClInclude Include="Render\UserInterface\submenu.h" />
@@ -208,6 +210,7 @@
     <ClCompile Include="Render\Hooks\d3d12hook.cpp" />
     <ClCompile Include="Controls\inputhook.cpp" />
     <ClCompile Include="Render\Hooks\hooks.cpp" />
+    <ClCompile Include="Render\UserInterface\UserInterface.cpp" />
     <ClCompile Include="Render\View\Menu\menu.cpp" />
     <ClCompile Include="Render\UserInterface\Background.cpp" />
     <ClCompile Include="Render\UserInterface\Opitons.cpp" />

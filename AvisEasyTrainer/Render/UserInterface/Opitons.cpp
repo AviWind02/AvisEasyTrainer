@@ -8,7 +8,7 @@ using namespace controls;
 
 namespace render::ui
 {
-    bool DrawOptionTextRAW(const std::string& left, const std::string& center, const std::string& right)
+    bool DrawOptionTextRAW(const std::string& left, const std::string& center, const std::string& right, const std::string& tip)
     {
         using namespace UI;
         using namespace render::draw;
@@ -29,7 +29,9 @@ namespace render::ui
         const float spacing = Layout::OptionHeight;
         const float padX = Layout::OptionPaddingX;
 
-        int maxVisible = (std::max)(1, int((menuBox.size.y - Header::Height) / spacing));
+        int footerHeight = UI::Header::Height;
+        int availableHeight = menuBox.size.y - UI::Header::Height - footerHeight;
+        int maxVisible = (std::max)(1, int(availableHeight / UI::Layout::OptionHeight));     
         int startOpt = ((currentOption - 1) / maxVisible) * maxVisible + 1;
         int endOpt = (std::min)(startOpt + maxVisible - 1, optionIndex);
 
@@ -52,13 +54,16 @@ namespace render::ui
             cursor.y >= optionPos.y && cursor.y <= optionPos.y + optionSize.y);
         bool clicked = hovered && ImGui::IsMouseClicked(ImGuiMouseButton_Left);
 
-        ImFont* font = FontManager::Regular.Small;
+        ImFont* font = FontManager::Regular.Medium;
         float fontHeight = font->FontSize;
         float verticalCenterY = optionPos.y + (spacing - fontHeight) * 0.5f;
 
         // Highlight bar (active + hovered)
         if (currentOption == optionIndex)
+        {
             DrawRect({ optionPos.x, smoothY }, optionSize, isBreak ? Colors::Transparent : Colors::ActiveHighlight, Layout::FrameRounding);
+            InfoBox::SetInfoBoxText(tip);
+        }
 
         if (hovered)
             DrawRect(optionPos, optionSize, isBreak ? Colors::Transparent : Colors::HoverBg, Layout::FrameRounding);
@@ -78,7 +83,7 @@ namespace render::ui
         );
 
 
-        return (currentOption == optionIndex && (clicked || controls::selectPressed));
+        return ((currentOption == optionIndex || hovered) && (clicked || controls::selectPressed));
     }
     bool DrawIntOption(const std::string& label, int& value, int min, int max, int step, bool useToggle, bool& toggle, const std::string& tip)
     {
@@ -86,11 +91,14 @@ namespace render::ui
         using namespace Layout;
         using namespace render::draw;
 
-        bool clicked = DrawOptionTextRAW(label, "", "");
+        bool clicked = DrawOptionTextRAW(label, "", "", tip);
         bool selected = (currentOption == optionIndex);
         bool changed = false;
 
-        int maxVisible = (std::max)(1, int((menuBox.size.y - Header::Height) / OptionHeight));
+
+        int footerHeight = UI::Header::Height;
+        int availableHeight = menuBox.size.y - UI::Header::Height - footerHeight;
+        int maxVisible = (std::max)(1, int(availableHeight / UI::Layout::OptionHeight));     
         int startOpt = ((currentOption - 1) / maxVisible) * maxVisible + 1;
         int endOpt = (std::min)(startOpt + maxVisible - 1, optionIndex);
 
@@ -182,11 +190,14 @@ namespace render::ui
         using namespace Layout;
         using namespace render::draw;
 
-        bool clicked = DrawOptionTextRAW(label, "", "");
+        bool clicked = DrawOptionTextRAW(label, "", "", tip);
         bool selected = (currentOption == optionIndex);
         bool changed = false;
 
-        int maxVisible = (std::max)(1, int((menuBox.size.y - Header::Height) / OptionHeight));
+
+        int footerHeight = UI::Header::Height;
+        int availableHeight = menuBox.size.y - UI::Header::Height - footerHeight;
+        int maxVisible = (std::max)(1, int(availableHeight / UI::Layout::OptionHeight));     
         int startOpt = ((currentOption - 1) / maxVisible) * maxVisible + 1;
         int endOpt = (std::min)(startOpt + maxVisible - 1, optionIndex);
 
@@ -231,12 +242,13 @@ namespace render::ui
         using namespace Layout;
         using namespace render::draw;
 
-        bool clicked = DrawOptionTextRAW(label, "", "");
+        bool clicked = DrawOptionTextRAW(label, "", "", tip);
         bool selected = (currentOption == optionIndex);
         bool changed = false;
 
-        int maxVisible = (std::max)(1, int((menuBox.size.y - Header::Height) / OptionHeight));
-        int startOpt = ((currentOption - 1) / maxVisible) * maxVisible + 1;
+        int footerHeight = UI::Header::Height;
+        int availableHeight = menuBox.size.y - UI::Header::Height - footerHeight;
+        int maxVisible = (std::max)(1, int(availableHeight / UI::Layout::OptionHeight));             int startOpt = ((currentOption - 1) / maxVisible) * maxVisible + 1;
         int endOpt = (std::min)(startOpt + maxVisible - 1, optionIndex);
 
         if (optionIndex >= startOpt && optionIndex <= endOpt)

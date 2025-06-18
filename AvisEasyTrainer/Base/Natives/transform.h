@@ -72,6 +72,11 @@ namespace gamebase {
 				return result;
 			}
 
+			inline float DegreeToRadian(float angle)
+			{
+				return angle * 0.0174532925199433f;
+			}
+
 			inline Vector3 GetPlayerWorldPosition()
 			{
 				Vector3 result{ 0.f, 0.f, 0.f };

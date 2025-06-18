@@ -10,6 +10,49 @@ namespace render::ui
 
     namespace background {
 
+        void DrawTitleBar() {
+            using namespace UI;
+            using namespace render::draw;
+
+            std::string title = GetBreadcrumbTitle();
+            ImVec2 textPos = { menuBox.pos.x + Layout::OptionPaddingX, menuBox.pos.y + 6.f };
+            ImVec2 areaSize = { menuBox.size.x, 50.f };
+
+            AddText(title, "", "", textPos, areaSize, Colors::Text, FontManager::Regular.Medium);
+        }
+
+        void DrawFooter() {
+            using namespace UI;
+            using namespace render::draw;
+
+            float spacing = Layout::OptionHeight;
+            int maxVisible = (std::max)(1, int((menuBox.size.y - Header::Height) / spacing));
+            int totalOptions = controls::optionIndex;
+            int totalPages = (totalOptions + maxVisible - 1) / maxVisible;
+            int currentPage = (controls::currentOption - 1) / maxVisible + 1;
+
+            std::string right1 = " | Pg: " + std::to_string(currentPage) + "/" + std::to_string(totalPages);
+            std::string right = "Opt: " + std::to_string(controls::currentOption) + right1;
+            std::string left = "EasyTrainer | vPre-Alpha";
+
+            ImVec2 footerPos = { menuBox.pos.x, menuBox.pos.y + menuBox.size.y - Header::Height };
+            ImVec2 footerSize = { menuBox.size.x, Header::Height };
+
+            DrawLine(
+                { footerPos.x, footerPos.y },
+                { footerPos.x + footerSize.x, footerPos.y },
+                Colors::Border, 1.0f
+            );
+
+            AddText(
+                left, "", right,
+                { footerPos.x + 10.f, footerPos.y + 16.f },
+                footerSize,
+                Colors::MutedText,
+                FontManager::Regular.Small
+            );
+        }
+
         void HandleWindowDraggingAndResizing()
         {
             using namespace UI;
