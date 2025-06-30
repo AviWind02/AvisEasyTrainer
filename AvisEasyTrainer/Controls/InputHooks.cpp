@@ -12,7 +12,7 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg
 
 static WNDPROC oWndProc = nullptr;
 
-namespace controls::inputhook
+namespace Controls::InputHook
 {
     static bool g_TrapEnabled = false;
 
@@ -52,7 +52,7 @@ namespace controls::inputhook
         ImGuiIO& io = ImGui::GetIO();
         if (menuOpen)
         {
-            if (controls::mouseToggle)
+            if (Controls::mouseToggle)
             {
 
                 if (uMsg >= WM_MOUSEFIRST && uMsg <= WM_MOUSELAST)

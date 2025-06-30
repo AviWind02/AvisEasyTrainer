@@ -1,7 +1,7 @@
 #pragma once
 
 
-namespace render::ui {
+namespace UI {
 
     namespace InfoBox {
 
@@ -15,12 +15,11 @@ namespace render::ui {
 
         inline void Render() {
 
-            using namespace UI;
-            using namespace render::draw;
+            using namespace Render::Draw;
 
 
 
-            if (!controls::menuOpen)
+            if (!Controls::menuOpen)
                 return;
 
 
@@ -47,7 +46,7 @@ namespace render::ui {
 
             const float pad = Layout::Padding;
             const float spacing = 15.0f;
-            const ImVec2 screenSize = render::ui::GetParentWindowSize();
+            const ImVec2 screenSize = GetParentWindowSize();
             const float boxWidth = menuBox.size.x;
 
             ImVec2 wrappedSize = ImGui::CalcTextSize(animatedText.c_str(), nullptr, true, boxWidth - 2 * pad);

@@ -1,20 +1,14 @@
 #pragma once
+#include "Base/GameBase.h"
 
-#include <Base/gamebase.h>
-#include <RED4ext/Scripting/Natives/Generated/game/VehicleSystem.hpp>
-#include <RED4ext/Scripting/Natives/Generated/game/data/Vehicle_Record.hpp>
-#include <RED4ext/Scripting/Natives/Generated/game/StatsSystem.hpp>
 #include <RED4ext/Scripting/Natives/Generated/game/data/StatType.hpp>
 #include <RED4ext/Scripting/Natives/Generated/game/StatData.hpp>
 #include <RED4ext/Scripting/Natives/Generated/game/StatModifierData.h>
 #include <RED4ext/Scripting/Natives/Generated/game/StatsObjectID.hpp>
 
-
-using namespace RED4ext;
-
-namespace gamebase {
-    namespace natives {
-        namespace statmodifier {
+namespace GameBase {
+    namespace Natives {
+        namespace StatModifier {
      
 
             struct ModifierEntry
@@ -71,28 +65,24 @@ namespace gamebase {
             }
 
 
-            inline float GetStatValue(game::data::StatType statType) {
-                //loghandler::sdk->logger->InfoF(loghandler::handle, "[GetStatValue] Called with statType: %d", static_cast<int>(statType));
-                ScriptGameInstance gi;
-                Handle<IScriptable> playerHandle;
-                ent::EntityID playerID;
+            inline float GetStatValue(game::data::StatType statType)
+            {
+                Handle<IScriptable> playerHandle{};
+                ent::EntityID playerID{};
 
-                if (!gamebase::TryGetGameInstance(gi) || !gamebase::TryGetPlayerHandleAndID(playerHandle, playerID)) {
-                    loghandler::sdk->logger->Error(loghandler::handle, "[GetStatValue] Failed to get game instance or player handle/ID");
+                if (!TryGetPlayerHandleAndID(playerHandle, playerID))
                     return -1.f;
-                }
-                //loghandler::sdk->logger->InfoF(loghandler::handle, "[GetStatValue] Obtained GameInstance and PlayerID: %u", playerID);
 
-                auto statsSystem = gamebase::GetStatsSystem();
+                auto statsSystem = Systems::GetStatsSystem();
                 if (!statsSystem) {
-                    loghandler::sdk->logger->Error(loghandler::handle, "[GetStatValue] statsSystem is null");
+                    loghandler::sdk->logger->Error(loghandler::handle, "[GetStatValue] StatsSystem is null.");
                     return -1.f;
                 }
 
                 auto* cls = CRTTISystem::Get()->GetClass("gameStatsSystem");
                 auto* fn = cls ? cls->GetFunction("GetStatValue") : nullptr;
                 if (!fn) {
-                    loghandler::sdk->logger->Error(loghandler::handle, "[GetStatValue] Function GetStatValue not found");
+                    loghandler::sdk->logger->Error(loghandler::handle, "[GetStatValue] Function not found.");
                     return -1.f;
                 }
 
@@ -102,10 +92,16 @@ namespace gamebase {
                     { nullptr, &statType },
                     { nullptr, &playerHandle }
                 };
-                ExecuteFunction(statsSystem, fn, &outValue, args);
-                //loghandler::sdk->logger->InfoF(loghandler::handle, "[GetStatValue] Result: %f", outValue);
+
+                if (!ExecuteFunction(statsSystem, fn, &outValue, args)) {
+                    loghandler::sdk->logger->ErrorF(loghandler::handle,
+                        "[GetStatValue] Execution failed for stat.");
+                    return -1.f;
+                }
+
                 return outValue;
             }
+
 
             // InjectStatModifier is functionally the same as AddModifier. 
             // Internally, it just calls AddModifier (per PsiberX's StatModifier info), so this function is 
@@ -127,7 +123,7 @@ namespace gamebase {
                 ScriptGameInstance gi;
                 Handle<IScriptable> playerHandle;
 
-                if (!gamebase::TryGetGameInstance(gi) || !gamebase::TryGetPlayerHandle(playerHandle)) {
+                if (!TryGetGameInstance(gi) || !TryGetPlayerHandle(playerHandle)) {
                     loghandler::sdk->logger->Error(loghandler::handle, "[InjectStatModifier] Failed to get game instance or player handle");
                     return false;
                 }
@@ -149,15 +145,14 @@ namespace gamebase {
 
             inline bool AddStatModifier(Handle<game::StatModifierData> handle)
             {
-                auto statsSystem = gamebase::GetStatsSystem();
+                auto statsSystem = Systems::GetStatsSystem();
                 if (!statsSystem) {
                     loghandler::sdk->logger->Error(loghandler::handle, "[AddStatModifier] statsSystem is null");
                     return false;
                 }
 
-                Handle<IScriptable> playerHandle;
                 ent::EntityID playerID;
-                if (!gamebase::TryGetPlayerHandleAndID(playerHandle, playerID)) {
+                if (!TryGetPlayerID(playerID)) {
                     loghandler::sdk->logger->Error(loghandler::handle, "[AddStatModifier] Failed to get player handle/ID");
                     return false;
                 }
@@ -176,13 +171,13 @@ namespace gamebase {
                     { nullptr, &handle }
                 };
 
-                ExecuteFunction(statsSystem, fn, &result, args);
+                if (!ExecuteFunction(statsSystem, fn, &result, args)) {
+                    loghandler::sdk->logger->Error(loghandler::handle, "[AddStatModifier] Execution failed");
+                    return false;
+                }
 
-                if (result)
-                    loghandler::sdk->logger->Info(loghandler::handle, "[Modifier] Added modifier to player");
-                else
-                    loghandler::sdk->logger->Warn(loghandler::handle, "[Modifier] AddModifier returned false");
-
+                if (!result)
+                    loghandler::sdk->logger->Warn(loghandler::handle, "[AddStatModifier] AddModifier returned false");
                 return result;
             }
 
@@ -191,7 +186,7 @@ namespace gamebase {
                 if (!handle)
                     return false;
 
-                auto statsSystem = gamebase::GetStatsSystem();
+                auto statsSystem = Systems::GetStatsSystem();
                 if (!statsSystem) {
                     loghandler::sdk->logger->Error(loghandler::handle, "[RemoveStatModifier] statsSystem is null");
                     return false;
@@ -199,7 +194,7 @@ namespace gamebase {
 
                 Handle<IScriptable> playerHandle;
                 ent::EntityID playerID;
-                if (!gamebase::TryGetPlayerHandleAndID(playerHandle, playerID)) {
+                if (!TryGetPlayerHandleAndID(playerHandle, playerID)) {
                     loghandler::sdk->logger->Error(loghandler::handle, "[RemoveStatModifier] Failed to get player handle/ID");
                     return false;
                 }
@@ -218,13 +213,13 @@ namespace gamebase {
                     { nullptr, &handle }
                 };
 
-                ExecuteFunction(statsSystem, fn, &result, args);
+                if (!ExecuteFunction(statsSystem, fn, &result, args)) {
+                    loghandler::sdk->logger->Error(loghandler::handle, "[RemoveStatModifier] Execution failed");
+                    return false;
+                }
 
-                if (result)
-                    loghandler::sdk->logger->Info(loghandler::handle, "[Modifier] Removed modifier from player");
-                else
-                    loghandler::sdk->logger->Warn(loghandler::handle, "[Modifier] RemoveModifier returned false");
-
+                if (!result)
+                    loghandler::sdk->logger->Warn(loghandler::handle, "[RemoveStatModifier] RemoveModifier returned false");
                 return result;
             }
 
@@ -252,87 +247,18 @@ namespace gamebase {
                 for (const auto& [id, entry] : cachedModifiers)
                 {
                     if (RemoveStatModifier(entry.handle)) {
-                        loghandler::sdk->logger->InfoF(loghandler::handle, "[Modifier] Removed cached modifier ID %u", id);
+                        loghandler::sdk->logger->InfoF(loghandler::handle, "[RemoveAllCachedModifiers] Removed cached modifier ID %u", id);
                     }
                     else {
-                        loghandler::sdk->logger->WarnF(loghandler::handle, "[Modifier] Failed to remove cached modifier ID %u", id);
+                        loghandler::sdk->logger->WarnF(loghandler::handle, "[RemoveAllCachedModifiers] Failed to remove cached modifier ID %u", id);
                     }
                 }
 
                 cachedModifiers.clear();
-                loghandler::sdk->logger->Info(loghandler::handle, "[Modifier] All cached modifiers removed");
+                loghandler::sdk->logger->Info(loghandler::handle, "[RemoveAllCachedModifiers] All cached modifiers removed");
             }
 
 
         }
     }
 }
-
-/*
-     bool InjectStatModifier(game::data::StatType statType, float value, game::StatModifierType modifierType)
-        {
-            auto* rtti = RED4ext::CRTTISystem::Get();
-            if (!rtti)
-            {
-                loghandler::sdk->logger->Error(loghandler::handle, "[InjectStatModifier] RTTI system is null");
-                return false;
-            }
-
-            auto* createFn = rtti->GetFunction("gameRPGManager::CreateStatModifier;gamedataStatTypegameStatModifierTypeFloat");
-            if (!createFn)
-            {
-                loghandler::sdk->logger->Error(loghandler::handle, "[InjectStatModifier] CreateStatModifier not found");
-                return false;
-            }
-
-            StackArgs_t createArgs{
-                { nullptr, &statType },
-                { nullptr, &modifierType },
-                { nullptr, &value }
-            };
-
-            RED4ext::Handle<game::StatModifierData> modifierHandle;
-            if (!ExecuteFunction((ScriptInstance)nullptr, createFn, &modifierHandle, createArgs) || !modifierHandle)
-            {
-                loghandler::sdk->logger->Error(loghandler::handle, "[InjectStatModifier] Failed to create modifier");
-                return false;
-            }
-
-            auto* injectFn = rtti->GetFunction("gameRPGManager::InjectStatModifier;GameInstanceGameObjectgameStatModifierData");
-            if (!injectFn)
-            {
-                loghandler::sdk->logger->Error(loghandler::handle, "[InjectStatModifier] InjectStatModifier not found");
-                return false;
-            }
-
-            RED4ext::ScriptGameInstance gi;
-            if (!gamebase::TryGetGameInstance(gi))
-            {
-                loghandler::sdk->logger->Error(loghandler::handle, "[InjectStatModifier] Failed to get GameInstance");
-                return false;
-            }
-
-            RED4ext::Handle<RED4ext::IScriptable> playerHandle;
-            RED4ext::ent::EntityID playerID;
-            if (!gamebase::TryGetPlayerHandleAndID(playerHandle, playerID))
-            {
-                loghandler::sdk->logger->Error(loghandler::handle, "[InjectStatModifier] Failed to get player handle");
-                return false;
-            }
-
-            StackArgs_t injectArgs{
-                { nullptr, &gi },
-                { nullptr, &playerHandle },
-                { nullptr, &modifierHandle }
-            };
-
-            if (!ExecuteFunction((ScriptInstance)nullptr, injectFn, nullptr, injectArgs))
-            {
-                loghandler::sdk->logger->Error(loghandler::handle, "[InjectStatModifier] Failed to inject modifier");
-                return false;
-            }
-
-            return true;
-        }
-
-*/

@@ -1,11 +1,11 @@
 #include "pch.h"
 #include "Base/gamebase.h"
-#include "Base/Natives/vehicleclass.h"
+#include "Base/Natives/Vehicle.h"
 
 #include "vehiclefeature.h"
 
-namespace feature {
-    namespace vehicleoptions {
+namespace Feature {
+    namespace VehicleOptions {
    
         std::unordered_map<std::string, bool> vehicleToggleStates;
         bool tickVehicleToggleNow = false;
@@ -25,7 +25,7 @@ namespace feature {
             for (auto& vehicle : allVehicles)
             {
                 const char* id = vehicle.recordID.empty() ? "<empty_id>" : vehicle.recordID.c_str();
-                std::string localizedName = gamebase::natives::vehicle::LocalizeVehicleDisplayName(vehicle.recordID);
+                std::string localizedName = GameBase::Natives::Vehicle::LocalizeVehicleDisplayName(vehicle.recordID);
                 vehicle.modelName = localizedName.empty() ? "<unnamed>" : localizedName;
 
                 loghandler::sdk->logger->InfoF(loghandler::handle,
@@ -41,7 +41,7 @@ namespace feature {
                 const char* id = vehicle.recordID.empty() ? "<empty_id>" : vehicle.recordID.c_str();
                 RED4ext::TweakDBID tweakID(id);
 
-                bool isUnlocked = gamebase::natives::vehicle::IsVehicleUnlocked(tweakID);
+                bool isUnlocked = GameBase::Natives::Vehicle::IsVehicleUnlocked(tweakID);
                 vehicleToggleStates[vehicle.recordID] = isUnlocked;
 
                 loghandler::sdk->logger->InfoF(loghandler::handle,
@@ -71,11 +71,11 @@ namespace feature {
             {
                 const RED4ext::CString vehicleName(it->recordID.c_str());
                 RED4ext::TweakDBID tweakID(vehicleName.c_str());
-                bool isCurrentlyUnlocked = gamebase::natives::vehicle::IsVehicleUnlocked(tweakID);
+                bool isCurrentlyUnlocked = GameBase::Natives::Vehicle::IsVehicleUnlocked(tweakID);
 
                 bool desiredState = !isCurrentlyUnlocked;
 
-                gamebase::natives::vehicle::SetPlayerVehicleState(vehicleName, desiredState);
+                GameBase::Natives::Vehicle::SetPlayerVehicleState(vehicleName, desiredState);
                 vehicleToggleStates[it->recordID] = desiredState;
             }
 

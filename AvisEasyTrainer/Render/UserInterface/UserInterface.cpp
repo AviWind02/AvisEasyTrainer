@@ -3,7 +3,7 @@
 
 
 
-namespace render::ui
+namespace UI
 {
 
     bool ContainsIcon(const std::string& text) {

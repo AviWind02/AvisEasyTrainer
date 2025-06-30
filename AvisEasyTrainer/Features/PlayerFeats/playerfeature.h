@@ -1,7 +1,7 @@
 #pragma once
-namespace feature {
-	namespace playeroptions {
-		namespace playerwanted {
+namespace Feature {
+	namespace PlayerOptions {
+		namespace PlayerWanted {
 		
 			inline bool tickNeverWanted = false;
 			inline bool tickClearWanted = false;
@@ -44,8 +44,16 @@ namespace feature {
 		inline bool tickPlayerMaxSpeed = false;
 		inline float maxSpeedValue = 0;
 
+		inline bool tickSandevistanDuration = false;
+		inline float sandevistanDurationValue = 1.f;
+
+		inline bool tickSandevistanTimeScale = false;
+		inline float sandevistanTimeScaleValue = 1.f;
+		
+
 		inline bool tickFreeflyMovement = false;
 		inline bool tickTraceRatelow = false;
+		inline bool tickQuicksilver = false;
 		inline bool tickGrenadeCooldown = false;
 		inline bool tickProjectileCooldown = false;
 		inline bool tickCloakCooldown = false;
@@ -63,8 +71,8 @@ namespace feature {
 		inline bool tickGodResistances = false;
 		inline bool tickGodCombatRegen = false;
 		inline bool tickNoClip = false;
+		
+		
 		void Tick();
-		void showWeapons();
-
 	}
 }

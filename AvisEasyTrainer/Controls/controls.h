@@ -1,5 +1,5 @@
 #pragma once
-namespace controls {
+namespace Controls {
     // State
     inline bool menuOpen = true;
     inline bool mouseToggle = false;
@@ -26,7 +26,7 @@ namespace controls {
     void HandleInputTick();
 
 
-    namespace inputhook
+    namespace InputHook
     {
         void Init(HWND hwnd);
         void Remove(HWND hwnd);
@@ -34,7 +34,7 @@ namespace controls {
         void SetMouseTrap(bool enable);
         bool IsMouseTrapped();
 
-        namespace draw
+        namespace Draw
         {
             inline int g_MouseDeltaX = 0;
             inline int g_MouseDeltaY = 0;

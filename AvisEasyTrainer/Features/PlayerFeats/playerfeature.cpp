@@ -14,18 +14,18 @@
 // SandevistanCooldown, BerserkCooldown, KerenzikovCooldown, OverclockCooldown, QuickhackCooldown,
 // QuickhackCost, MemoryRegeneration, and the original GodMode are handled.
 
-namespace feature {
-	namespace playeroptions {
+namespace Feature {
+	namespace PlayerOptions {
 
 		using namespace RED4ext;
 		using namespace game;
 		using namespace data;
-		using namespace gamebase;
+		using namespace GameBase;
 
 		void SetStatPoolValue(StatPoolType stat, float value)
 		{
 			constexpr bool propagate = true;
-			natives::statpoolmodifier::SetPoolValue(stat, value, propagate);
+			Natives::StatPoolModifier::SetPoolValue(stat, value, propagate);
 		}
 
 		void SetHealthFull()
@@ -49,18 +49,39 @@ namespace feature {
 			SetStatPoolValue(StatPoolType::Oxygen, 100.f);
 		}
 
+		void SetQuicksilver(bool remove = false)
+		{
+			static Handle<game::StatModifierData>duration;
+			static Handle<game::StatModifierData>timeScale;
+			//static Handle<game::StatModifierData>playerSpeed;
+
+			if (remove)
+			{
+				Natives::StatModifier::RemoveStatModifier(duration);
+				Natives::StatModifier::RemoveStatModifier(timeScale);
+				//Natives::StatModifier::RemoveStatModifier(playerSpeed);
+
+			}
+			else
+			{
+				Natives::StatModifier::AddStatModifier(StatType::TimeDilationSandevistanDuration, 100.f, game::StatModifierType::Multiplier, duration);
+				Natives::StatModifier::AddStatModifier(StatType::TimeDilationSandevistanTimeScale, 0.005, game::StatModifierType::Multiplier, timeScale);
+				//Natives::StatModifier::AddStatModifier(StatType::MaxSpeed, 15.f, game::StatModifierType::Multiplier, playerSpeed);  Better if the player just toggles its tbh
+			}
+		}
+
 		void SetHealthRegenMods(bool remove = false)
 		{
 			static Handle<game::StatModifierData> regenRate;
 			static Handle<game::StatModifierData> health;
 
 			if (remove) {
-				natives::statmodifier::RemoveStatModifier(regenRate);
-				natives::statmodifier::RemoveStatModifier(health);
+				Natives::StatModifier::RemoveStatModifier(regenRate);
+				Natives::StatModifier::RemoveStatModifier(health);
 			}
 			else {
-				natives::statmodifier::AddStatModifier(StatType::HealthGeneralRegenRateMult, 9999.9f, StatModifierType::Additive, regenRate);
-				natives::statmodifier::AddStatModifier(StatType::Health, 99999.9f, StatModifierType::Additive, health);
+				Natives::StatModifier::AddStatModifier(StatType::HealthGeneralRegenRateMult, 9999.9f, StatModifierType::Additive, regenRate);
+				Natives::StatModifier::AddStatModifier(StatType::Health, 99999.9f, StatModifierType::Additive, health);
 			}
 		}
 
@@ -68,18 +89,18 @@ namespace feature {
 		{
 			static Handle<game::StatModifierData> armor;
 			if (remove)
-				natives::statmodifier::RemoveStatModifier(armor);
+				Natives::StatModifier::RemoveStatModifier(armor);
 			else
-				natives::statmodifier::AddStatModifier(StatType::Armor, 99999999.9f, StatModifierType::Additive, armor);
+				Natives::StatModifier::AddStatModifier(StatType::Armor, 99999999.9f, StatModifierType::Additive, armor);
 		}
 
 		void SetFallDamageMods(bool remove = false)
 		{
 			static Handle<game::StatModifierData> fallDamage;
 			if (remove)
-				natives::statmodifier::RemoveStatModifier(fallDamage);
+				Natives::StatModifier::RemoveStatModifier(fallDamage);
 			else
-				natives::statmodifier::AddStatModifier(StatType::FallDamageReduction, 99.9f, StatModifierType::Additive, fallDamage);
+				Natives::StatModifier::AddStatModifier(StatType::FallDamageReduction, 99.9f, StatModifierType::Additive, fallDamage);
 		}
 
 		void SetDamageResistances(bool remove = false)
@@ -92,20 +113,20 @@ namespace feature {
 			static Handle<game::StatModifierData> physical;
 
 			if (remove) {
-				natives::statmodifier::RemoveStatModifier(explosion);
-				natives::statmodifier::RemoveStatModifier(melee);
-				natives::statmodifier::RemoveStatModifier(thermal);
-				natives::statmodifier::RemoveStatModifier(chemical);
-				natives::statmodifier::RemoveStatModifier(electric);
-				natives::statmodifier::RemoveStatModifier(physical);
+				Natives::StatModifier::RemoveStatModifier(explosion);
+				Natives::StatModifier::RemoveStatModifier(melee);
+				Natives::StatModifier::RemoveStatModifier(thermal);
+				Natives::StatModifier::RemoveStatModifier(chemical);
+				Natives::StatModifier::RemoveStatModifier(electric);
+				Natives::StatModifier::RemoveStatModifier(physical);
 			}
 			else {
-				natives::statmodifier::AddStatModifier(StatType::ExplosionResistance, 99.9f, StatModifierType::Additive, explosion);
-				natives::statmodifier::AddStatModifier(StatType::MeleeResistance, 99.9f, StatModifierType::Additive, melee);
-				natives::statmodifier::AddStatModifier(StatType::ThermalResistance, 99.9f, StatModifierType::Additive, thermal);
-				natives::statmodifier::AddStatModifier(StatType::ChemicalResistance, 99.9f, StatModifierType::Additive, chemical);
-				natives::statmodifier::AddStatModifier(StatType::ElectricResistance, 99.9f, StatModifierType::Additive, electric);
-				natives::statmodifier::AddStatModifier(StatType::PhysicalResistance, 99.9f, StatModifierType::Additive, physical);
+				Natives::StatModifier::AddStatModifier(StatType::ExplosionResistance, 99.9f, StatModifierType::Additive, explosion);
+				Natives::StatModifier::AddStatModifier(StatType::MeleeResistance, 99.9f, StatModifierType::Additive, melee);
+				Natives::StatModifier::AddStatModifier(StatType::ThermalResistance, 99.9f, StatModifierType::Additive, thermal);
+				Natives::StatModifier::AddStatModifier(StatType::ChemicalResistance, 99.9f, StatModifierType::Additive, chemical);
+				Natives::StatModifier::AddStatModifier(StatType::ElectricResistance, 99.9f, StatModifierType::Additive, electric);
+				Natives::StatModifier::AddStatModifier(StatType::PhysicalResistance, 99.9f, StatModifierType::Additive, physical);
 			}
 		}
 
@@ -113,54 +134,54 @@ namespace feature {
 		{
 			static Handle<game::StatModifierData> regenEnable;
 			if (remove)
-				natives::statmodifier::RemoveStatModifier(regenEnable);
+				Natives::StatModifier::RemoveStatModifier(regenEnable);
 			else
-				natives::statmodifier::AddStatModifier(StatType::HealthInCombatRegenEnabled, 1.0f, StatModifierType::Additive, regenEnable);
+				Natives::StatModifier::AddStatModifier(StatType::HealthInCombatRegenEnabled, 1.0f, StatModifierType::Additive, regenEnable);
 		}
 
 		void SetInfiniteOxygen(bool remove = false)
 		{
 			static Handle<game::StatModifierData> oxygen;
 			if (remove)
-				natives::statmodifier::RemoveStatModifier(oxygen);
+				Natives::StatModifier::RemoveStatModifier(oxygen);
 			else
-				natives::statmodifier::AddStatModifier(StatType::CanBreatheUnderwater, 1.0f, StatModifierType::Additive, oxygen);
+				Natives::StatModifier::AddStatModifier(StatType::CanBreatheUnderwater, 1.0f, StatModifierType::Additive, oxygen);
 		}
 
 		void SetInfiniteStamina(bool remove = false)
 		{
 			static Handle<game::StatModifierData> stamina;
 			if (remove)
-				natives::statmodifier::RemoveStatModifier(stamina);
+				Natives::StatModifier::RemoveStatModifier(stamina);
 			else
-				natives::statmodifier::AddStatModifier(StatType::CanIgnoreStamina, 1.0f, StatModifierType::Additive, stamina);
+				Natives::StatModifier::AddStatModifier(StatType::CanIgnoreStamina, 1.0f, StatModifierType::Additive, stamina);
 		}
 
 		void SetHealItemCooldown(bool remove = false)
 		{
 			static Handle<game::StatModifierData> heal;
 			if (remove)
-				natives::statmodifier::RemoveStatModifier(heal);
+				Natives::StatModifier::RemoveStatModifier(heal);
 			else
-				natives::statmodifier::AddStatModifier(StatType::HealingItemsChargesRegenMult, 10000.0f, StatModifierType::Additive, heal);
+				Natives::StatModifier::AddStatModifier(StatType::HealingItemsChargesRegenMult, 10000.0f, StatModifierType::Additive, heal);
 		}
 
 		void SetGrenadeCooldown(bool remove = false)
 		{
 			static Handle<game::StatModifierData> grenade;
 			if (remove)
-				natives::statmodifier::RemoveStatModifier(grenade);
+				Natives::StatModifier::RemoveStatModifier(grenade);
 			else
-				natives::statmodifier::AddStatModifier(StatType::GrenadesChargesRegenMult, 10000.0f, StatModifierType::Additive, grenade);
+				Natives::StatModifier::AddStatModifier(StatType::GrenadesChargesRegenMult, 10000.0f, StatModifierType::Additive, grenade);
 		}
 
 		void SetProjectileCooldown(bool remove = false)
 		{
 			static Handle<game::StatModifierData> projectile;
 			if (remove)
-				natives::statmodifier::RemoveStatModifier(projectile);
+				Natives::StatModifier::RemoveStatModifier(projectile);
 			else
-				natives::statmodifier::AddStatModifier(StatType::ProjectileLauncherChargesRegenMult, 10000.0f, StatModifierType::Additive, projectile);
+				Natives::StatModifier::AddStatModifier(StatType::ProjectileLauncherChargesRegenMult, 10000.0f, StatModifierType::Additive, projectile);
 		}
 
 		void SetCloakCooldown(bool remove = false)
@@ -169,13 +190,13 @@ namespace feature {
 			static Handle<game::StatModifierData> cloak2;
 			if (remove)
 			{
-				natives::statmodifier::RemoveStatModifier(cloak1);
-				natives::statmodifier::RemoveStatModifier(cloak2);
+				Natives::StatModifier::RemoveStatModifier(cloak1);
+				Natives::StatModifier::RemoveStatModifier(cloak2);
 			}
 			else
 			{
-				natives::statmodifier::AddStatModifier(StatType::OpticalCamoRechargeDuration, 0.01f, StatModifierType::Multiplier, cloak1);
-				natives::statmodifier::AddStatModifier(StatType::OpticalCamoChargesRegenRate, 100.0f, StatModifierType::Additive, cloak2);
+				Natives::StatModifier::AddStatModifier(StatType::OpticalCamoRechargeDuration, 0.01f, StatModifierType::Multiplier, cloak1);
+				Natives::StatModifier::AddStatModifier(StatType::OpticalCamoChargesRegenRate, 100.0f, StatModifierType::Additive, cloak2);
 			}
 		}
 
@@ -183,27 +204,27 @@ namespace feature {
 		{
 			static Handle<game::StatModifierData> sand;
 			if (remove)
-				natives::statmodifier::RemoveStatModifier(sand);
+				Natives::StatModifier::RemoveStatModifier(sand);
 			else
-				natives::statmodifier::AddStatModifier(StatType::TimeDilationSandevistanRechargeDuration, 0.01f, StatModifierType::Multiplier, sand);
+				Natives::StatModifier::AddStatModifier(StatType::TimeDilationSandevistanRechargeDuration, 0.01f, StatModifierType::Multiplier, sand);
 		}
 
 		void SetBerserkCooldown(bool remove = false)
 		{
 			static Handle<game::StatModifierData> berserk;
 			if (remove)
-				natives::statmodifier::RemoveStatModifier(berserk);
+				Natives::StatModifier::RemoveStatModifier(berserk);
 			else
-				natives::statmodifier::AddStatModifier(StatType::BerserkChargesRegenRate, 100.0f, StatModifierType::Additive, berserk);
+				Natives::StatModifier::AddStatModifier(StatType::BerserkChargesRegenRate, 100.0f, StatModifierType::Additive, berserk);
 		}
 
 		void SetKerenzikovCooldown(bool remove = false)
 		{
 			static Handle<game::StatModifierData> keren;
 			if (remove)
-				natives::statmodifier::RemoveStatModifier(keren);
+				Natives::StatModifier::RemoveStatModifier(keren);
 			else
-				natives::statmodifier::AddStatModifier(StatType::KerenzikovCooldownDuration, 0.01f, StatModifierType::Multiplier, keren);
+				Natives::StatModifier::AddStatModifier(StatType::KerenzikovCooldownDuration, 0.01f, StatModifierType::Multiplier, keren);
 		}
 
 		void SetOverclockCooldown(bool remove = false)
@@ -212,13 +233,13 @@ namespace feature {
 			static Handle<game::StatModifierData> over2;
 			if (remove)
 			{
-				natives::statmodifier::RemoveStatModifier(over1);
-				natives::statmodifier::RemoveStatModifier(over2);
+				Natives::StatModifier::RemoveStatModifier(over1);
+				Natives::StatModifier::RemoveStatModifier(over2);
 			}
 			else
 			{
-				natives::statmodifier::AddStatModifier(StatType::CyberdeckOverclockRegenRate, 100.0f, StatModifierType::Additive, over1);
-				natives::statmodifier::AddStatModifier(StatType::CyberdeckOverclockCooldown, 0.01f, StatModifierType::Multiplier, over2);
+				Natives::StatModifier::AddStatModifier(StatType::CyberdeckOverclockRegenRate, 100.0f, StatModifierType::Additive, over1);
+				Natives::StatModifier::AddStatModifier(StatType::CyberdeckOverclockCooldown, 0.01f, StatModifierType::Multiplier, over2);
 			}
 		}
 
@@ -226,27 +247,27 @@ namespace feature {
 		{
 			static Handle<game::StatModifierData> hackcool;
 			if (remove)
-				natives::statmodifier::RemoveStatModifier(hackcool);
+				Natives::StatModifier::RemoveStatModifier(hackcool);
 			else
-				natives::statmodifier::AddStatModifier(StatType::QuickhacksCooldownReduction, 1.0f, StatModifierType::Additive, hackcool);
+				Natives::StatModifier::AddStatModifier(StatType::QuickhacksCooldownReduction, 1.0f, StatModifierType::Additive, hackcool);
 		}
 
 		void SetQuickhackCost(bool remove = false)
 		{
 			static Handle<game::StatModifierData> hackcost;
 			if (remove)
-				natives::statmodifier::RemoveStatModifier(hackcost);
+				Natives::StatModifier::RemoveStatModifier(hackcost);
 			else
-				natives::statmodifier::AddStatModifier(StatType::MemoryCostReduction, 10000.0f, StatModifierType::Additive, hackcost);
+				Natives::StatModifier::AddStatModifier(StatType::MemoryCostReduction, 10000.0f, StatModifierType::Additive, hackcost);
 		}
 
 		void SetMemoryRegeneration(bool remove = false)
 		{
 			static Handle<game::StatModifierData> regen;
 			if (remove)
-				natives::statmodifier::RemoveStatModifier(regen);
+				Natives::StatModifier::RemoveStatModifier(regen);
 			else
-				natives::statmodifier::AddStatModifier(StatType::MemoryRegenRateMult, 100.0f, StatModifierType::Additive, regen);
+				Natives::StatModifier::AddStatModifier(StatType::MemoryRegenRateMult, 100.0f, StatModifierType::Additive, regen);
 		}
 
 		void SetDetectionRatelow(bool remove = false)
@@ -257,17 +278,17 @@ namespace feature {
 
 			if (remove)
 			{
-				natives::statmodifier::RemoveStatModifier(detection1);
-				natives::statmodifier::RemoveStatModifier(detection2);
-				natives::statmodifier::RemoveStatModifier(detection3);
+				Natives::StatModifier::RemoveStatModifier(detection1);
+				Natives::StatModifier::RemoveStatModifier(detection2);
+				Natives::StatModifier::RemoveStatModifier(detection3);
 
 			}
 			else
 			{
 				// No idea if this is even right works sometimes tho soooooo yea!?
-				natives::statmodifier::AddStatModifier(StatType::Visibility, 0.00001f, StatModifierType::Multiplier, detection1);
-				natives::statmodifier::AddStatModifier(StatType::VisibilityReduction, 0.00001f, StatModifierType::Multiplier, detection2);
-				natives::statmodifier::AddStatModifier(StatType::VisibilityReductionModifierHelper, 99999999.9f, StatModifierType::Additive, detection3);
+				Natives::StatModifier::AddStatModifier(StatType::Visibility, 0.00001f, StatModifierType::Multiplier, detection1);
+				Natives::StatModifier::AddStatModifier(StatType::VisibilityReduction, 0.00001f, StatModifierType::Multiplier, detection2);
+				Natives::StatModifier::AddStatModifier(StatType::VisibilityReductionModifierHelper, 99999999.9f, StatModifierType::Additive, detection3);
 
 			}
 		}
@@ -278,9 +299,9 @@ namespace feature {
 			static Handle<game::StatModifierData> jump;
 
 			if (remove)
-				natives::statmodifier::RemoveStatModifier(jump);
+				Natives::StatModifier::RemoveStatModifier(jump);
 			else
-				natives::statmodifier::AddStatModifier(StatType::JumpHeight, jumpHeight, StatModifierType::Multiplier, jump);
+				Natives::StatModifier::AddStatModifier(StatType::JumpHeight, jumpHeight, StatModifierType::Multiplier, jump);
 		}
 
 
@@ -291,14 +312,14 @@ namespace feature {
 			static bool loadValue = true;
 			if (loadValue)
 			{
-				kiroshEyeZoom = natives::statmodifier::GetStatValue(StatType::KiroshiMaxZoomLevel);
+				kiroshEyeZoom = Natives::StatModifier::GetStatValue(StatType::KiroshiMaxZoomLevel);
 				loadValue = false;
 			}
 
 			if (remove)
-				natives::statmodifier::RemoveStatModifier(detection1);
+				Natives::StatModifier::RemoveStatModifier(detection1);
 			else
-				natives::statmodifier::AddStatModifier(StatType::KiroshiMaxZoomLevel, kiroshEyeZoom, StatModifierType::Multiplier, detection1);
+				Natives::StatModifier::AddStatModifier(StatType::KiroshiMaxZoomLevel, kiroshEyeZoom, StatModifierType::Multiplier, detection1);
 		}
 
 
@@ -310,20 +331,20 @@ namespace feature {
 			static int tempValue = 0;
 			if (remove)
 			{
-				natives::statmodifier::RemoveStatModifier(carrycapacity);
+				Natives::StatModifier::RemoveStatModifier(carrycapacity);
 			}
 			else
 			{
 
 		/*		if (!valueInitialized)
 				{
-					tempValue = natives::statmodifier::GetStatValue(StatType::CarryCapacity);
+					tempValue = Natives::StatModifier::GetStatValue(StatType::CarryCapacity);
 					valueInitialized = true;
 					carryCapacityValue = tempValue;
 				}*/
 
-				natives::statmodifier::AddStatModifier(StatType::CarryCapacity, carryCapacityValue, game::StatModifierType::Additive, carrycapacity);
-				//natives::statmodifier::AddStatModifier(StatType::CarryCapacityModifierHelper, (memoryValue - tempValue), game::StatModifierType::Additive, memory);
+				Natives::StatModifier::AddStatModifier(StatType::CarryCapacity, carryCapacityValue, game::StatModifierType::Additive, carrycapacity);
+				//Natives::StatModifier::AddStatModifier(StatType::CarryCapacityModifierHelper, (memoryValue - tempValue), game::StatModifierType::Additive, memory);
 			}
 		}
 
@@ -334,13 +355,13 @@ namespace feature {
 
 			if (remove)
 			{
-				natives::statmodifier::RemoveStatModifier(trace);
-				natives::statmodifier::RemoveStatModifier(trace2);
+				Natives::StatModifier::RemoveStatModifier(trace);
+				Natives::StatModifier::RemoveStatModifier(trace2);
 			}
 			else
 			{
-				natives::statmodifier::AddStatModifier(StatType::RevealNetrunnerWhenHacked, -9999.0f, game::StatModifierType::Additive, trace);
-				natives::statmodifier::AddStatModifier(StatType::HasICELevelBooster, 0.0f, game::StatModifierType::Additive, trace2);// I think this kills anyone hacking player?
+				Natives::StatModifier::AddStatModifier(StatType::RevealNetrunnerWhenHacked, -9999.0f, game::StatModifierType::Additive, trace);
+				Natives::StatModifier::AddStatModifier(StatType::HasICELevelBooster, 0.0f, game::StatModifierType::Additive, trace2);// I think this kills anyone hacking player?
 			}
 		}
 		void setMemory(bool remove = false)
@@ -351,7 +372,7 @@ namespace feature {
 			static int tempValue = 0;
 			if (remove)
 			{
-				natives::statmodifier::RemoveStatModifier(memory);
+				Natives::StatModifier::RemoveStatModifier(memory);
 			}
 			else
 			{
@@ -359,12 +380,12 @@ namespace feature {
 				// But show the value in the UI.  My math is broke
 				/*if (!valueInitialized)
 				{
-					tempValue = natives::statmodifier::GetStatValue(StatType::Memory);
+					tempValue = Natives::StatModifier::GetStatValue(StatType::Memory);
 					valueInitialized = true;
 					memoryValue = tempValue;
 				}*/
 
-				natives::statmodifier::AddStatModifier(StatType::Memory, memoryValue, game::StatModifierType::Additive, memory);
+				Natives::StatModifier::AddStatModifier(StatType::Memory, memoryValue, game::StatModifierType::Additive, memory);
 			}
 		}
 
@@ -374,9 +395,29 @@ namespace feature {
 			static Handle<game::StatModifierData> maxSpeedModifier;
 
 			if (remove)
-				natives::statmodifier::RemoveStatModifier(maxSpeedModifier);
+				Natives::StatModifier::RemoveStatModifier(maxSpeedModifier);
 			else
-				natives::statmodifier::AddStatModifier(StatType::MaxSpeed, maxSpeedValue, StatModifierType::Multiplier, maxSpeedModifier);// I think this has a max no idea what it is tbh
+				Natives::StatModifier::AddStatModifier(StatType::MaxSpeed, maxSpeedValue, StatModifierType::Multiplier, maxSpeedModifier);// I think this has a max no idea what it is tbh
+		}
+
+		void SetSandevistanDuration(bool remove = false)
+		{
+			static Handle<game::StatModifierData> sandevistanDuration;
+
+			if (remove)
+				Natives::StatModifier::RemoveStatModifier(sandevistanDuration);
+			else
+				Natives::StatModifier::AddStatModifier(StatType::TimeDilationSandevistanDuration, sandevistanDurationValue, StatModifierType::Multiplier, sandevistanDuration);
+		}
+
+		void SetSandevistanTimeScale(bool remove = false)
+		{
+			static Handle<game::StatModifierData> sandevistanTimeScale;
+
+			if (remove)
+				Natives::StatModifier::RemoveStatModifier(sandevistanTimeScale);
+			else
+				Natives::StatModifier::AddStatModifier(StatType::TimeDilationSandevistanTimeScale, sandevistanTimeScaleValue, StatModifierType::Multiplier, sandevistanTimeScale);
 		}
 
 		void Settest(bool remove = false)
@@ -385,12 +426,11 @@ namespace feature {
 
 			if (remove)
 			{
-				natives::statmodifier::RemoveStatModifier(test);
-
+				Natives::StatModifier::RemoveStatModifier(test);
 			}
 			else
 			{
-				natives::statmodifier::InjectStatModifier(StatType::MaxSpeed, 100, game::StatModifierType::Multiplier, test);// SpeedBoost
+				Natives::StatModifier::AddStatModifier(StatType::MagazineAutoRefill, 15.f, game::StatModifierType::Additive, test);
 			}
 
 		}
@@ -451,12 +491,12 @@ namespace feature {
 			float frameSpeed = moveSpeed * (speedBoost ? 2.5f : .7f);
 			float frameRotation = rotSpeed;
 
-			Vector3 position = gamebase::natives::transform::GetPlayerWorldPosition();
-			Vector3 rotation = gamebase::natives::transform::GetPlayerWorldEulerAngles();
+			Vector3 position = Natives::Transform::GetPlayerWorldPosition();
+			Vector3 rotation = Natives::Transform::GetPlayerWorldEulerAngles();
 
 			yaw = rotation.Z;
 
-			float yawRad = gamebase::natives::transform::DegreeToRadian(yaw);
+			float yawRad = Natives::Transform::DegreeToRadian(yaw);
 
 			if (forward)
 			{
@@ -482,15 +522,13 @@ namespace feature {
 			if (yaw > 360.f) yaw -= 360.f;
 
 			RED4ext::EulerAngles newRot{ rotation.X, rotation.Y, yaw };
-			gamebase::natives::transform::SetPlayerWorldTransform(position, newRot);
+			Natives::Transform::SetPlayerWorldTransform(position, newRot);
 		}
 
 
 		void Tick()
 		{
-
-
-			playerwanted::Tick();
+			PlayerWanted::Tick();
 
 			if (tickGodmode)
 				SetHealthFull();
@@ -525,6 +563,14 @@ namespace feature {
 			static float carryCapacityValueS = 300;
 			HandleStatModifierToggle(tickCarryCapacity, (float)carryCapacityValue, carryCapacityValueS, carryCapacityEdit, setCarryCapacityHigh);
 
+			static bool sandevistanDurationEdit = false;
+			static float sandevistanDurationValueSlider = 1.f;
+			HandleStatModifierToggle(tickSandevistanDuration, sandevistanDurationValue, sandevistanDurationValueSlider, sandevistanDurationEdit, SetSandevistanDuration);
+
+			static bool sandevistanTimeScaleEdit = false;
+			static float sandevistanTimeScaleValueSlider = 1.f;
+			HandleStatModifierToggle(tickSandevistanTimeScale, sandevistanTimeScaleValue, sandevistanTimeScaleValueSlider, sandevistanTimeScaleEdit, SetSandevistanTimeScale);
+
 
 			static bool memoryEdit = false;
 			static float memoryValueS = 16;
@@ -532,6 +578,10 @@ namespace feature {
 
 			static bool tracing = false;
 			HandleStatModifierToggle(tickTraceRatelow, tracing, setTraceRatelow);
+
+			static bool quicksilver = false;
+			HandleStatModifierToggle(tickQuicksilver, quicksilver, SetQuicksilver);
+
 
 			static bool superjump = false;
 			static float superjumpH = 0.f;

@@ -42,16 +42,16 @@
     <ClInclude Include="Vendor\ImGui\imstb_truetype.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Render\Draw\draw.h">
+    <ClInclude Include="Render\Draw\Draw.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Render\Hooks\d3d12globals.h">
+    <ClInclude Include="Render\Hooks\D3D12Globals.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Controls\controls.h">
+    <ClInclude Include="Controls\Controls.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Render\Hooks\hooks.h">
+    <ClInclude Include="Render\Hooks\Hooks.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Vendor\minhook\include\MinHook.h">
@@ -78,10 +78,10 @@
     <ClInclude Include="Vendor\minhook\src\trampoline.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Render\Font\font.h">
+    <ClInclude Include="Render\Font\Font.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Render\Font\rubikFont.h">
+    <ClInclude Include="Render\Font\RubikFont.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Render\Font\Icons\fa_solid_900.h">
@@ -102,19 +102,19 @@
     <ClInclude Include="Global\math.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Base\gamebase.h">
+    <ClInclude Include="Base\GameBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Features\PlayerFeats\playerfeature.h">
+    <ClInclude Include="Features\PlayerFeats\PlayerFeature.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Base\Natives\statmodifiers.h">
+    <ClInclude Include="Base\Natives\StatModifiers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Base\Natives\statpoolmodifiers.h">
+    <ClInclude Include="Base\Natives\StatPoolModifiers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Base\Natives\transform.h">
+    <ClInclude Include="Base\Natives\Transform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Render\UserInterface\submenu.h">
@@ -123,16 +123,16 @@
     <ClInclude Include="Render\UserInterface\buttons.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Features\TeleportFeats\teleportfeature.h">
+    <ClInclude Include="Features\TeleportFeats\TeleportFeature.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Files\jsonhelper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Features\VehicleFeat\vehiclefeature.h">
+    <ClInclude Include="Features\VehicleFeat\VehicleFeature.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Base\Natives\vehicleclass.h">
+    <ClInclude Include="Base\Natives\Vehicle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Render\View\VehicleMenu\vehicleview.h">
@@ -147,7 +147,16 @@
     <ClInclude Include="Render\UserInterface\Backend\InfoBox.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Base\Natives\preventionsystem.h">
+    <ClInclude Include="Base\Natives\PreventionSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\Natives\World.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\WorldFeat\WorldFeature.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\View\WorldMenu\WorldView.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -182,16 +191,16 @@
     <ClCompile Include="Vendor\ImGui\imgui_widgets.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Render\Draw\draw.cpp">
+    <ClCompile Include="Render\Draw\Draw.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Render\Hooks\d3d12hook.cpp">
+    <ClCompile Include="Render\Hooks\D3D12Hook.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Controls\inputhook.cpp">
+    <ClCompile Include="Controls\InputHooks.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Render\Hooks\hooks.cpp">
+    <ClCompile Include="Render\Hooks\Hooks.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Vendor\minhook\src\hde\hde32.c">
@@ -215,28 +224,28 @@
     <ClCompile Include="Render\UserInterface\Opitons.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Controls\controls.cpp">
+    <ClCompile Include="Controls\Controls.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Render\View\Menu\menu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Base\gamebase.cpp">
+    <ClCompile Include="Base\GameBase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Base\gamesystem.cpp">
+    <ClCompile Include="Base\GameSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Features\PlayerFeats\playerfeature.cpp">
+    <ClCompile Include="Features\PlayerFeats\PlayerFeature.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Base\Natives\natives.cpp">
+    <ClCompile Include="Base\Natives\Natives.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Features\TeleportFeats\teleportfeature.cpp">
+    <ClCompile Include="Features\TeleportFeats\TeleportFeature.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Features\VehicleFeat\vehiclefeature.cpp">
+    <ClCompile Include="Features\VehicleFeat\VehicleFeature.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Render\View\VehicleMenu\vehicleunlockview.cpp">
@@ -249,6 +258,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Features\PlayerFeats\PlayerWanted.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Features\WorldFeat\TimeFeature.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\View\WorldMenu\TimeView.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\View\WorldMenu\WeatherView.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Features\WorldFeat\WeatherFeature.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

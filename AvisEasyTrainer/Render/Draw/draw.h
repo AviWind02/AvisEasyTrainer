@@ -1,5 +1,5 @@
 #pragma once
-namespace render::draw
+namespace Render::Draw
 {
     void AddText(const std::optional<std::string>& left,
         const std::optional<std::string>& center,

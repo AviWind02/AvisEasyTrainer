@@ -4,14 +4,15 @@
 #include <imgui_internal.h>
 
 using namespace g_feature::g_math;
-using namespace controls;
+using namespace Render::Draw;
+using namespace Controls;
 
-namespace render::ui
+namespace UI
 {
+    using namespace Layout;
+
     bool DrawOptionTextRAW(const std::string& left, const std::string& center, const std::string& right, const std::string& tip)
     {
-        using namespace UI;
-        using namespace render::draw;
 
         bool isBreak = (left.find("#BREAK") != std::string::npos);
 
@@ -20,8 +21,8 @@ namespace render::ui
             cleanedLeft.erase(cleanedLeft.find("#BREAK"), 6);
 
         if (isBreak && currentOption == optionIndex + 1) {
-            if (controls::Down()) currentOption++;
-            else if (controls::Up()) currentOption--;
+            if (Down()) currentOption++;
+            else if (Up()) currentOption--;
         }
 
         optionIndex++;
@@ -83,13 +84,11 @@ namespace render::ui
         );
 
 
-        return ((currentOption == optionIndex || hovered) && (clicked || controls::selectPressed));
+        return ((currentOption == optionIndex || hovered) && (clicked || selectPressed));
     }
     bool DrawIntOption(const std::string& label, int& value, int min, int max, int step, bool useToggle, bool& toggle, const std::string& tip)
     {
-        using namespace UI;
         using namespace Layout;
-        using namespace render::draw;
 
         bool clicked = DrawOptionTextRAW(label, "", "", tip);
         bool selected = (currentOption == optionIndex);
@@ -162,13 +161,13 @@ namespace render::ui
 
             if (selected)
             {
-                if (controls::leftPressed) {
+                if (leftPressed) {
                     value -= step;
                     if (value < min) value = max;
                     toggle = true;
                     changed = true;
                 }
-                if (controls::rightPressed) {
+                if (rightPressed) {
                     value += step;
                     if (value > max) value = min;
                     toggle = true;
@@ -186,9 +185,6 @@ namespace render::ui
 
     bool DrawToggleOption(const std::string& label, bool& toggle, const std::string& tip)
     {
-        using namespace UI;
-        using namespace Layout;
-        using namespace render::draw;
 
         bool clicked = DrawOptionTextRAW(label, "", "", tip);
         bool selected = (currentOption == optionIndex);
@@ -238,17 +234,13 @@ namespace render::ui
     }
     bool DrawFloatOption(const std::string& label, float& value, float min, float max, float step, bool useToggle, bool& toggle, const std::string& tip)
     {
-        using namespace UI;
-        using namespace Layout;
-        using namespace render::draw;
-
         bool clicked = DrawOptionTextRAW(label, "", "", tip);
         bool selected = (currentOption == optionIndex);
         bool changed = false;
 
         int footerHeight = UI::Header::Height;
         int availableHeight = menuBox.size.y - UI::Header::Height - footerHeight;
-        int maxVisible = (std::max)(1, int(availableHeight / UI::Layout::OptionHeight));             int startOpt = ((currentOption - 1) / maxVisible) * maxVisible + 1;
+        int maxVisible = (std::max)(1, int(availableHeight / OptionHeight));             int startOpt = ((currentOption - 1) / maxVisible) * maxVisible + 1;
         int endOpt = (std::min)(startOpt + maxVisible - 1, optionIndex);
 
         if (optionIndex >= startOpt && optionIndex <= endOpt)
@@ -311,13 +303,13 @@ namespace render::ui
 
             if (selected)
             {
-                if (controls::leftPressed) {
+                if (leftPressed) {
                     value -= step;
                     if (value < min) value = max;
                     toggle = true;
                     changed = true;
                 }
-                if (controls::rightPressed) {
+                if (rightPressed) {
                     value += step;
                     if (value > max) value = min;
                     toggle = true;

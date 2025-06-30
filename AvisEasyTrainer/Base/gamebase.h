@@ -3,13 +3,18 @@
 
 #include <RED4ext/Scripting/Natives/ScriptGameInstance.hpp>
 #include <RED4ext/Scripting/Natives/Generated/ent/Entity.hpp>
+#include <RED4ext/Scripting/Natives/Generated/game/Puppet.hpp>
+
 #include <RED4ext/Scripting/Natives/Generated/game/StatsSystem.hpp>
 #include <RED4ext/Scripting/Natives/Generated/game/StatPoolsSystem.hpp>
-#include <RED4ext/Scripting/Natives/Generated/game/Puppet.hpp>
+#include <RED4ext/Scripting/Natives/Generated/game/VehicleSystem.hpp>
+#include <RED4ext/Scripting/Natives/Generated/game/TeleportationFacility.hpp>
+#include <RED4ext/Scripting/Natives/Generated/world/WeatherScriptInterface.hpp>
+
 
 using namespace RED4ext;
 
-namespace gamebase {
+namespace GameBase {
     bool TryGetGameInstance(ScriptGameInstance& outInstance);
 
     bool TryGetPlayerHandle(Handle<IScriptable>& outHandle);
@@ -31,7 +36,11 @@ namespace gamebase {
 
         return sys;
     }
-
-    Handle<game::StatsSystem>     GetStatsSystem();
-    Handle<game::StatPoolsSystem> GetStatPoolsSystem();
+    namespace Systems {
+        Handle<StatsSystem> GetStatsSystem();
+        Handle<StatPoolsSystem> GetStatPoolsSystem();
+        Handle<VehicleSystem> GetVehicleSystem();
+        Handle<TeleportationFacility> GetTeleportationSystem();
+        Handle<WeatherSystem> GetWeatherSystem();
+    }
 }

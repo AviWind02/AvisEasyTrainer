@@ -12,7 +12,7 @@
 
 using namespace g_feature::g_math;
 
-namespace render::hooks::d3d12
+namespace Render::Hooks::D3d12
 {
 
     using ExecuteCommandLists_t = void (STDMETHODCALLTYPE*)(
@@ -331,11 +331,11 @@ namespace render::hooks::d3d12
             g_ImGuiHeap->GetGPUDescriptorHandleForHeapStart());
 
 
-        controls::inputhook::Init(g_MainWindow);
+        Controls::InputHook::Init(g_MainWindow);
         
         FontManager::InitializeFonts();
         
-        render::ui::InitializeUIStyle();
+        UI::InitializeUIStyle();
 
         loghandler::sdk->logger->Info(loghandler::handle, "[Init] InitializeD3D12 Exit");
         return true;
@@ -367,10 +367,10 @@ namespace render::hooks::d3d12
             ImGui_ImplWin32_NewFrame();
             ImGui_ImplDX12_NewFrame();
             ImGui::NewFrame();
-            ImGui::GetIO().MouseDrawCursor = controls::mouseToggle;
+            ImGui::GetIO().MouseDrawCursor = Controls::mouseToggle;
             ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_NoMouse;
-            controls::inputhook::SetMouseTrap(controls::mouseToggle);
-            render::ui::DrawMainMenu();
+            Controls::InputHook::SetMouseTrap(Controls::mouseToggle);
+            UI::DrawMainMenu();
 
             ImGui::Render();
             if (ImGui::GetDrawData() && ImGui::GetDrawData()->CmdListsCount > 0)

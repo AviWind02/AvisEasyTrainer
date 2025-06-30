@@ -13,7 +13,7 @@
 #include "RED4ext/GpuApi/DeviceData-inl.hpp"
 #include "RED4ext/GpuApi/SwapChain.hpp"
 
-namespace render::hooks::d3d12
+namespace Render::Hooks::D3d12
 {
     // DX12 globals
     inline ID3D12Device* g_Device = nullptr;

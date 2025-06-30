@@ -2,7 +2,7 @@
 #include "pch.h"
 #include "Features/VehicleFeat/vehiclefeature.h"
 #include "Vendor/minhook/include/MinHook.h"
-#include <Base/Natives/vehicleclass.h>
+#include <Base/Natives/vehicle.h>
 
 
 
@@ -25,14 +25,14 @@ void __stdcall HookTweakDBLoad(RED4ext::TweakDB* tdb)
         {
             std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
-            for (const auto& vehicle : feature::vehicleoptions::allVehicles)
+            for (const auto& vehicle : Feature::VehicleOptions::allVehicles)
             {
                 if (vehicle.affiliation.find("player") == std::string::npos)
                 {
-                    gamebase::natives::vehicle::InjectSingleVehicleIntoTweakDB(vehicle.recordID);
+                    GameBase::Natives::Vehicle::InjectSingleVehicleIntoTweakDB(vehicle.recordID);
                 }
             }
-            feature::vehicleoptions::UpdateVehicleNames();// all the game labels into the vector
+            Feature::VehicleOptions::UpdateVehicleNames();// all the game labels into the vector
             loghandler::sdk->logger->Info(loghandler::handle, "[HookTweakDBLoad] Vehicle injection complete.");
         }).detach();
     });
@@ -65,7 +65,7 @@ void InstallTweakDBLoadHook()
 //Called every frame when the game is running
 bool Running_OnUpdate(RED4ext::CGameApplication* aApp)
 {
-	render::ui::NativeTick();
+	UI::NativeTick();
     return false;
 }
 
@@ -73,7 +73,8 @@ bool Running_OnEnter(RED4ext::CGameApplication* aApp)
 {
     
 
-    std::thread([=]() { render::hooks::WaitForDX12AndInit(loghandler::handle, loghandler::sdk);
+    std::thread([=]() { 
+        Render::Hooks::WaitForDX12AndInit(loghandler::handle, loghandler::sdk);
 
         }).detach();
     

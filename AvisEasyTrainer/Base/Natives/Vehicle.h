@@ -1,27 +1,23 @@
 #pragma once
-#include <Base/gamebase.h>
+#include "Base/GameBase.h"
 
-#include <RED4ext/Scripting/Natives/Generated/game/VehicleSystem.hpp>
 #include <RED4ext/Scripting/Natives/Generated/game/data/Vehicle_Record.hpp>
 
-using namespace RED4ext;
-
-namespace gamebase {
-    namespace natives {
-        namespace vehicle {
+namespace GameBase {
+    namespace Natives {
+        namespace Vehicle {
 
             inline bool IsVehicleUnlocked(RED4ext::TweakDBID id)
             {
                 loghandler::sdk->logger->Info(loghandler::handle, "[IsVehicleUnlocked] Called.");
 
-                // Log TweakDBID info
                 loghandler::sdk->logger->InfoF(
                     loghandler::handle,
                     "[IsVehicleUnlocked] TweakDBID name hash: 0x%08X, name length: %u",
                     id.name.hash, id.name.length
                 );
 
-                auto vehicleSystem = gamebase::GetGameSystem<game::VehicleSystem>("GetVehicleSystem");
+                auto vehicleSystem = GetGameSystem<game::VehicleSystem>("GetVehicleSystem");
                 if (!vehicleSystem)
                 {
                     loghandler::sdk->logger->Error(loghandler::handle, "[IsVehicleUnlocked] Failed to get VehicleSystem");
@@ -83,12 +79,9 @@ namespace gamebase {
                     return true;
                 }
 
-                auto vehicleSystem = gamebase::GetGameSystem<game::VehicleSystem>("GetVehicleSystem");
+                auto vehicleSystem = Systems::GetVehicleSystem();
                 if (!vehicleSystem)
-                {
-                    loghandler::sdk->logger->Error(loghandler::handle, "[SetPlayerVehicleState] Failed to get VehicleSystem");
                     return false;
-                }
 
                 auto* fn = RED4ext::CRTTISystem::Get()->GetClass("gameVehicleSystem")->GetFunction("EnablePlayerVehicle");
                 if (!fn)
@@ -126,12 +119,9 @@ namespace gamebase {
 
             inline void EnableAllVehicles()
             {
-                auto vehicleSystem = gamebase::GetGameSystem<game::VehicleSystem>("GetVehicleSystem");
+                auto vehicleSystem = Systems::GetVehicleSystem();
                 if (!vehicleSystem)
-                {
-                    loghandler::sdk->logger->Error(loghandler::handle, "[EnableAllVehicles] Failed to get VehicleSystem");
                     return;
-                }
 
                 auto* fn = RED4ext::CRTTISystem::Get()->GetClass("gameVehicleSystem")->GetFunction("EnableAllPlayerVehicles");
                 if (!fn)
@@ -286,7 +276,7 @@ namespace gamebase {
                     ExecuteFunction(record, descFn, &description, args);
                 }
 
-                std::string brand = gamebase::natives::vehicle::GetLocalizedTextByKey(brandCName);
+                std::string brand = Vehicle::GetLocalizedTextByKey(brandCName);
                 std::string desc = description.c_str();
 
                 std::string result = "[Brand] " + brand + " | [Desc] " + desc;

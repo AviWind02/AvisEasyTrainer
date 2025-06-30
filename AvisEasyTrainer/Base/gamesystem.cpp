@@ -1,10 +1,7 @@
 #include "pch.h"
-#include "gamebase.h"
+#include "GameBase.h"
 
-namespace gamebase {
-
-    using namespace RED4ext;
-    using namespace RED4ext::game;
+namespace GameBase::Systems {
 
     Handle<StatsSystem> GetStatsSystem() {
         return GetGameSystem<StatsSystem>("GetStatsSystem");
@@ -12,5 +9,17 @@ namespace gamebase {
 
     Handle<StatPoolsSystem> GetStatPoolsSystem() {
         return GetGameSystem<StatPoolsSystem>("GetStatPoolsSystem");
+    }
+
+    Handle<VehicleSystem> GetVehicleSystem() {
+        return GetGameSystem<VehicleSystem>("GetVehicleSystem");
+    }
+    
+    Handle<TeleportationFacility> GetTeleportationSystem() {
+        return GetGameSystem<TeleportationFacility>("GetTeleportationFacility");
+    }
+
+    Handle<WeatherSystem> GetWeatherSystem() {
+        return GetGameSystem<WeatherSystem>("GetWeatherSystem");
     }
 }

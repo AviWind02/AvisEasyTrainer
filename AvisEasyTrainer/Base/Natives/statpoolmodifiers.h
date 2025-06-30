@@ -1,34 +1,24 @@
 #pragma once
-
-#include <Base/gamebase.h>
+#include "Base/GameBase.h"
 
 #include <RED4ext/Scripting/Natives/Generated/game/StatPoolsSystem.hpp>
 #include <RED4ext/Scripting/Natives/Generated/game/data/StatPoolType.hpp>
 
-using namespace RED4ext;
-
-namespace gamebase {
-    namespace natives {
-        namespace statpoolmodifier {
+namespace GameBase {
+    namespace Natives {
+        namespace StatPoolModifier {
 
 
             inline float GetPoolValue(game::data::StatPoolType poolType) {
-                //loghandler::sdk->logger->InfoF(loghandler::handle, "[GetPoolValue] Called with poolType: %d", static_cast<int>(poolType));
-                ScriptGameInstance gi;
                 Handle<IScriptable> playerHandle;
                 ent::EntityID playerID;
 
-                if (!gamebase::TryGetGameInstance(gi) || !gamebase::TryGetPlayerHandleAndID(playerHandle, playerID)) {
-                    loghandler::sdk->logger->Error(loghandler::handle, "[GetPoolValue] Failed to get game instance or player handle/ID");
+                if (!TryGetPlayerHandleAndID(playerHandle, playerID)) 
                     return -1.f;
-                }
-                // loghandler::sdk->logger->InfoF(loghandler::handle, "[GetPoolValue] Obtained GameInstance and PlayerID: %u", playerID);
 
-                auto statPoolSystem = gamebase::GetStatPoolsSystem();
-                if (!statPoolSystem) {
-                    loghandler::sdk->logger->Error(loghandler::handle, "[GetPoolValue] statPoolSystem is null");
+                auto statPoolSystem = Systems::GetStatPoolsSystem();
+                if (!statPoolSystem) 
                     return -1.f;
-                }
 
                 auto* cls = CRTTISystem::Get()->GetClass("gameStatPoolsSystem");
                 auto* fn = cls ? cls->GetFunction("GetStatPoolValue") : nullptr;
@@ -43,25 +33,22 @@ namespace gamebase {
                     { nullptr, &poolType },
                     { nullptr, &playerHandle }
                 };
-                ExecuteFunction(statPoolSystem, fn, &outValue, args);
-                //loghandler::sdk->logger->InfoF(loghandler::handle, "[GetPoolValue] Result: %f", outValue);
+                if (!ExecuteFunction(statPoolSystem, fn, &outValue, args)) {
+                    loghandler::sdk->logger->Error(loghandler::handle, "[GetPoolValue] Execution failed");
+                    return -1.f;
+                }
                 return outValue;
             }
 
             inline bool SetPoolValue(game::data::StatPoolType poolType, float newValue, bool propagate) {
-                //loghandler::sdk->logger->InfoF(loghandler::handle, "[SetPoolValue] Called with poolType: %d, newValue: %f, propagate: %s", static_cast<int>(poolType), newValue, propagate ? "true" : "false");
-                ScriptGameInstance gi;
                 Handle<IScriptable> playerHandle;
                 ent::EntityID playerID;
 
-                if (!gamebase::TryGetGameInstance(gi) || !gamebase::TryGetPlayerHandleAndID(playerHandle, playerID)) {
-                    loghandler::sdk->logger->Error(loghandler::handle, "[SetPoolValue] Failed to get game instance or player handle/ID");
+                if (!TryGetPlayerHandleAndID(playerHandle, playerID)) 
                     return false;
-                }
 
-                auto statPoolSystem = gamebase::GetStatPoolsSystem();
+                auto statPoolSystem = Systems::GetStatPoolsSystem();
                 if (!statPoolSystem) {
-                    loghandler::sdk->logger->Error(loghandler::handle, "[SetPoolValue] statPoolSystem is null");
                     return false;
                 }
 
@@ -79,9 +66,12 @@ namespace gamebase {
                     { nullptr, &playerHandle },
                     { nullptr, &propagate }
                 };
-                ExecuteFunction(statPoolSystem, fn, nullptr, args);
-                //loghandler::sdk->logger->Info(loghandler::handle, "[SetPoolValue] Executed successfully");
-                return true;
+
+                if (!ExecuteFunction(statPoolSystem, fn, nullptr, args)) {
+                    loghandler::sdk->logger->Error(loghandler::handle, "[SetPoolValue] Execution failed");
+                    return false;
+                }
+                    return true;
             }
         }
     }

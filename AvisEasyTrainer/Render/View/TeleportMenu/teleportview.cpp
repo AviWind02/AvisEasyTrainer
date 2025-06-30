@@ -5,7 +5,8 @@
 
 #include "teleportview.h"
 
-using namespace render::ui;
+using namespace UI;
+using namespace Feature::TeleyOptions;
 
 namespace view::teleport {
 
@@ -14,7 +15,6 @@ namespace view::teleport {
 
     void TeleportFilteredView()
     {
-        using namespace feature::teleoptions;
 
         for (const auto& loc : teleportLocations)
         {
@@ -32,8 +32,6 @@ namespace view::teleport {
 
     void TeleportMainView()
     {
-        using namespace feature::teleoptions;
-
         static int forwardDistance = 2;
         static int upwardDistance = 0;
 

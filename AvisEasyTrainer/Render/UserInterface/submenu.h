@@ -3,7 +3,7 @@
 #include <vector>
 #include <functional>
 
-namespace render::ui {
+namespace UI {
 
 
     struct SubMenu {
@@ -17,13 +17,13 @@ namespace render::ui {
 
     inline void OpenSubMenu(const SubMenu& submenu) {
         menuStack.push_back(submenu);
-        optionStack.push_back(controls::currentOption);
+        optionStack.push_back(Controls::currentOption);
 
         if (optionStack.size() > 10)
             optionStack.erase(optionStack.begin());
 
         currentMenuIndex++;
-        controls::currentOption = 1;
+        Controls::currentOption = 1;
     }
 
     inline void CloseSubMenu() {
@@ -32,11 +32,11 @@ namespace render::ui {
             currentMenuIndex--;
 
             if (!optionStack.empty()) {
-                controls::currentOption = optionStack.back();
+                Controls::currentOption = optionStack.back();
                 optionStack.pop_back();
             }
             else {
-                controls::currentOption = 1;
+                Controls::currentOption = 1;
             }
         }
     }

@@ -1,11 +1,13 @@
 #include <pch.h>
 
 
-#include "statmodifiers.h"
-#include "statpoolmodifiers.h"
+#include "StatModifiers.h"
+#include "StatPoolModifiers.h"
 
-#include "transform.h"
+#include "Transform.h"
 
-#include "vehicleclass.h"
+#include "Vehicle.h"
 
-#include "preventionsystem.h"
+#include "PreventionSystem.h"
+
+#include "World.h"

@@ -1,6 +1,6 @@
 #pragma once
 
-namespace render::ui {
+namespace UI {
 	namespace buttons {
 
         inline bool Option(const std::string& label, const std::string& tip = "", std::function<void()> action = [] {})

@@ -1,24 +1,24 @@
 #include "pch.h"
 #include "Base/gamebase.h"
-#include "Base/Natives/transform.h"
+#include "Base/Natives/Transform.h"
 
 #include "teleportfeature.h"
 
 
 
-namespace feature {
-	namespace teleoptions {
+namespace Feature {
+	namespace TeleyOptions {
 
 
 		using namespace RED4ext;
 		using namespace game;
 		using namespace data;
-		using namespace gamebase;
+		using namespace GameBase;
 
         void RequestTeleport(const RED4ext::Vector3& pos)
         {
             pendingTeleportPosition = pos;
-            pendingTeleportRotation = gamebase::natives::transform::GetPlayerWorldEulerAngles();
+            pendingTeleportRotation = Natives::Transform::GetPlayerWorldEulerAngles();
             tickTeleportNow = true;
         }
 
@@ -26,10 +26,10 @@ namespace feature {
 
         void TeleportForward(float distance)
         {
-            Vector3 pos = gamebase::natives::transform::GetPlayerWorldPosition();
-            Vector3 rot = gamebase::natives::transform::GetPlayerWorldEulerAngles(); 
+            Vector3 pos = Natives::Transform::GetPlayerWorldPosition();
+            Vector3 rot = Natives::Transform::GetPlayerWorldEulerAngles(); 
 
-            float yawRad = gamebase::natives::transform::DegreeToRadian(rot.Z);
+            float yawRad = Natives::Transform::DegreeToRadian(rot.Z);
             float xOffset = distance * std::sin(yawRad) * -1.f;
             float yOffset = distance * std::cos(yawRad);
 
@@ -40,14 +40,14 @@ namespace feature {
         }
         void TeleportUp(float amount)
         {
-            Vector3 pos = gamebase::natives::transform::GetPlayerWorldPosition();
+            Vector3 pos = Natives::Transform::GetPlayerWorldPosition();
             pos.Z += amount;
             RequestTeleport(pos);
         }
 
         void TeleportDown(float amount)
         {
-            Vector3 pos = gamebase::natives::transform::GetPlayerWorldPosition();
+            Vector3 pos = Natives::Transform::GetPlayerWorldPosition();
             pos.Z -= amount;
             RequestTeleport(pos);
         }
@@ -56,7 +56,7 @@ namespace feature {
         {
             if (tickTeleportNow)
             {
-                gamebase::natives::transform::SetPlayerWorldTransform(pendingTeleportPosition, { pendingTeleportRotation.X, pendingTeleportRotation.Y, pendingTeleportRotation.Z});
+                Natives::Transform::SetPlayerWorldTransform(pendingTeleportPosition, { pendingTeleportRotation.X, pendingTeleportRotation.Y, pendingTeleportRotation.Z});
                 tickTeleportNow = false;
             }
         }

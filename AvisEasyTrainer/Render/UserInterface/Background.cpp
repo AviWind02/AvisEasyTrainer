@@ -3,16 +3,15 @@
 #include "Controls/controls.h"
 
 using namespace g_feature::g_math;
+using namespace Render::Draw;
 
-namespace render::ui
+namespace UI
 {
     MenuBox menuBox;
 
     namespace background {
 
         void DrawTitleBar() {
-            using namespace UI;
-            using namespace render::draw;
 
             std::string title = GetBreadcrumbTitle();
             ImVec2 textPos = { menuBox.pos.x + Layout::OptionPaddingX, menuBox.pos.y + 6.f };
@@ -22,17 +21,15 @@ namespace render::ui
         }
 
         void DrawFooter() {
-            using namespace UI;
-            using namespace render::draw;
 
             float spacing = Layout::OptionHeight;
             int maxVisible = (std::max)(1, int((menuBox.size.y - Header::Height) / spacing));
-            int totalOptions = controls::optionIndex;
+            int totalOptions = Controls::optionIndex;
             int totalPages = (totalOptions + maxVisible - 1) / maxVisible;
-            int currentPage = (controls::currentOption - 1) / maxVisible + 1;
+            int currentPage = (Controls::currentOption - 1) / maxVisible + 1;
 
             std::string right1 = " | Pg: " + std::to_string(currentPage) + "/" + std::to_string(totalPages);
-            std::string right = "Opt: " + std::to_string(controls::currentOption) + right1;
+            std::string right = "Opt: " + std::to_string(Controls::currentOption) + right1;
             std::string left = "EasyTrainer | vPre-Alpha";
 
             ImVec2 footerPos = { menuBox.pos.x, menuBox.pos.y + menuBox.size.y - Header::Height };
@@ -55,8 +52,6 @@ namespace render::ui
 
         void HandleWindowDraggingAndResizing()
         {
-            using namespace UI;
-
             static bool dragging = false;
             static bool resizing = false;
             static ImVec2 dragOffset{};
@@ -122,8 +117,6 @@ namespace render::ui
 
         void DrawResizeHandleDot()
         {
-            using namespace UI;
-
             static const float dotRadius = 5.0f;
             static const float handleSize = 12.0f;
 
@@ -154,7 +147,7 @@ namespace render::ui
 
 
         void DrawBackgroundWindow() {
-            render::draw::DrawRect(menuBox.pos, menuBox.size, UI::Colors::Background, UI::Layout::FrameRounding);
+            DrawRect(menuBox.pos, menuBox.size, UI::Colors::Background, UI::Layout::FrameRounding);
             HandleWindowDraggingAndResizing();
             DrawResizeHandleDot();
         }

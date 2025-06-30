@@ -5,13 +5,13 @@
 
 #include "Vendor/minhook/include/MinHook.h"
 #include <RED4ext/GpuApi/DeviceData.hpp>
-namespace render::hooks
+namespace Render::Hooks
 {
     static bool hooksInitialized = false;
 
     void Init(RED4ext::PluginHandle aHandle, const RED4ext::v0::Sdk* aSdk, uint32_t swapID)
     {
-        render::hooks::d3d12::g_WorkingSwapChainID = swapID;
+        D3d12::g_WorkingSwapChainID = swapID;
 
         loghandler::handle = aHandle;
         loghandler::sdk = aSdk;
@@ -25,7 +25,7 @@ namespace render::hooks
             return;
         }
 
-        render::hooks::d3d12::g_CachedDeviceData = RED4ext::GpuApi::GetDeviceData();
+        D3d12::g_CachedDeviceData = RED4ext::GpuApi::GetDeviceData();
 
         auto& swapContainer = deviceData->swapChains;
         if (!swapContainer.IsValidID(swapID) || !swapContainer.IsUsedID(swapID))
@@ -83,7 +83,7 @@ namespace render::hooks
 
         aSdk->logger->InfoF(aHandle, "Present vfunc address: 0x%p", presentFn);
 
-        render::hooks::d3d12::oPresentD3D12 = reinterpret_cast<decltype(render::hooks::d3d12::oPresentD3D12)>(presentFn);
+        D3d12::oPresentD3D12 = reinterpret_cast<decltype(D3d12::oPresentD3D12)>(presentFn);
 
         DWORD oldProtect;
         if (!VirtualProtect(&vtable[8], sizeof(void*), PAGE_EXECUTE_READWRITE, &oldProtect))
@@ -92,7 +92,7 @@ namespace render::hooks
             return;
         }
 
-        vtable[8] = reinterpret_cast<void*>(&render::hooks::d3d12::hookPresentD3D12);
+        vtable[8] = reinterpret_cast<void*>(&D3d12::hookPresentD3D12);
         VirtualProtect(&vtable[8], sizeof(void*), oldProtect, &oldProtect);
 
         aSdk->logger->Info(aHandle, "Hooked Present successfully.");
@@ -159,7 +159,7 @@ namespace render::hooks
     void Shutdown() // Prevents the game from staying open
     {
 
-		using namespace render::hooks::d3d12;   
+		using namespace D3d12;   
 
         loghandler::sdk->logger->Info(loghandler::handle, "[Shutdown] Entry");
 

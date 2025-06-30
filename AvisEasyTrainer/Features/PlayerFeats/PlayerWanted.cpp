@@ -4,17 +4,16 @@
 
 #include "Base/Natives/preventionsystem.h"
 
-namespace feature {
-	namespace playeroptions {
-		namespace playerwanted {
+namespace Feature {
+	namespace PlayerOptions {
+		namespace PlayerWanted {
 
 			using namespace RED4ext;
 			using namespace game;
 			using namespace data;
-			using namespace gamebase;
+			using namespace GameBase;
+			using namespace Natives::Prevention;
 
-
-			using namespace natives::prevention;
 			void SetWantedLevel(int level)
 			{
 				level = std::clamp(level, 1, 5);
@@ -34,7 +33,7 @@ namespace feature {
 				if (enabled && tickHoldWanted)
 				{
 					tickHoldWanted = false;
-					render::ui::NotificationSystem::NotifyInfo("Disabled: Hold Wanted Level");
+					UI::NotificationSystem::NotifyInfo("Disabled: Hold Wanted Level");
 				}
 
 				tickNeverWanted = enabled;
@@ -45,7 +44,7 @@ namespace feature {
 				if (enabled && tickNeverWanted)
 				{
 					tickNeverWanted = false;
-					render::ui::NotificationSystem::NotifyInfo("Disabled: Never Wanted");
+					UI::NotificationSystem::NotifyInfo("Disabled: Never Wanted");
 				}
 
 				tickHoldWanted = enabled;

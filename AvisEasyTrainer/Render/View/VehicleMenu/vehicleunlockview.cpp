@@ -2,11 +2,12 @@
 #include <set>
 
 #include "Features/VehicleFeat/vehiclefeature.h"
-#include "Base/Natives/vehicleclass.h"
+#include "Base/Natives/vehicle.h"
 
 #include "vehicleview.h"
 
-using namespace render::ui;
+using namespace UI;
+using namespace Feature::VehicleOptions;
 
 namespace view::vehicle {
     namespace vehicleunlocks {
@@ -19,7 +20,6 @@ namespace view::vehicle {
 
         void FilteredVehicleView()
         {
-            using namespace feature::vehicleoptions;
 
             for (const auto& v : allVehicles)
             {
@@ -50,7 +50,6 @@ namespace view::vehicle {
 
         void VehicleUnlockMainView()
         {
-            using namespace feature::vehicleoptions;
             std::set<std::string> shownCategories, shownBrands, shownAffiliations;
 
 

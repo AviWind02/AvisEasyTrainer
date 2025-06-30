@@ -1,9 +1,9 @@
 #include "pch.h"
-#include "controls.h"
+#include "Controls.h"
 
 
 
-namespace controls
+namespace Controls
 {
 
     // Cooldown
@@ -113,7 +113,7 @@ namespace controls
 
         if (Back() && now - lastKeyTick > scrollDelay)
         {
-			render::ui::CloseSubMenu();
+			UI::CloseSubMenu();
             lastKeyTick = now;
         }
 

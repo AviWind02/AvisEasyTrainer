@@ -146,27 +146,29 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Base\Natives\preventionsystem.h" />
-    <ClInclude Include="Base\Natives\statpoolmodifiers.h" />
-    <ClInclude Include="Base\Natives\statmodifiers.h" />
-    <ClInclude Include="Base\Natives\transform.h" />
-    <ClInclude Include="Base\Natives\vehicleclass.h" />
-    <ClInclude Include="Controls\controls.h" />
-    <ClInclude Include="Base\gamebase.h" />
-    <ClInclude Include="Features\PlayerFeats\playerfeature.h" />
-    <ClInclude Include="Features\TeleportFeats\teleportfeature.h" />
-    <ClInclude Include="Features\VehicleFeat\vehiclefeature.h" />
+    <ClInclude Include="Base\Natives\PreventionSystem.h" />
+    <ClInclude Include="Base\Natives\StatPoolModifiers.h" />
+    <ClInclude Include="Base\Natives\StatModifiers.h" />
+    <ClInclude Include="Base\Natives\World.h" />
+    <ClInclude Include="Base\Natives\Transform.h" />
+    <ClInclude Include="Base\Natives\Vehicle.h" />
+    <ClInclude Include="Controls\Controls.h" />
+    <ClInclude Include="Base\GameBase.h" />
+    <ClInclude Include="Features\PlayerFeats\PlayerFeature.h" />
+    <ClInclude Include="Features\TeleportFeats\TeleportFeature.h" />
+    <ClInclude Include="Features\VehicleFeat\VehicleFeature.h" />
+    <ClInclude Include="Features\WorldFeat\WorldFeature.h" />
     <ClInclude Include="Files\jsonhelper.h" />
     <ClInclude Include="Global\math.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="Render\Draw\draw.h" />
-    <ClInclude Include="Render\Font\font.h" />
+    <ClInclude Include="Render\Draw\Draw.h" />
+    <ClInclude Include="Render\Font\Font.h" />
     <ClInclude Include="Render\Font\Icons\fa_solid_900.h" />
     <ClInclude Include="Render\Font\Icons\font_awesome_5.h" />
     <ClInclude Include="Render\Font\Icons\IconLoader.h" />
-    <ClInclude Include="Render\Font\rubikFont.h" />
-    <ClInclude Include="Render\Hooks\d3d12globals.h" />
-    <ClInclude Include="Render\Hooks\hooks.h" />
+    <ClInclude Include="Render\Font\RubikFont.h" />
+    <ClInclude Include="Render\Hooks\D3D12Globals.h" />
+    <ClInclude Include="Render\Hooks\Hooks.h" />
     <ClInclude Include="Render\UserInterface\Backend\InfoBox.h" />
     <ClInclude Include="Render\UserInterface\Backend\NotificationSystem.h" />
     <ClInclude Include="Render\UserInterface\buttons.h" />
@@ -175,6 +177,7 @@
     <ClInclude Include="Render\UserInterface\UserInterface.h" />
     <ClInclude Include="Render\View\TeleportMenu\teleportview.h" />
     <ClInclude Include="Render\View\VehicleMenu\vehicleview.h" />
+    <ClInclude Include="Render\View\WorldMenu\WorldView.h" />
     <ClInclude Include="Vendor\ImGui\backends\imgui_impl_dx12.h" />
     <ClInclude Include="Vendor\ImGui\backends\imgui_impl_win32.h" />
     <ClInclude Include="Vendor\ImGui\imgui.h" />
@@ -193,31 +196,35 @@
     <ClInclude Include="Vendor\minhook\src\trampoline.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Base\Natives\natives.cpp" />
-    <ClCompile Include="Controls\controls.cpp" />
+    <ClCompile Include="Base\Natives\Natives.cpp" />
+    <ClCompile Include="Controls\Controls.cpp" />
     <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="Base\gamebase.cpp" />
-    <ClCompile Include="Base\gamesystem.cpp" />
-    <ClCompile Include="Features\PlayerFeats\playerfeature.cpp" />
+    <ClCompile Include="Base\GameBase.cpp" />
+    <ClCompile Include="Base\GameSystem.cpp" />
+    <ClCompile Include="Features\PlayerFeats\PlayerFeature.cpp" />
     <ClCompile Include="Features\PlayerFeats\PlayerWanted.cpp" />
-    <ClCompile Include="Features\TeleportFeats\teleportfeature.cpp" />
-    <ClCompile Include="Features\VehicleFeat\vehiclefeature.cpp" />
+    <ClCompile Include="Features\TeleportFeats\TeleportFeature.cpp" />
+    <ClCompile Include="Features\VehicleFeat\VehicleFeature.cpp" />
+    <ClCompile Include="Features\WorldFeat\TimeFeature.cpp" />
+    <ClCompile Include="Features\WorldFeat\WeatherFeature.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Render\Draw\draw.cpp" />
-    <ClCompile Include="Render\Hooks\d3d12hook.cpp" />
-    <ClCompile Include="Controls\inputhook.cpp" />
-    <ClCompile Include="Render\Hooks\hooks.cpp" />
+    <ClCompile Include="Render\Draw\Draw.cpp" />
+    <ClCompile Include="Render\Hooks\D3D12Hook.cpp" />
+    <ClCompile Include="Controls\InputHooks.cpp" />
+    <ClCompile Include="Render\Hooks\Hooks.cpp" />
     <ClCompile Include="Render\UserInterface\UserInterface.cpp" />
     <ClCompile Include="Render\View\Menu\menu.cpp" />
     <ClCompile Include="Render\UserInterface\Background.cpp" />
     <ClCompile Include="Render\UserInterface\Opitons.cpp" />
     <ClCompile Include="Render\View\TeleportMenu\teleportview.cpp" />
     <ClCompile Include="Render\View\VehicleMenu\vehicleunlockview.cpp" />
+    <ClCompile Include="Render\View\WorldMenu\TimeView.cpp" />
+    <ClCompile Include="Render\View\WorldMenu\WeatherView.cpp" />
     <ClCompile Include="Vendor\ImGui\backends\imgui_impl_dx12.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>

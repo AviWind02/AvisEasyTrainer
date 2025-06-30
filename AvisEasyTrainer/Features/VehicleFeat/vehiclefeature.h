@@ -1,6 +1,6 @@
 #pragma once
-namespace feature {
-    namespace vehicleoptions {
+namespace Feature {
+    namespace VehicleOptions {
         struct VehicleMetadata
         {
             std::string recordID;     // Full TweakDBID (e.g. Vehicle.v_sport2_porsche_911turbo)

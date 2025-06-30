@@ -1,6 +1,6 @@
 #pragma once
 
-namespace render::ui
+namespace UI
 {
 
     struct MenuBox {

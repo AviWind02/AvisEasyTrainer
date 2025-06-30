@@ -1,10 +1,8 @@
 #include "pch.h"
-#include "gamebase.h"
+#include "GameBase.h"
 
-namespace gamebase {
+namespace GameBase {
 
-    using namespace RED4ext;
-    using namespace RED4ext::game;
 
     bool TryGetGameInstance(ScriptGameInstance& outInstance)
     {
