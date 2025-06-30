@@ -80,7 +80,7 @@ namespace UI
         static bool hasCheckedUnlockStates = false;
 
         if (!menuStack.empty() &&
-            menuStack.back().title == view::vehicle::vehicleunlocks::vehicleUnlockMenu.title &&
+            menuStack.back().title == View::Vehicle::Vehicleunlocks::vehicleUnlockMenu.title &&
             !hasCheckedUnlockStates)
         {
             Feature::VehicleOptions::UpdateVehicleUnlockStates();
@@ -113,29 +113,29 @@ namespace UI
     void SelfView()
     {
 
-        buttons::Toggle("Unlimited health", Feature::PlayerOptions::tickGodmode, "Refills health to 100 constantly");
-        buttons::Toggle("Unlimited Stamina",Feature::PlayerOptions::tickUnlimitedStamina, "Keeps stamina maxed.");
-        buttons::Toggle("Unlimited Oxygen",Feature::PlayerOptions::tickUnlimitedOxygen, "Keeps oxygen at 100%");
-        buttons::Toggle("NoClip Mode",Feature::PlayerOptions::tickNoClip, "Move freely in any direction without collisions.");
-        buttons::Toggle("Quicksilver's Sandevistan",Feature::PlayerOptions::tickQuicksilver, "Set time scale to near-zero, and extends Sandevistan duration.", [] {
+        Buttons::Toggle("Unlimited health", Feature::PlayerOptions::tickGodmode, "Refills health to 100 constantly");
+        Buttons::Toggle("Unlimited Stamina",Feature::PlayerOptions::tickUnlimitedStamina, "Keeps stamina maxed.");
+        Buttons::Toggle("Unlimited Oxygen",Feature::PlayerOptions::tickUnlimitedOxygen, "Keeps oxygen at 100%");
+        Buttons::Toggle("NoClip Mode",Feature::PlayerOptions::tickNoClip, "Move freely in any direction without collisions.");
+        Buttons::Toggle("Quicksilver's Sandevistan",Feature::PlayerOptions::tickQuicksilver, "Set time scale to near-zero, and extends Sandevistan duration.", [] {
            Feature::PlayerOptions::tickSandevistanDuration = false;
            Feature::PlayerOptions::tickSandevistanTimeScale = false; });
-        buttons::Toggle("Never Wanted",Feature::PlayerOptions::PlayerWanted::tickNeverWanted, "Prevents police from pursuing you.",
+        Buttons::Toggle("Never Wanted",Feature::PlayerOptions::PlayerWanted::tickNeverWanted, "Prevents police from pursuing you.",
             [] {Feature::PlayerOptions::PlayerWanted::SetNeverWantedLevel(Feature::PlayerOptions::PlayerWanted::tickNeverWanted); });
-        buttons::IntToggle("Wanted Level",Feature::PlayerOptions::PlayerWanted::heldWantedLevel, 1, 5, 1,Feature::PlayerOptions::PlayerWanted::tickHoldWanted,
+        Buttons::IntToggle("Wanted Level",Feature::PlayerOptions::PlayerWanted::heldWantedLevel, 1, 5, 1,Feature::PlayerOptions::PlayerWanted::tickHoldWanted,
             "Sets your wanted level. If toggled on, it will be held.",
             [] {Feature::PlayerOptions::PlayerWanted::SetHoldWantedLevel(Feature::PlayerOptions::PlayerWanted::tickHoldWanted); });
-        buttons::Option("Clear Wanted level", "Temporarily disables the police system to reset wanted level.", [] {Feature::PlayerOptions::PlayerWanted::tickClearWanted = true; });
-        buttons::FloatToggle("Player Max Speed",Feature::PlayerOptions::maxSpeedValue, 1.0f, 15.f, 0.5f,Feature::PlayerOptions::tickPlayerMaxSpeed, "Set maximum player speed.");
-        buttons::Toggle("Health Regen",Feature::PlayerOptions::tickGodHealthRegen, "Extreme passive health regeneration.");
-        buttons::Toggle("Armor Boost",Feature::PlayerOptions::tickGodArmor, "Near invincible armor.");
-        buttons::Toggle("Damage Resistances",Feature::PlayerOptions::tickGodResistances, "Maximizes all resistances.");
-		buttons::IntToggle("Carry Capacity",Feature::PlayerOptions::carryCapacityValue, 1, 1000, 1,Feature::PlayerOptions::tickCarryCapacity, "Set carry capacity.");
-        buttons::FloatToggle("Jump Height",Feature::PlayerOptions::jumpHeight, 0.1f, 150.f, 0.5f,Feature::PlayerOptions::tickSuperJump, "Set jump height.");
-        buttons::Toggle("Combat Regen",Feature::PlayerOptions::tickGodCombatRegen, "Regen during combat.");
-        buttons::Toggle("Unlimited Memory",Feature::PlayerOptions::tickUnlimitedMemory, "Full RAM when exiting scanner.");
-        buttons::IntToggle("Memory Value",Feature::PlayerOptions::memoryValue, 1, 256, 1,Feature::PlayerOptions::tickMemoryEdit, "Set RAM max.");
-        buttons::Toggle("Memory Regeneration Boost",Feature::PlayerOptions::tickMemoryRegeneration, "Massive RAM regen.");
+        Buttons::Option("Clear Wanted level", "Temporarily disables the police system to reset wanted level.", [] {Feature::PlayerOptions::PlayerWanted::tickClearWanted = true; });
+        Buttons::FloatToggle("Player Max Speed",Feature::PlayerOptions::maxSpeedValue, 1.0f, 15.f, 0.5f,Feature::PlayerOptions::tickPlayerMaxSpeed, "Set maximum player speed.");
+        Buttons::Toggle("Health Regen",Feature::PlayerOptions::tickGodHealthRegen, "Extreme passive health regeneration.");
+        Buttons::Toggle("Armor Boost",Feature::PlayerOptions::tickGodArmor, "Near invincible armor.");
+        Buttons::Toggle("Damage Resistances",Feature::PlayerOptions::tickGodResistances, "Maximizes all resistances.");
+		Buttons::IntToggle("Carry Capacity",Feature::PlayerOptions::carryCapacityValue, 1, 1000, 1,Feature::PlayerOptions::tickCarryCapacity, "Set carry capacity.");
+        Buttons::FloatToggle("Jump Height",Feature::PlayerOptions::jumpHeight, 0.1f, 150.f, 0.5f,Feature::PlayerOptions::tickSuperJump, "Set jump height.");
+        Buttons::Toggle("Combat Regen",Feature::PlayerOptions::tickGodCombatRegen, "Regen during combat.");
+        Buttons::Toggle("Unlimited Memory",Feature::PlayerOptions::tickUnlimitedMemory, "Full RAM when exiting scanner.");
+        Buttons::IntToggle("Memory Value",Feature::PlayerOptions::memoryValue, 1, 256, 1,Feature::PlayerOptions::tickMemoryEdit, "Set RAM max.");
+        Buttons::Toggle("Memory Regeneration Boost",Feature::PlayerOptions::tickMemoryRegeneration, "Massive RAM regen.");
        
 
 
@@ -146,21 +146,21 @@ namespace UI
     void ReductionView()
     {
 
-        buttons::Toggle("Visibility Rate Reduction",Feature::PlayerOptions::tickdetectionRate, "Lowers how easily NPCs detect you. You're still visible to them and can get detected up close or if in combat.");
-        buttons::Toggle("Fall Damage Reduction",Feature::PlayerOptions::tickGodFallDamage, "Negates most fall damage.");
-        buttons::Toggle("Trace Rate Reduction",Feature::PlayerOptions::tickTraceRatelow, "Reduce trace mechanics.");
-        buttons::Toggle("Heal Item Cooldown Reduction",Feature::PlayerOptions::tickHealItemCooldown, "No cooldown on healing.");
-        buttons::Toggle("Grenade Cooldown Reduction",Feature::PlayerOptions::tickGrenadeCooldown, "No cooldown on grenades.");
-        buttons::Toggle("Projectile Launcher Cooldown",Feature::PlayerOptions::tickProjectileCooldown, "Spam launcher freely.");
-        buttons::Toggle("Cloak Cooldown Reduction",Feature::PlayerOptions::tickCloakCooldown, "Fast cloak recharge.");
-        buttons::Toggle("Sandevistan Cooldown Reduction",Feature::PlayerOptions::tickSandevistanCooldown, "Short cooldown.");
-        buttons::FloatToggle("Sandevistan Duration",Feature::PlayerOptions::sandevistanDurationValue, 1.f, 15.f, 0.25f,Feature::PlayerOptions::tickSandevistanDuration, "Multiplier for Sandevistan effect duration.");
-        buttons::FloatToggle("Sandevistan Time Scale",Feature::PlayerOptions::sandevistanTimeScaleValue, 0.001f, 2.f, 0.005f,Feature::PlayerOptions::tickSandevistanTimeScale, "Multiplier for how time flows during Sandevistan.");
-        buttons::Toggle("Berserk Cooldown Reduction",Feature::PlayerOptions::tickBerserkCooldown, "Frequent activations.");
-        buttons::Toggle("Kerenzikov Cooldown Reduction",Feature::PlayerOptions::tickKerenzikovCooldown, "No cooldown.");
-        buttons::Toggle("Overclock Cooldown Reduction",Feature::PlayerOptions::tickOverclockCooldown, "No overclock delay.");
-        buttons::Toggle("Quickhack Cooldown Reduction",Feature::PlayerOptions::tickQuickhackCooldown, "Rapid quickhacks.");
-        buttons::Toggle("Quickhack Cost Reduction",Feature::PlayerOptions::tickQuickhackCost, "Reduces RAM cost.");
+        Buttons::Toggle("Visibility Rate Reduction",Feature::PlayerOptions::tickdetectionRate, "Lowers how easily NPCs detect you. You're still visible to them and can get detected up close or if in combat.");
+        Buttons::Toggle("Fall Damage Reduction",Feature::PlayerOptions::tickGodFallDamage, "Negates most fall damage.");
+        Buttons::Toggle("Trace Rate Reduction",Feature::PlayerOptions::tickTraceRatelow, "Reduce trace mechanics.");
+        Buttons::Toggle("Heal Item Cooldown Reduction",Feature::PlayerOptions::tickHealItemCooldown, "No cooldown on healing.");
+        Buttons::Toggle("Grenade Cooldown Reduction",Feature::PlayerOptions::tickGrenadeCooldown, "No cooldown on grenades.");
+        Buttons::Toggle("Projectile Launcher Cooldown",Feature::PlayerOptions::tickProjectileCooldown, "Spam launcher freely.");
+        Buttons::Toggle("Cloak Cooldown Reduction",Feature::PlayerOptions::tickCloakCooldown, "Fast cloak recharge.");
+        Buttons::Toggle("Sandevistan Cooldown Reduction",Feature::PlayerOptions::tickSandevistanCooldown, "Short cooldown.");
+        Buttons::FloatToggle("Sandevistan Duration",Feature::PlayerOptions::sandevistanDurationValue, 1.f, 15.f, 0.25f,Feature::PlayerOptions::tickSandevistanDuration, "Multiplier for Sandevistan effect duration.");
+        Buttons::FloatToggle("Sandevistan Time Scale",Feature::PlayerOptions::sandevistanTimeScaleValue, 0.001f, 2.f, 0.005f,Feature::PlayerOptions::tickSandevistanTimeScale, "Multiplier for how time flows during Sandevistan.");
+        Buttons::Toggle("Berserk Cooldown Reduction",Feature::PlayerOptions::tickBerserkCooldown, "Frequent activations.");
+        Buttons::Toggle("Kerenzikov Cooldown Reduction",Feature::PlayerOptions::tickKerenzikovCooldown, "No cooldown.");
+        Buttons::Toggle("Overclock Cooldown Reduction",Feature::PlayerOptions::tickOverclockCooldown, "No overclock delay.");
+        Buttons::Toggle("Quickhack Cooldown Reduction",Feature::PlayerOptions::tickQuickhackCooldown, "Rapid quickhacks.");
+        Buttons::Toggle("Quickhack Cost Reduction",Feature::PlayerOptions::tickQuickhackCost, "Reduces RAM cost.");
 
 
     }SubMenu cooldownMenu{ "Cooldown & Reduction Menu", &ReductionView };
@@ -168,19 +168,19 @@ namespace UI
 
     void MainMenuView()
     {
-        buttons::Submenu("Self Menu", selfMenu,
+        Buttons::Submenu("Self Menu", selfMenu,
             "Enhance player stats like health, stamina, and resistances. Includes god mode, super jump, no-clip, memory boosts, and wanted level control.");
 
-        buttons::Submenu("Vehicle Menu", view::vehicle::vehicleunlocks::vehicleUnlockMenu, "Unlock all vehicles and remove saved vehicles from your owned list.");
-        buttons::Submenu("Cooldown & Reduction Menu", cooldownMenu, "Reduce or remove cooldowns for healing, grenades, Sandevistan, Berserk, cloak, and quickhacks.");
-        buttons::Submenu("Teleport Menu", view::teleport::teleportMenu, "Teleport instantly preset locations  in Night City.");
-        buttons::Submenu("Time Menu", view::world::timeview::timeMenu, "Adjust in-game time manually or synchronize with your real-world system clock.");
-        buttons::Submenu("Weather Menu", view::world::weatherview::weatherControlMenu, "Change current weather.");
+        Buttons::Submenu("Vehicle Menu", View::Vehicle::Vehicleunlocks::vehicleUnlockMenu, "Unlock all vehicles and remove saved vehicles from your owned list.");
+        Buttons::Submenu("Cooldown & Reduction Menu", cooldownMenu, "Reduce or remove cooldowns for healing, grenades, Sandevistan, Berserk, cloak, and quickhacks.");
+        Buttons::Submenu("Teleport Menu", View::Teleport::teleportMenu, "Teleport instantly preset locations  in Night City.");
+        Buttons::Submenu("Time Menu", View::World::TimeView::timeMenu, "Adjust in-game time manually or synchronize with your real-world system clock.");
+        Buttons::Submenu("Weather Menu", View::World::WeatherView::weatherControlMenu, "Change current weather.");
 
 
 
-		buttons::Toggle("Test Feature", tickTest, "Test feature toggle for debugging purposes");
-        buttons::Toggle("Test Player Feature",Feature::PlayerOptions::tickTest  , "");
+		Buttons::Toggle("Test Feature", tickTest, "Test feature toggle for debugging purposes");
+        Buttons::Toggle("Test Player Feature",Feature::PlayerOptions::tickTest  , "");
 
     } SubMenu mainMenu{ "Main Menu",  &MainMenuView };
     

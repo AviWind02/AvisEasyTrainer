@@ -3,7 +3,7 @@
 
 using namespace UI;
 
-namespace view::world::timeview {
+namespace View::World::TimeView {
 
     static int hourInput = 0;
     static int minuteInput = 0;
@@ -13,41 +13,41 @@ namespace view::world::timeview {
     {
         using namespace Feature::World::Time;
 
-        buttons::Int("Hour", hourInput, 0, 23, 1, "Set the current hour (0–23)", [] {
+        Buttons::Int("Hour", hourInput, 0, 23, 1, "Set the current hour (0–23)", [] {
             RequestSetTime(hourInput, minuteInput, secondInput);
         });
 
-        buttons::Int("Minute", minuteInput, 0, 59, 1, "Set the current minute (0–59)", [] {
+        Buttons::Int("Minute", minuteInput, 0, 59, 1, "Set the current minute (0–59)", [] {
             RequestSetTime(hourInput, minuteInput, secondInput);
         });
 
-        buttons::Int("Second", secondInput, 0, 59, 1, "Set the current second (0–59)", [] {
+        Buttons::Int("Second", secondInput, 0, 59, 1, "Set the current second (0–59)", [] {
             RequestSetTime(hourInput, minuteInput, secondInput);
         });
-        buttons::Toggle("Synchronize with System Time", tickSyncTime, "Updates in-game time to match real-world clock.");
+        Buttons::Toggle("Synchronize with System Time", tickSyncTime, "Updates in-game time to match real-world clock.");
   
 
-        buttons::Break("", "Presets");
-        buttons::Option("Morning (6:00:00)", "Sets the time to early morning (6 AM).", [] {
+        Buttons::Break("", "Presets");
+        Buttons::Option("Morning (6:00:00)", "Sets the time to early morning (6 AM).", [] {
             SetTimeAndRequest(6, 0, 0);
             });
 
-        buttons::Option("Noon (12:00:00)", "Sets the time to midday (12 PM).", [] {
+        Buttons::Option("Noon (12:00:00)", "Sets the time to midday (12 PM).", [] {
             SetTimeAndRequest(12, 0, 0);
             });
 
-        buttons::Option("Afternoon (15:00:00)", "Sets the time to afternoon (3 PM).", [] {
+        Buttons::Option("Afternoon (15:00:00)", "Sets the time to afternoon (3 PM).", [] {
             SetTimeAndRequest(15, 0, 0);
             });
 
-        buttons::Option("Evening (18:00:00)", "Sets the time to evening (6 PM).", [] {
+        Buttons::Option("Evening (18:00:00)", "Sets the time to evening (6 PM).", [] {
             SetTimeAndRequest(18, 0, 0);
             });
 
-        buttons::Option("Night (21:00:00)", "Sets the time to night (9 PM).", [] {
+        Buttons::Option("Night (21:00:00)", "Sets the time to night (9 PM).", [] {
             SetTimeAndRequest(21, 0, 0);
             });
-        buttons::Break("", "Quick Hours");
+        Buttons::Break("", "Quick Hours");
         for (int h = 0; h < 24; ++h)
         {
             int hour12 = h % 12 == 0 ? 12 : h % 12;
@@ -61,7 +61,7 @@ namespace view::world::timeview {
             char rightText[16];
             std::snprintf(rightText, sizeof(rightText), "%02d:00", h);
 
-            buttons::OptionExtended(label, "|", rightText, desc, [h] {
+            Buttons::OptionExtended(label, "|", rightText, desc, [h] {
                 SetTimeAndRequest(h, 0, 0);
                 });
         }

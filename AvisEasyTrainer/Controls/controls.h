@@ -7,7 +7,7 @@ namespace Controls {
     inline int optionIndex = 0;
     inline int currentOption = 1;
 
-    // State for one-frame buttons
+    // State for one-frame Buttons
     inline bool leftPressed = false;
     inline bool rightPressed = false;
     inline bool selectPressed = false;

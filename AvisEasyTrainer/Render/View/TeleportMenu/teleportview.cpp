@@ -8,7 +8,7 @@
 using namespace UI;
 using namespace Feature::TeleyOptions;
 
-namespace view::teleport {
+namespace View::Teleport {
 
     static std::string selectedCategory;
 
@@ -21,7 +21,7 @@ namespace view::teleport {
             if (loc.category != selectedCategory)
                 continue;
 
-            if (buttons::OptionExtended(loc.name, "", ICON_FA_MAP_MARKED, "Teleport created by: " + loc.creator))
+            if (Buttons::OptionExtended(loc.name, "", ICON_FA_MAP_MARKED, "Teleport created by: " + loc.creator))
             {
                 RequestTeleport(loc.position);
             }
@@ -35,16 +35,16 @@ namespace view::teleport {
         static int forwardDistance = 2;
         static int upwardDistance = 0;
 
-        buttons::Int("Forward Distance", forwardDistance, 1, 25, 1);
-        //buttons::Int("Upward Distance", upwardDistance, 0, 20, 1);
+        Buttons::Int("Forward Distance", forwardDistance, 1, 25, 1);
+        //Buttons::Int("Upward Distance", upwardDistance, 0, 20, 1);
 
-        if (buttons::Option("Teleport Forward", "Move forward based on rotation"))
+        if (Buttons::Option("Teleport Forward", "Move forward based on rotation"))
         {
             TeleportForward(static_cast<float>(forwardDistance));
             //TeleportUp(static_cast<float>(upwardDistance));
         }
 
-        buttons::Break("", "Teleport Categories");
+        Buttons::Break("", "Teleport Categories");
 
         std::set<std::string> uniqueCategories;
         for (const auto& loc : teleportLocations)
@@ -55,7 +55,7 @@ namespace view::teleport {
 
         for (const auto& category : sortedCategories)
         {
-            if (buttons::Submenu(category.c_str(), teleportFilteredMenu))
+            if (Buttons::Submenu(category.c_str(), teleportFilteredMenu))
             {
                 selectedCategory = category;
             }

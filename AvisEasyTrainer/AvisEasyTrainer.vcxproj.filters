@@ -117,10 +117,10 @@
     <ClInclude Include="Base\Natives\Transform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Render\UserInterface\submenu.h">
+    <ClInclude Include="Render\UserInterface\Submenu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Render\UserInterface\buttons.h">
+    <ClInclude Include="Render\UserInterface\Buttons.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Features\TeleportFeats\TeleportFeature.h">
@@ -135,10 +135,10 @@
     <ClInclude Include="Base\Natives\Vehicle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Render\View\VehicleMenu\vehicleview.h">
+    <ClInclude Include="Render\View\VehicleMenu\Vehicleview.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Render\View\TeleportMenu\teleportview.h">
+    <ClInclude Include="Render\View\TeleportMenu\TeleportView.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Render\UserInterface\Backend\NotificationSystem.h">
@@ -227,7 +227,7 @@
     <ClCompile Include="Controls\Controls.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Render\View\Menu\menu.cpp">
+    <ClCompile Include="Render\View\Menu\Menu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Base\GameBase.cpp">
@@ -248,10 +248,10 @@
     <ClCompile Include="Features\VehicleFeat\VehicleFeature.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Render\View\VehicleMenu\vehicleunlockview.cpp">
+    <ClCompile Include="Render\View\VehicleMenu\VehicleUnlockView.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Render\View\TeleportMenu\teleportview.cpp">
+    <ClCompile Include="Render\View\TeleportMenu\TeleportView.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Render\UserInterface\UserInterface.cpp">

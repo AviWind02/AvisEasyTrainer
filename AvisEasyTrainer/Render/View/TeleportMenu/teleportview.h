@@ -1,5 +1,5 @@
 #pragma once
-namespace view::teleport {
+namespace View::Teleport {
 	void TeleportMainView();
 	inline UI::SubMenu teleportMenu{ "Teleport Menu", &TeleportMainView };
 

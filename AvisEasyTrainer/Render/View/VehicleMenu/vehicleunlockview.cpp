@@ -9,8 +9,8 @@
 using namespace UI;
 using namespace Feature::VehicleOptions;
 
-namespace view::vehicle {
-    namespace vehicleunlocks {
+namespace View::Vehicle {
+    namespace Vehicleunlocks {
 
 
         enum class FilterMode { None, All, Category, Brand, Affiliation };
@@ -40,7 +40,7 @@ namespace view::vehicle {
 
                 bool& toggle = vehicleToggleStates[v.recordID];
                 std::string tooltip = "Unlock " + modelName + " and add it to your player vehicle list. Disable to remove it. Make sure you're not inside the vehicle before disabling.";
-                if (buttons::Toggle(modelName, toggle, tooltip))
+                if (Buttons::Toggle(modelName, toggle, tooltip))
                 {
                     RequestVehicleToggle(v.recordID);
                 }
@@ -53,25 +53,25 @@ namespace view::vehicle {
             std::set<std::string> shownCategories, shownBrands, shownAffiliations;
 
 
-            if (buttons::Submenu("All Vehicles", vehicleUnlockFilteredMenu))
+            if (Buttons::Submenu("All Vehicles", vehicleUnlockFilteredMenu))
             {
                 currentMode = FilterMode::All;
                 selectedValue.clear();
             }
 
-            if (buttons::Submenu("Player Vehicles", vehicleUnlockFilteredMenu))
+            if (Buttons::Submenu("Player Vehicles", vehicleUnlockFilteredMenu))
             {
                 currentMode = FilterMode::Affiliation;
                 selectedValue = "Player";
             }
 
-            buttons::Break("", "Filter by Category");
+            Buttons::Break("", "Filter by Category");
 
             for (const auto& v : allVehicles)
             {
                 if (shownCategories.insert(v.category).second)
                 {
-                    if (buttons::Submenu(v.category.c_str(), vehicleUnlockFilteredMenu))
+                    if (Buttons::Submenu(v.category.c_str(), vehicleUnlockFilteredMenu))
                     {
                         currentMode = FilterMode::Category;
                         selectedValue = v.category;
@@ -79,7 +79,7 @@ namespace view::vehicle {
                 }
             }
 
-            buttons::Break("", "Filter by Brand Name");
+            Buttons::Break("", "Filter by Brand Name");
 
             for (const auto& v : allVehicles)
             {
@@ -88,7 +88,7 @@ namespace view::vehicle {
 
                 if (shownBrands.insert(v.brandName).second)
                 {
-                    if (buttons::Submenu(v.brandName.c_str(), vehicleUnlockFilteredMenu))
+                    if (Buttons::Submenu(v.brandName.c_str(), vehicleUnlockFilteredMenu))
                     {
                         currentMode = FilterMode::Brand;
                         selectedValue = v.brandName;
@@ -96,7 +96,7 @@ namespace view::vehicle {
                 }
             }
 
-            buttons::Break("", "Filter by Affiliation");
+            Buttons::Break("", "Filter by Affiliation");
 
             for (const auto& v : allVehicles)
             {
@@ -105,7 +105,7 @@ namespace view::vehicle {
 
                 if (shownAffiliations.insert(v.affiliation).second)
                 {
-                    if (buttons::Submenu(v.affiliation.c_str(), vehicleUnlockFilteredMenu))
+                    if (Buttons::Submenu(v.affiliation.c_str(), vehicleUnlockFilteredMenu))
                     {
                         currentMode = FilterMode::Affiliation;
                         selectedValue = v.affiliation;

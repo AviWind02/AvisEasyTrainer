@@ -47,7 +47,7 @@ namespace loghandler
 #include "Controls/controls.h"
 #include "Render/UserInterface/UserInterface.h"
 #include "Render/UserInterface/submenu.h"
-#include "Render/UserInterface/buttons.h"
+#include "Render/UserInterface/Buttons.h"
 
 #include "Render/UserInterface/Backend/NotificationSystem.h"
 #include "Render/UserInterface/Backend/InfoBox.h"
